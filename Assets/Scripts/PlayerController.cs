@@ -1,26 +1,35 @@
-﻿using UnityEngine;
+﻿
+ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 
 
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerController : NetworkBehaviour {
-
+    public Action 
+        act_attack1, 
+        act_attack2, 
+        act_ability1,
+        act_ability2,
+        act_ability3;
+    
     [SerializeField]
     private float
         m_speed = 10.0f,
         m_lookSensitivity = 100.0f;
 
     [SerializeField]
-    private GameObject 
+    public GameObject 
         m_localPlayerObject,
         PREFAB_PROJECTILE;
-    [SerializeField]
-    Transform m_bulletSpawn;
-    private PlayerMotor motor;
+    public Transform m_head, m_bulletSpawn;
+    public PlayerMotor m_motor;
+
+    [SyncVar]
+    Quaternion headRotation;
 	// Use this for initialization
 	void Start () {
-        motor = GetComponent<PlayerMotor>();
+        m_motor = GetComponent<PlayerMotor>();
         
 
     }
@@ -33,6 +42,7 @@ public class PlayerController : NetworkBehaviour {
     void Update () {
         if (!isLocalPlayer)
         {
+            m_head.rotation = headRotation;
             return;
         }
         //Calculate movement velocity 
@@ -40,16 +50,21 @@ public class PlayerController : NetworkBehaviour {
             zMove = Input.GetAxisRaw("Vertical");
         Vector3 velocity = (transform.right * xMove + transform.forward * zMove ).normalized* m_speed;
         //
-        motor.move(velocity);
-        motor.rotate(new Vector3(0, Input.GetAxisRaw("Mouse X"), 0) * m_lookSensitivity);
-        motor.rotateCamera(new Vector3(Input.GetAxisRaw("Mouse Y"), 0, 0) * m_lookSensitivity);
+        m_motor.move(velocity);
+        m_motor.rotate(new Vector3(0, Input.GetAxisRaw("Mouse X"), 0) * m_lookSensitivity);
+        m_motor.rotateHead(new Vector3(Input.GetAxisRaw("Mouse Y"), 0, 0) * m_lookSensitivity);
+        headRotation = m_head.rotation;
+
+
+       // CmdUpdateHeadRotation(m_head.rotation);
         if (Input.GetMouseButtonDown(0))
         {
             attack1();
+            CmdAttack1();
         }
         if (Input.GetMouseButtonDown(1))
         {
-            attack2();
+
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -68,12 +83,17 @@ public class PlayerController : NetworkBehaviour {
             ability3();
         }
     }
+    [Command]
+    void CmdUpdateHeadRotation(Quaternion rotation)
+    {
+
+    }
     
     public virtual void attack1()
     {
-        CmdFire();
-
+        act_attack1.runLocal(this);
     }
+  
     public virtual void attack2()
     {
 
@@ -95,7 +115,15 @@ public class PlayerController : NetworkBehaviour {
 
     }
     [Command]
-    void CmdFire()
+    public virtual void CmdAttack1()
+    {
+
+        act_attack1.runServer(this);
+    }
+
+
+    [Command]
+    public virtual void CmdFire()
     {
         // Create the Bullet from the Bullet Prefab
         var bullet = (GameObject)Instantiate(
@@ -104,12 +132,16 @@ public class PlayerController : NetworkBehaviour {
             m_bulletSpawn.rotation);
 
         // Add velocity to the bullet
-        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 6;
+
+        bullet.GetComponent<Rigidbody>().velocity = ((this.transform.position + m_motor.m_head.forward * 1000) - m_bulletSpawn.transform.position).normalized * 100;
 
         // Spawn the bullet on the Clients
         NetworkServer.Spawn(bullet);
-         
+
         // Destroy the bullet after 2 seconds
         Destroy(bullet, 2.0f);
     }
+    
 }
+
+  

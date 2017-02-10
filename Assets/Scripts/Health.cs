@@ -17,10 +17,8 @@ public class Health : NetworkBehaviour
 	void Update () {
 		
 	}
-    void takeDamage(int amount)
+    public void takeDamage(int amount)
     {
-        if (!isServer)
-            return;
         health -= amount;
         if(health <= 0)
         {
