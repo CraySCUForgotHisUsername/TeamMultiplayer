@@ -101,10 +101,6 @@ public class PlayerMotor : NetworkBehaviour {
     {
         m_avatar.m_head.transform.rotation = rotation;
     } 
-    public Quaternion getHeadRotation()
-    {
-        return m_avatar.m_head.transform.rotation;
-    }
     public void addToHead(Transform transform)
     {
         transform.SetParent( m_avatar.m_head.transform);
@@ -138,5 +134,9 @@ public class PlayerMotor : NetworkBehaviour {
     public Avatar getAvatar()
     {
         return m_avatarUsed;
+    }
+    public Quaternion getHeadRotation()
+    {
+        return m_avatar.m_head.transform.rotation;
     }
 }

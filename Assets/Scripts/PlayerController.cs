@@ -17,25 +17,37 @@ public class PlayerController : NetworkBehaviour {
     public PlayerMotor m_motor;
 
     [SyncVar]
-    Quaternion headRotation;
+    public Quaternion headRotation = new Quaternion();
 	// Use this for initialization
 	void Start () {
 
     }
     public override void OnStartLocalPlayer()
     {
+        //onStart();
     }
     public override void OnStartAuthority()
     {
         onStart();
     }
+
+    public override void OnStartClient()
+    {
+       // onStart();
+    }
+    public override void OnStartServer()
+    {
+       // onStart();
+    }
     void onStart()
     {
+        Debug.Log("onStart " + isLocalPlayer);
         gameObject.name = "OtherPlayer";
         if (!isLocalPlayer) return;
         Debug.Log("OnStartLocalPlayer");
         gameObject.name = "LocalPlayer";
         m_eye.SetActive(true);
+       // m_motor.setAvatar(isLocalPlayer);
 
     }
     public void link(PlayerMotor motor)
@@ -55,11 +67,24 @@ public class PlayerController : NetworkBehaviour {
        // m_eye.transform.parent = m_motor.m_head.transform;
        // m_eye.transform.localPosition = Vector3.zero;
     }
+
+    [TargetRpc]
+    public void TargetLink(NetworkConnection target, NetworkInstanceId id)
+    {
+        var obj = ClientScene.FindLocalObject(id);
+        link(obj.GetComponent<PlayerMotor>());
+    }
+    [Command]
+    public void CmdSetHeadRotation(float x, float y, float z)
+    {
+        this.headRotation = Quaternion.Euler(x, y, z);
+    }
     // Update is called once per frame
     void Update () {
         //    Debug.Log(hasAuthority);
-        if (!isLocalPlayer)
+        if (!isLocalPlayer )
         {
+            //Debug.Log("I AM RESETTING!!!!!!!!!!!!! head rotation" + headRotation.eulerAngles);
             m_motor.setHeadRotation( headRotation);
             return;
         }
@@ -73,6 +98,8 @@ public class PlayerController : NetworkBehaviour {
         m_motor.rotate( Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
         //m_motor.rotateHead(new Vector3(Input.GetAxisRaw("Mouse Y"), 0, 0) );
         headRotation = m_motor.getHeadRotation();
+        CmdSetHeadRotation(headRotation.eulerAngles.x, headRotation.eulerAngles.y, headRotation.eulerAngles.z);
+        //Debug.Log("I AM refershing head rotation" + headRotation.eulerAngles);
 
 
         // CmdUpdateHeadRotation(m_head.rotation);

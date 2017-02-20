@@ -8,6 +8,8 @@ public class ServerCommunication : MonoBehaviour {
     static public ServerCommunication ME;
     public PlayerController PREFAB_PLAYER_CONTROLLER;
     public PlayerMotor HERO_A, HERO_B,HERO_C;
+
+    
     Dictionary<int, PlayerInfo> m_playerInfos = new Dictionary<int, PlayerInfo>();
     // Use this for initialization
     void Awake()
@@ -22,11 +24,26 @@ public class ServerCommunication : MonoBehaviour {
 	void Update () {
 		
 	}
-    public void playerAdd(NetworkConnection connection)
+    
+    public void onNewPlayer(NetworkConnection connection)
     {
         var info = new PlayerInfo();
         info.connection = connection;
         m_playerInfos.Add(connection.connectionId, info);
+        refreshForPlayer(connection);
+    }
+    void refreshForPlayer(NetworkConnection targetPlayer)
+    {
+        for (var i = 0; i < m_playerInfos.Count; i++)
+        {
+            var info = m_playerInfos[i];
+            if(info.controller != null && info.motor != null)
+            {
+                info.controller.TargetLink(targetPlayer, info.motor.netId);
+
+            }
+        }
+
     }
     public void playerAssignTeam(NetworkConnection playerConnection, TEAM team)
     {

@@ -21,6 +21,13 @@ public class ClientCommunication : NetworkBehaviour
     {
         CmdAddMeClient();
     }
+
+    //Simple bullet effect. Request les
+    [Command]
+    public void CmdEffect_00(int effectNumber)
+    {
+
+    }
     [Command]
     public void CmdDamage(
         NetworkInstanceId attackerID, NetworkInstanceId targetID, float damage)
@@ -49,7 +56,7 @@ public class ClientCommunication : NetworkBehaviour
     public void CmdAddMeClient()
     {
         Debug.Log(connectionToClient);
-        ServerCommunication.ME.playerAdd(connectionToClient);
+        ServerCommunication.ME.onNewPlayer(connectionToClient);
 
     }
     public override void OnStartLocalPlayer()
