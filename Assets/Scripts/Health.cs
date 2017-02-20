@@ -7,7 +7,7 @@ public class Health : NetworkBehaviour
 {
 
     [SyncVar]
-    public int health = 100;
+    public float health = 100;
 	// Use this for initialization
 	void Start () {
 		
@@ -17,13 +17,21 @@ public class Health : NetworkBehaviour
 	void Update () {
 		
 	}
-    public void takeDamage(int amount)
+    public bool takeDamage(float amount)
     {
         health -= amount;
-        if(health <= 0)
+        if(health < 1)
         {
             health = 0;
             
         }
+        return true;
     }
+    [TargetRpc]
+    public void TargetTakeDamage(NetworkConnection target, float extra)
+    {
+        Debug.Log("Hello I am told I am taking damage " + this.gameObject.name);
+        takeDamage(extra);
+    }
+
 }
