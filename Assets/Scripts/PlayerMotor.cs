@@ -4,7 +4,9 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMotor : NetworkBehaviour {
-
+    public Avatar 
+        PREFAB_AVATAR,
+        PREFAB_FIRSTPERSON, PREFAB_THIRDPERSON;
     [SerializeField]
     Avatar m_avatar,
         m_avatarUsed,
@@ -30,8 +32,24 @@ public class PlayerMotor : NetworkBehaviour {
 
 
     Rigidbody m_rigidbody;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    private void Awake()
+    {
+        m_avatar = Instantiate<Avatar>(PREFAB_AVATAR);
+        m_avatarFirstPerson = Instantiate<Avatar>(PREFAB_FIRSTPERSON);
+        m_avatarThirdPerson = Instantiate<Avatar>(PREFAB_THIRDPERSON);
+        m_avatarFirstPerson.gameObject.SetActive(false);
+        m_avatarThirdPerson.gameObject.SetActive(false);
+
+        m_avatar.transform.SetParent(this.transform);
+        m_avatarFirstPerson.transform.SetParent(this.transform);
+        m_avatarThirdPerson.transform.SetParent(this.transform);
+
+        m_avatar.transform.localPosition = Vector3.zero;
+        m_avatarFirstPerson.transform.localPosition = Vector3.zero;
+        m_avatarThirdPerson.transform.localPosition = Vector3.zero;
+    }
+    void Start () {
         m_rigidbody = GetComponent<Rigidbody>();
 
 	}
@@ -67,7 +85,7 @@ public class PlayerMotor : NetworkBehaviour {
     public void kUpdate ()
     {
         m_action1.kUpdate(this, Time.deltaTime);
-        m_action2.kUpdate(this, Time.deltaTime);
+        //m_action2.kUpdate(this, Time.deltaTime);
         //m_action1.update(this, Time.deltaTime);
         //m_action1.update(this, Time.deltaTime);
         //m_action1.update(this, Time.deltaTime);
