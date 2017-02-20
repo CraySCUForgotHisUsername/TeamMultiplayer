@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Action : MonoBehaviour  {
+public class Action : NetworkBehaviour  {
 
     // Use this for initialization
     public virtual void runLocal(PlayerController playerController)

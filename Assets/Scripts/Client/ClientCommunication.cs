@@ -22,15 +22,21 @@ public class ClientCommunication : NetworkBehaviour
         CmdAddMeClient();
     }
 
+    [Command]
+    public void CmdTest()
+    {
+
+    }
     //Simple bullet effect. Request les
     [Command]
     public void CmdEffect_00(int effectNumber)
     {
 
     }
+   
     [Command]
     public void CmdDamage(
-        NetworkInstanceId attackerID, NetworkInstanceId targetID, float damage)
+        NetworkInstanceId attackerID, NetworkInstanceId targetID, Vector3 originalImpactPoint, float damageInstant, float damageDelayed)
     {
         var attackerIdentity = ClientScene.FindLocalObject(attackerID).GetComponent<NetworkIdentity>();
         var targetIdentity = ClientScene.FindLocalObject(targetID).GetComponent<NetworkIdentity>();
@@ -39,13 +45,16 @@ public class ClientCommunication : NetworkBehaviour
         //Debug.Log(targetIdentity);
         //Debug.Log(targetHealth);
         var targetConnection = targetIdentity.connectionToClient;
-        if(targetConnection== null)
+        targetHealth.takeDamageRaw(damageInstant);
+        if (targetConnection== null)
         {
-            targetHealth.takeDamage(damage);
+            Debug.Log("Object not owned by anyone");
+            targetHealth.takeDamage(damageDelayed);
         }
         else
         {
-            targetHealth.TargetTakeDamage(targetIdentity.connectionToClient, damage);
+            Debug.Log("Asking if the target will be damaged");
+            targetHealth.TargetTakeDamage(targetIdentity.connectionToClient, originalImpactPoint, damageDelayed);
 
         }
         //Debug.Log(targetIdentity.connectionToClient);

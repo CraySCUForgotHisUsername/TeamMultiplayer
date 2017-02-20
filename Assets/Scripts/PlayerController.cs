@@ -43,7 +43,7 @@ public class PlayerController : NetworkBehaviour {
     {
         Debug.Log("onStart " + isLocalPlayer);
         gameObject.name = "OtherPlayer";
-        if (!isLocalPlayer) return;
+        if (!hasAuthority) return;
         Debug.Log("OnStartLocalPlayer");
         gameObject.name = "LocalPlayer";
         m_eye.SetActive(true);
@@ -82,7 +82,7 @@ public class PlayerController : NetworkBehaviour {
     // Update is called once per frame
     void Update () {
         //    Debug.Log(hasAuthority);
-        if (!isLocalPlayer )
+        if (!hasAuthority)
         {
             //Debug.Log("I AM RESETTING!!!!!!!!!!!!! head rotation" + headRotation.eulerAngles);
             m_motor.setHeadRotation( headRotation);

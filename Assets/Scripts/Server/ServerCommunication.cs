@@ -87,8 +87,8 @@ public class ServerCommunication : MonoBehaviour {
         }
        // m_playerInfos[playerConnection.connectionId] = playerInfo;
         Debug.Log(playerConnection.playerControllers);
-        NetworkServer.ReplacePlayerForConnection(playerConnection, playerInfo.motor.gameObject, playerConnection.playerControllers[0].playerControllerId);
-        NetworkServer.ReplacePlayerForConnection(playerConnection, playerInfo.controller.gameObject, playerConnection.playerControllers[0].playerControllerId);
+        //NetworkServer.ReplacePlayerForConnection(playerConnection, playerInfo.motor.gameObject, playerConnection.playerControllers[0].playerControllerId);
+        //NetworkServer.ReplacePlayerForConnection(playerConnection, playerInfo.controller.gameObject, playerConnection.playerControllers[0].playerControllerId);
 
         NetworkServer.SpawnWithClientAuthority(playerInfo.motor.gameObject, playerConnection);
         NetworkServer.SpawnWithClientAuthority(playerInfo.controller.gameObject, playerConnection);

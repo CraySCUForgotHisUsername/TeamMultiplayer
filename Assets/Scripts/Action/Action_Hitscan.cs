@@ -24,7 +24,7 @@ public class Action_Hitscan : Action {
     }
     public override void use(PlayerMotor motor)
     {
-        Debug.Log("Fired");
+        //Debug.Log("Fired");
         base.use(motor);
         
         fire(motor.netId,  motor.getAvatar().m_head.transform.position, motor.getAvatar().m_head.transform.forward , m_damage, m_maxTravelDistance);
@@ -55,10 +55,13 @@ public class Action_Hitscan : Action {
         if (isHitSomething)
         {
             var targetHealth = hit.transform.GetComponent<Health>();
-            if (targetHealth != null && targetHealth.takeDamage(damage / 2) )
+            if ( targetHealth != null && targetHealth.IsTakeDamage )
             {
                 var targetMotor = hit.transform.GetComponent<NetworkIdentity>();
-                ClientCommunication.ME.CmdDamage(myMotor, targetMotor.netId, damage / 2);
+                //Debug.Log(ClientCommunication.ME.gameObject.name);
+                ClientCommunication.ME.CmdTest();
+                //ClientCommunication.ME.CmdDamageRaw(myMotor, targetMotor.netId, hit.point, damage / 2, damage / 2);
+                ClientCommunication.ME.CmdDamage(myMotor, targetMotor.netId, hit.point, targetHealth.howMuchDamageWillBeTaken( damage / 2), damage / 2);
             }
         }
         //return this.transform.position + this.transform.forward * travelDistance;

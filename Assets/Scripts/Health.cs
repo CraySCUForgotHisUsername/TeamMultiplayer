@@ -5,7 +5,9 @@ using UnityEngine.Networking;
 
 public class Health : NetworkBehaviour
 {
+    static float DAMAGE_AVOID_DISTANCE = 1.0f;
 
+    bool isTakingDamage = true;
     [SyncVar]
     public float health = 100;
 	// Use this for initialization
@@ -17,8 +19,30 @@ public class Health : NetworkBehaviour
 	void Update () {
 		
 	}
+    public void takeDamageRaw(float amount)
+    {
+        //Debug.Log("Raw damage " + amount);
+        health -= amount;
+        if (health < 1)
+        {
+            health = 0;
+
+        }
+    }
+    public bool IsTakeDamage
+    {
+        get {
+         return isTakingDamage;
+        }
+    }
+    public float howMuchDamageWillBeTaken(float amount)
+    {
+        return amount;
+    }
     public bool takeDamage(float amount)
     {
+        Debug.Log("takeDamage damage " + amount);
+        if (!isTakingDamage) return false;
         health -= amount;
         if(health < 1)
         {
@@ -27,11 +51,20 @@ public class Health : NetworkBehaviour
         }
         return true;
     }
+    [Command]
+    void CmdClinetUpdatingHealth(float h)
+    {
+        this.health = h;
+    }
     [TargetRpc]
-    public void TargetTakeDamage(NetworkConnection target, float extra)
+    public void TargetTakeDamage(NetworkConnection target, Vector3 impactPoint, float damage)
     {
         Debug.Log("Hello I am told I am taking damage " + this.gameObject.name);
-        takeDamage(extra);
+        if((this.transform.position - impactPoint).magnitude > DAMAGE_AVOID_DISTANCE)
+        {
+            //do nothing;
+        }
+        takeDamage(damage);
     }
 
 }
