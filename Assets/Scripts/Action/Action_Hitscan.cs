@@ -27,10 +27,11 @@ public class Action_Hitscan : Action {
         //Debug.Log("Fired");
         base.use(motor);
         
-        fire(motor.netId,  motor.getAvatar().m_head.transform.position, motor.getAvatar().m_head.transform.forward , m_damage, m_maxTravelDistance);
+        fire(motor.m_playerInfo.team, motor.netId,  motor.getAvatar().m_head.transform.position, motor.getAvatar().m_head.transform.forward , m_damage, m_maxTravelDistance);
 
     }
     public void fire(
+        GameData.TEAM team,
         NetworkInstanceId myMotor,
         Vector3 posBegin, Vector3 direction,
         float damage, float maxTravelDistance)
@@ -40,6 +41,7 @@ public class Action_Hitscan : Action {
         var ray = new Ray(posBegin, direction);
         RaycastHit hit;
         Physics.Raycast(ray, out hit);
+     
         if (hit.transform == null || hit.distance > maxTravelDistance)
         {
             travelDistance = maxTravelDistance;
@@ -55,6 +57,8 @@ public class Action_Hitscan : Action {
         if (isHitSomething)
         {
             var targetHealth = hit.transform.GetComponent<Health>();
+            EffectManager.ME.getPlayerBulletTrail(team, myMotor, posBegin + direction * travelDistance);
+
             if ( targetHealth != null && targetHealth.IsTakeDamage )
             {
                 var targetMotor = hit.transform.GetComponent<NetworkIdentity>();

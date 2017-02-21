@@ -19,7 +19,6 @@ public class ClientCommunication : NetworkBehaviour
 	}
     public override void OnStartClient()
     {
-        CmdAddMeClient();
     }
 
     [Command]
@@ -64,7 +63,6 @@ public class ClientCommunication : NetworkBehaviour
     [Command]
     public void CmdAddMeClient()
     {
-        Debug.Log(connectionToClient);
         ServerCommunication.ME.onNewPlayer(connectionToClient);
 
     }
@@ -72,6 +70,7 @@ public class ClientCommunication : NetworkBehaviour
     {
         gameObject.name = "MeClientCommunication";
         ME = this;
+        CmdAddMeClient();
     }
     [Command]
     public void CmdSelectTeam(TEAM team)
@@ -83,6 +82,14 @@ public class ClientCommunication : NetworkBehaviour
     public void CmdSelectHero(HERO hero)
     {
         ServerCommunication.ME.playerAssignHero(connectionToClient, hero);
+
+    }
+
+    //EffectManager
+    [Command]
+    public void CmdEffectPlayerBulletTrail( NetworkInstanceId playerMotorId, Vector3 to)
+    {
+        ServerCommunication.ME.DistributeEffect(connectionToClient, playerMotorId, to);
 
     }
 

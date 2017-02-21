@@ -7,6 +7,7 @@ public class PlayerMotor : NetworkBehaviour {
     public Avatar 
         PREFAB_AVATAR,
         PREFAB_FIRSTPERSON, PREFAB_THIRDPERSON;
+    public GameData.PlayerInfo m_playerInfo = new GameData.PlayerInfo();
     [SerializeField]
     Avatar m_avatar,
         m_avatarUsed,
@@ -36,18 +37,24 @@ public class PlayerMotor : NetworkBehaviour {
     private void Awake()
     {
         m_avatar = Instantiate<Avatar>(PREFAB_AVATAR);
+        m_avatar.transform.SetParent(this.transform);
+        m_avatar.transform.localPosition = Vector3.zero;
+        m_avatar.transform.localRotation = Quaternion.identity;
+
+
+
         m_avatarFirstPerson = Instantiate<Avatar>(PREFAB_FIRSTPERSON);
         m_avatarThirdPerson = Instantiate<Avatar>(PREFAB_THIRDPERSON);
         m_avatarFirstPerson.gameObject.SetActive(false);
         m_avatarThirdPerson.gameObject.SetActive(false);
 
-        m_avatar.transform.SetParent(this.transform);
         m_avatarFirstPerson.transform.SetParent(this.transform);
         m_avatarThirdPerson.transform.SetParent(this.transform);
 
-        m_avatar.transform.localPosition = Vector3.zero;
         m_avatarFirstPerson.transform.localPosition = Vector3.zero;
         m_avatarThirdPerson.transform.localPosition = Vector3.zero;
+        m_avatarFirstPerson.transform.localRotation = Quaternion.identity;
+        m_avatarThirdPerson.transform.localRotation = Quaternion.identity;
     }
     void Start () {
         m_rigidbody = GetComponent<Rigidbody>();
@@ -67,6 +74,11 @@ public class PlayerMotor : NetworkBehaviour {
         //if (m_rotationFace != Vector3.zero)
         //    m_head.transform.Rotate(-m_rotationFace * Time.fixedDeltaTime);
     }
+    [ClientRpc]
+    public void RpcSetPlayerTeam(int team)
+    {
+        this.m_playerInfo.team = (GameData.TEAM)team;
+    }
     public void move(float horizontal, float vertical)
     {
         Vector3 direction = (m_avatar.transform.right* horizontal+ m_avatar.transform.forward * vertical).normalized;//.normalized;
@@ -74,7 +86,7 @@ public class PlayerMotor : NetworkBehaviour {
     }
     public void rotate(float horizontal, float vertical)
     {
-        m_avatar.transform.Rotate(new Vector3(0, horizontal, 0) * m_lookSensitivity);
+        transform.Rotate(new Vector3(0, horizontal, 0) * m_lookSensitivity);
         m_avatar.m_head.transform.Rotate(new Vector3(-vertical, 0, 0)* m_lookSensitivity);
     }
     public void rotateHead(Vector3 velocity)
@@ -97,10 +109,7 @@ public class PlayerMotor : NetworkBehaviour {
             return m_avatar.m_head.transform.forward;
         }
     }
-    public void setHeadRotation(Quaternion rotation)
-    {
-        m_avatar.m_head.transform.rotation = rotation;
-    } 
+  
     public void addToHead(Transform transform)
     {
         transform.SetParent( m_avatar.m_head.transform);
@@ -115,8 +124,10 @@ public class PlayerMotor : NetworkBehaviour {
         avatar.gameObject.SetActive(true);
         addToHead(avatar.m_head.transform);
         avatar.m_head.transform.localPosition = Vector3.zero;
+        //avatar.m_head.transform.localRotation = Quaternion.identity;
         addToBody(avatar.m_body.transform);
         avatar.m_body.transform.localPosition = Vector3.zero;
+        //avatar.m_body.transform.localRotation = Quaternion.identity;
         m_avatarUsed = avatar;
 
     }
@@ -138,5 +149,9 @@ public class PlayerMotor : NetworkBehaviour {
     public Quaternion getHeadRotation()
     {
         return m_avatar.m_head.transform.rotation;
+    }
+    public void setHeadRotation(Quaternion rotation)
+    {
+        m_avatar.m_head.transform.rotation = rotation;
     }
 }

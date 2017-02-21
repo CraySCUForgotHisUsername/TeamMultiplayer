@@ -53,7 +53,7 @@ public class PlayerController : NetworkBehaviour {
     public void link(PlayerMotor motor)
     {
         m_motor = motor;
-        m_motor.setAvatar(isLocalPlayer);
+        m_motor.setAvatar(hasAuthority);
         motor.addToHead(m_eye.transform);
         //m_eye.transform.parent = m_motor.m_avatar.m_head.transform;
         m_eye.transform.localPosition = Vector3.zero;

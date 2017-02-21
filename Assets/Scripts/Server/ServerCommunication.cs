@@ -94,6 +94,23 @@ public class ServerCommunication : MonoBehaviour {
         NetworkServer.SpawnWithClientAuthority(playerInfo.controller.gameObject, playerConnection);
         //playerInfo.controller.link(playerInfo.motor);
         playerInfo.controller.RpcLink(playerInfo.motor.netId);
+        playerInfo.motor.RpcSetPlayerTeam((int)playerInfo.team);
+
+    }
+    public void DistributeEffect(NetworkConnection playerConnection, NetworkInstanceId playerMotorId, Vector3 to)
+    {
+        Debug.Log("DistributeEffect " + m_playerInfos.Count);
+        var playerInfo = m_playerInfos[playerConnection.connectionId];
+        
+        for (int i = 0; i < m_playerInfos.Count; i++)
+        {
+            //if (i == playerConnection.connectionId) continue;
+            if (m_playerInfos[i].connection.connectionId == playerConnection.connectionId)
+                continue;
+            Debug.Log("DistributeEffect " + m_playerInfos[i].connection.connectionId + " , " + playerConnection.connectionId);
+            EffectManager.ME.TargetGetBulletTrail(m_playerInfos[i].connection, (m_playerInfos[i].team == playerInfo.team), playerMotorId, to);
+
+        }
 
     }
 }
