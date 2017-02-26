@@ -6,6 +6,7 @@ public class Avatar : MonoBehaviour {
     public GameObject 
         m_head, m_body,
         m_weapon;
+    public Collider m_headCollider, m_bodyColldier, m_weaponColldier;
 	// Use this for initialization
 	void Start () {
 		

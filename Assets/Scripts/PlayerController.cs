@@ -14,7 +14,7 @@ public class PlayerController : NetworkBehaviour {
     
     [SerializeField]
     public GameObject m_eye;
-    public PlayerMotor m_motor;
+    public NMotor.Motor m_motor;
 
     [SyncVar]
     public Quaternion headRotation = new Quaternion();
@@ -50,7 +50,7 @@ public class PlayerController : NetworkBehaviour {
        // m_motor.setAvatar(isLocalPlayer);
 
     }
-    public void link(PlayerMotor motor)
+    public void link(NMotor.Motor motor)
     {
         m_motor = motor;
         m_motor.setAvatar(hasAuthority);
@@ -62,7 +62,7 @@ public class PlayerController : NetworkBehaviour {
     public void RpcLink(NetworkInstanceId id)
     {
         var obj = ClientScene.FindLocalObject(id);
-        link( obj.GetComponent<PlayerMotor>());
+        link( obj.GetComponent<NMotor.Motor>());
        // m_motor = motor;
        // m_eye.transform.parent = m_motor.m_head.transform;
        // m_eye.transform.localPosition = Vector3.zero;
@@ -72,12 +72,21 @@ public class PlayerController : NetworkBehaviour {
     public void TargetLink(NetworkConnection target, NetworkInstanceId id)
     {
         var obj = ClientScene.FindLocalObject(id);
-        link(obj.GetComponent<PlayerMotor>());
+        link(obj.GetComponent<NMotor.Motor>());
     }
     [Command]
     public void CmdSetHeadRotation(float x, float y, float z)
     {
         this.headRotation = Quaternion.Euler(x, y, z);
+    }
+    private void FixedUpdate()
+    {
+        if (!hasAuthority)
+        {
+            return;
+        }
+        m_motor.kFixedUpdate();
+
     }
     // Update is called once per frame
     void Update () {
@@ -95,6 +104,10 @@ public class PlayerController : NetworkBehaviour {
         //Vector3 velocity = ( xMove,0,+ m_motor.transform.forward * zMove ).normalized;
         //
         m_motor.move(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            m_motor.jump(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        }
         m_motor.rotate( Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
         //m_motor.rotateHead(new Vector3(Input.GetAxisRaw("Mouse Y"), 0, 0) );
         headRotation = m_motor.getHeadRotation();
@@ -133,7 +146,11 @@ public class PlayerController : NetworkBehaviour {
         {
             m_motor.m_action2.end(m_motor);
         }
-
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            Debug.Log("SHIFT");
+            m_motor.m_action3.use(m_motor);
+        }
         /*
 
 

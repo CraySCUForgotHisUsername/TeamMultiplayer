@@ -7,7 +7,7 @@ using GameData;
 public class ServerCommunication : MonoBehaviour {
     static public ServerCommunication ME;
     public PlayerController PREFAB_PLAYER_CONTROLLER;
-    public PlayerMotor HERO_A, HERO_B,HERO_C;
+    public NMotor.Motor HERO_A, HERO_B,HERO_C;
 
     
     Dictionary<int, PlayerInfo> m_playerInfos = new Dictionary<int, PlayerInfo>();
@@ -70,17 +70,17 @@ public class ServerCommunication : MonoBehaviour {
             playerInfo.controller = controller;
         }
         {
-            PlayerMotor motor;
+            NMotor.Motor motor;
             switch (playerInfo.hero) {
                 default:
                 case HERO.A:
-                    motor = GameObject.Instantiate(HERO_A.gameObject).GetComponent<PlayerMotor>();
+                    motor = GameObject.Instantiate(HERO_A.gameObject).GetComponent<NMotor.Motor>();
                     break;
                 case HERO.B:
-                    motor = GameObject.Instantiate(HERO_B.gameObject).GetComponent<PlayerMotor>();
+                    motor = GameObject.Instantiate(HERO_B.gameObject).GetComponent<NMotor.Motor>();
                     break;
                 case HERO.C:
-                    motor = GameObject.Instantiate(HERO_C.gameObject).GetComponent<PlayerMotor>();
+                    motor = GameObject.Instantiate(HERO_C.gameObject).GetComponent<NMotor.Motor>();
                     break;
             }
             playerInfo.motor = motor; 

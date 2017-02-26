@@ -22,7 +22,7 @@ public class Action_Hitscan : Action {
 
         //    );
     }
-    public override void use(PlayerMotor motor)
+    public override void use(NMotor.Motor motor)
     {
         //Debug.Log("Fired");
         base.use(motor);

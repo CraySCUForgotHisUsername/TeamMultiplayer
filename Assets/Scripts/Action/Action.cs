@@ -14,15 +14,15 @@ public class Action : MonoBehaviour  {
     {
 
     }
-    public virtual void use(PlayerMotor motor)
+    public virtual void use(NMotor.Motor motor)
     {
 
     }
-    public virtual void hold(PlayerMotor motor)
+    public virtual void hold(NMotor.Motor motor)
     {
 
     }
-    public virtual void end(PlayerMotor motor)
+    public virtual void end(NMotor.Motor motor)
     {
 
     }
@@ -53,7 +53,12 @@ public class Action : MonoBehaviour  {
         return position + direction * travelDistance;
         // trail.transform.position = transform.position;
     }
-    public void kUpdate( PlayerMotor motor, float timeElapsed)
+
+    public virtual void kFixedUpdate(NMotor.Motor motor, float timeElapsed)
+    {
+
+    }
+    public virtual void kUpdate(NMotor.Motor motor, float timeElapsed)
     {
 
     }

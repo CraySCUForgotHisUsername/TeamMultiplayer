@@ -14,7 +14,7 @@ namespace GameData
         public HERO hero;
         public NetworkConnection connection;
         public PlayerController controller;
-        public PlayerMotor motor;
+        public NMotor.Motor motor;
 
 
     }

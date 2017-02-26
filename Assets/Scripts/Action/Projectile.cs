@@ -20,12 +20,14 @@ namespace NAction {
         {
 
         }
-        public override void use(PlayerMotor motor)
+        public override void use(NMotor.Motor motor)
         {
             base.use(motor);
             NEntity.Projectile proj =  GameObject.Instantiate(PREFAB_PROJECTILE).GetComponent<NEntity.Projectile>();
             proj.transform.position = motor.getAvatar().m_weapon.transform.position;
             proj.transform.rotation = motor.getAvatar().m_weapon.transform.rotation;
+            Physics.IgnoreCollision(proj.m_colliderProjectile.GetComponent<Collider>(), motor.getCollisionAvatar().m_headCollider);
+            Physics.IgnoreCollision(proj.m_colliderProjectile.GetComponent<Collider>(), motor.getCollisionAvatar().m_bodyColldier);
         }
     }
 
