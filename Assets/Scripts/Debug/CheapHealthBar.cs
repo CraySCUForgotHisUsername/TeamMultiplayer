@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CheapHealthBar : MonoBehaviour {
-    public Health health;
+    public NEntity.Entity health;
     public TextMesh text;
 	// Use this for initialization
 	void Start () {
@@ -12,7 +12,7 @@ public class CheapHealthBar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        text.text =""+ health.health;
+        text.text =""+ health.Health;
 
     }
 }

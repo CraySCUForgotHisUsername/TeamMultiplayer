@@ -31,7 +31,7 @@ public class Action : MonoBehaviour  {
         float travelDistance = 0;
         var ray = new Ray(position, direction);
         RaycastHit hit;
-        Health targetHealth;
+        NEntity.Entity targetHealth;
 
         Physics.Raycast(ray, out hit);
         if (hit.transform == null || hit.distance > maxTravelDistance)
@@ -41,7 +41,7 @@ public class Action : MonoBehaviour  {
         }
         else
         {
-            targetHealth = hit.transform.GetComponent<Health>();
+            targetHealth = hit.transform.GetComponent<NEntity.Entity>();
             Debug.Log(hit.transform.gameObject.name);
             if(targetHealth!=null)
                 targetHealth.takeDamage((int)damage);

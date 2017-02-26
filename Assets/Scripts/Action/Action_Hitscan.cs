@@ -56,7 +56,7 @@ public class Action_Hitscan : Action {
         }
         if (isHitSomething)
         {
-            var targetHealth = hit.transform.GetComponent<Health>();
+            var targetHealth = hit.transform.GetComponent<NEntity.Entity>();
             EffectManager.ME.getPlayerBulletTrail(team, myMotor, posBegin + direction * travelDistance);
 
             if ( targetHealth != null && targetHealth.IsTakeDamage )

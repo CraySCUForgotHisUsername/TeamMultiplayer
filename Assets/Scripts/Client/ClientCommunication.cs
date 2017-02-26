@@ -39,7 +39,7 @@ public class ClientCommunication : NetworkBehaviour
     {
         var attackerIdentity = ClientScene.FindLocalObject(attackerID).GetComponent<NetworkIdentity>();
         var targetIdentity = ClientScene.FindLocalObject(targetID).GetComponent<NetworkIdentity>();
-        var targetHealth = targetIdentity.GetComponent<Health>();
+        var targetHealth = targetIdentity.GetComponent<NEntity.Entity>();
         //Debug.Log(attackerIdentity);
         //Debug.Log(targetIdentity);
         //Debug.Log(targetHealth);
