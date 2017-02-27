@@ -84,11 +84,11 @@ namespace NMotor {
         }
         void FixedUpdate()
         {
-            if(isUpdateMovement)updateMovement();
+            if(isUpdateMovement)updateMovement(Time.deltaTime);
         }
         bool IsGrounded()
         {
-            return Physics.Raycast(transform.position + new Vector3(0, 0.01f, 0), -Vector3.up, 0.02f);
+            return Physics.Raycast(transform.position + new Vector3(0, 0.01f, 0), -Vector3.up, 0.12f);
             /*
                 Physics.Raycast(transform.position + new Vector3(0.2f, 0.01f, 0), -Vector3.up, 0.02f) ||
 
@@ -98,9 +98,10 @@ namespace NMotor {
              **/
         }
         //Run during fixedupdate
-        public virtual void updateMovement()
+        public virtual void updateMovement(float timeElapsed)
         {
             bool isGrounded = IsGrounded();
+            Debug.Log(isGrounded);
             if (isGrounded)
             {
                 m_airControl += 1.0f * Time.fixedDeltaTime;
@@ -110,22 +111,35 @@ namespace NMotor {
 
 
             m_velocityOld = m_velocity;
-            if ( m_velocity != Vector3.zero)
+            //land control
+            if (isGrounded && m_velocity != Vector3.zero)
             {
 
-                if(isGrounded) m_rigidbody.MovePosition(m_rigidbody.position + m_velocity * Time.fixedDeltaTime);
+                m_rigidbody.MovePosition(m_rigidbody.position + m_velocity * Time.fixedDeltaTime);
                 //   m_rigidbody.AddForce(m_velocity * Time.fixedDeltaTime * m_airControl*100.0f);
 
             }
-            if (!isGrounded && m_velocityOld != Vector3.zero)
+            //air control
+            if (!isGrounded && m_velocity != Vector3.zero)
             {
-                var bodyVelocity = m_rigidbody.velocity;
-                bodyVelocity.y = 0;
-                float d = 1-Vector3.Dot(bodyVelocity.normalized, m_velocityOld.normalized);
+                var bodyVelocity_XZ = m_rigidbody.velocity;
+                bodyVelocity_XZ.y = 0;
+                //float bodyVelocityMagnitude = bodyVelocity.magnitude;
+                var bodyVelocityDirection = bodyVelocity_XZ.normalized;
+              
+                var desiredVelocityDirection = m_velocity.normalized;
+                //float ratioDifference = 1-Vector3.Dot(bodyVelocityDirection, desiredVelocityDirection);
+
+                float possibleAccelerationRange = 1 -  Mathf.Max(-1, Mathf.Min(1, Vector3.Dot(bodyVelocity_XZ,  desiredVelocityDirection) )) ;
+
+                //Debug.Log();
+                //possibleAccelerationRange = 1.0f;
+                //var directionCorrect = desiredVelocityDirection - bodyVelocityDirection;
+                //directionCorrect.Normalize();
+
+                Vector3 force = m_velocity * possibleAccelerationRange *  200.0f * timeElapsed;
                 
-                var s = m_velocityOld.normalized - m_rigidbody.velocity.normalized;
-                s.y = 0;
-                m_rigidbody.AddForce(s *d*50.0f);
+                m_rigidbody.AddForce(force * m_airControl);
             }
             if (m_rotation != Vector3.zero)
                 m_rigidbody.MoveRotation(m_rigidbody.rotation * Quaternion.Euler(m_rotation * Time.fixedDeltaTime));
