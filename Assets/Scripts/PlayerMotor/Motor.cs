@@ -102,7 +102,7 @@ namespace NMotor {
         bool updateIsGrounded()
         {
             RaycastHit hit;
-            Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), - Vector3.up,out  hit, 0.11f);
+            Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), - Vector3.up,out  hit, 0.15f);
             m_upward = Vector3.up;
             if (hit.transform != null)
             {

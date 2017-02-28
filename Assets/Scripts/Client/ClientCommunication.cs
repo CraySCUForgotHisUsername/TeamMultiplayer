@@ -87,6 +87,13 @@ public class ClientCommunication : NetworkBehaviour
 
     //EffectManager
     [Command]
+    public void CmdEffectPlayerBulletTrail_FromTo(NetworkInstanceId playerMotorId, Vector3 from, Vector3 to)
+    {
+        ServerCommunication.ME.DistributeEffect(connectionToClient, playerMotorId, from, to);
+
+    }
+
+    [Command]
     public void CmdEffectPlayerBulletTrail( NetworkInstanceId playerMotorId, Vector3 to)
     {
         ServerCommunication.ME.DistributeEffect(connectionToClient, playerMotorId, to);

@@ -5,6 +5,8 @@ using UnityEngine.Networking;
 
 public class Action_Hitscan : Action {
 
+    [SerializeField]
+    int m_bounce = 0;
     public float 
         m_damage, m_maxTravelDistance;
     // Use this for initialization
@@ -27,14 +29,14 @@ public class Action_Hitscan : Action {
         //Debug.Log("Fired");
         base.use(motor);
         
-        fire(motor.m_playerInfo.team, motor.netId,  motor.getAvatar().m_head.transform.position, motor.getAvatar().m_head.transform.forward , m_damage, m_maxTravelDistance);
+        fire(motor.m_playerInfo.team, motor.netId,  motor.getAvatar().m_head.transform.position, motor.getAvatar().m_head.transform.forward , m_damage, m_maxTravelDistance, m_bounce);
 
     }
     public void fire(
         GameData.TEAM team,
         NetworkInstanceId myMotor,
         Vector3 posBegin, Vector3 direction,
-        float damage, float maxTravelDistance)
+        float damage, float maxTravelDistance,int bounce, bool isBouncing = false)
     {
         bool isHitSomething = false;
         float travelDistance = 0;
@@ -54,19 +56,38 @@ public class Action_Hitscan : Action {
             // trail.transform.LookAt(hit.point);
 
         }
-        if (isHitSomething)
-        {
-            var targetHealth = hit.transform.GetComponent<NEntity.Entity>();
+        if (!isBouncing)
             EffectManager.ME.getPlayerBulletTrail(team, myMotor, posBegin + direction * travelDistance);
+        else
+            EffectManager.ME.getPlayerBulletTrail(team, myMotor, posBegin, posBegin + direction * travelDistance);
 
-            if ( targetHealth != null && targetHealth.IsTakeDamage )
+        if (hit.transform != null)
+        {
+            var targetEntity = hit.transform.GetComponent<NEntity.Entity>();
+            if (targetEntity != null && targetEntity.IsTakeDamage)
             {
                 var targetMotor = hit.transform.GetComponent<NetworkIdentity>();
                 //Debug.Log(ClientCommunication.ME.gameObject.name);
                 ClientCommunication.ME.CmdTest();
                 //ClientCommunication.ME.CmdDamageRaw(myMotor, targetMotor.netId, hit.point, damage / 2, damage / 2);
-                ClientCommunication.ME.CmdDamage(myMotor, targetMotor.netId, hit.point, targetHealth.howMuchDamageWillBeTaken( damage / 2), damage / 2);
+                ClientCommunication.ME.CmdDamage(myMotor, targetMotor.netId, hit.point, targetEntity.howMuchDamageWillBeTaken(damage / 2), damage / 2);
+                
             }
+            else
+            {
+
+                if (bounce > 0)
+                {
+                    var dirNew = Vector3.Reflect(direction, hit.normal);
+                    // var posNew = hit.point;// hit.normal
+                    fire(team, myMotor, hit.point, dirNew, damage, maxTravelDistance, bounce - 1, true);
+                    //fire()
+
+                }
+            }
+
+            //ClientCommunication.ME.CmdDamage_(myMotor, targetMotor.netId, hit.point, targetEntity.howMuchDamageWillBeTaken(damage / 2), damage / 2);
+            //return;
         }
         //return this.transform.position + this.transform.forward * travelDistance;
         // trail.transform.position = transform.position;

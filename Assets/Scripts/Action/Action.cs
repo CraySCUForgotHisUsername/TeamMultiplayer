@@ -26,6 +26,7 @@ public class Action : MonoBehaviour  {
     {
 
     }
+    /*
     public Vector3 fire(Vector3 position, Vector3 direction, float maxTravelDistance, int damage)
     {
         float travelDistance = 0;
@@ -53,6 +54,7 @@ public class Action : MonoBehaviour  {
         return position + direction * travelDistance;
         // trail.transform.position = transform.position;
     }
+     * */
 
     public virtual void kFixedUpdate(NMotor.Motor motor, float timeElapsed)
     {
