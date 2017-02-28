@@ -57,7 +57,7 @@ namespace NMotor {
             m_right = Vector3.zero,
             m_upward = Vector3.up;
         bool wasGrounded = true;
-        float isTimeRunning = 0;
+        float m_timeRunning = 0;
         
         public Rigidbody Rigidbody
         {
@@ -136,11 +136,10 @@ namespace NMotor {
                     //Vector3 dir = m_velocity.normalized
                     Debug.Log("OK JUMP!" + this.m_velocity * 100);
 
-                    float ratio =Mathf.Max(0.1f+ Mathf.Min(1, isTimeRunning / 0.5f));
-                    m_rigidbody.AddForce(this.m_velocity * 100 * ratio);
+                    //float ratio =Mathf.Max(0.1f+ Mathf.Min(1, m_timeRunning / 0.5f));
+                    m_rigidbody.AddForce(this.m_velocity * 100 );
 
                 }
-                isTimeRunning = 0;
             }
             else
             {
@@ -165,14 +164,14 @@ namespace NMotor {
                 m_rigidbody.MoveRotation(m_rigidbody.rotation * Quaternion.Euler(m_rotation * Time.fixedDeltaTime));
             if (m_velocity == Vector3.zero)
             {
-                isTimeRunning = 0;
+               // m_timeRunning = 0;
                 return;
             }
             //land control
             
             if (isGrounded )
             {
-                isTimeRunning += Time.fixedDeltaTime;
+               // m_timeRunning += Time.fixedDeltaTime;
                 //Debug.Log("MOVING " + Time.time);
                 m_rigidbody.MovePosition(m_rigidbody.position + m_velocity * Time.fixedDeltaTime);
                 //   m_rigidbody.AddForce(m_velocity * Time.fixedDeltaTime * m_airControl*100.0f);
@@ -181,7 +180,7 @@ namespace NMotor {
             //air control
             if (!isGrounded )
             {
-                isTimeRunning = 0;
+               // m_timeRunning = 0;
                 var bodyVelocity_XZ = m_rigidbody.velocity;
                 bodyVelocity_XZ.y = 0;
                 //float bodyVelocityMagnitude = bodyVelocity.magnitude;
@@ -220,6 +219,8 @@ namespace NMotor {
             }
             Vector3 direction = (m_avatar.transform.right * horizontal + m_avatar.transform.forward * vertical).normalized;//.normalized;
             m_velocity = direction * m_speed; ;
+            if (vertical > 0)
+                m_velocity *= 0.9f;
         }
         public virtual void jump(float horizontal, float vertical)
         {
