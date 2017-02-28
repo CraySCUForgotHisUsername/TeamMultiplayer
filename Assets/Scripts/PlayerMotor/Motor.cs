@@ -102,7 +102,7 @@ namespace NMotor {
         bool updateIsGrounded()
         {
             RaycastHit hit;
-            Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), - Vector3.up,out  hit, 0.15f);
+            Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), - Vector3.up,out  hit, 0.2f);
             m_upward = Vector3.up;
             if (hit.transform != null)
             {
@@ -128,8 +128,12 @@ namespace NMotor {
         {
             bool isGrounded = updateIsGrounded();
             m_rigidbody.AddForce(-m_upward * m_gravity*800.0f *timeElapsed);
+            m_rigidbody.drag = 10.0f;
+            m_rigidbody.angularDrag = 10.0f;
             if (!isGrounded)
             {
+                m_rigidbody.drag = 0.0f;
+                m_rigidbody.angularDrag = 0.0f;
                 //Debug.Log(isGrounded);
                 if (wasGrounded)
                 {
@@ -150,7 +154,7 @@ namespace NMotor {
             if (isGrounded)
             {
                 //m_rigidbody.velocity *= 0.0f;
-                m_rigidbody.velocity -= m_rigidbody.velocity * 0.99f * Mathf.Max(timeElapsed*3, 1.0f);// Vector3.zero;
+                //m_rigidbody.velocity -= m_rigidbody.velocity * 0.99f * Mathf.Max(timeElapsed*3, 1.0f);// Vector3.zero;
                 //if (m_rigidbody.velocity.magnitude < 0.1) m_rigidbody.velocity = Vector3.zero;
                 m_airControl += 1.0f * Time.fixedDeltaTime;
             }
