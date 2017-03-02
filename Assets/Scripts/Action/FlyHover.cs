@@ -67,7 +67,7 @@ namespace NAction
         }
         public override void kUpdate(Motor motor, float timeElapsed)
         {
-            Debug.Log(motor.isUpdateMovement);
+           // Debug.Log(motor.isUpdateMovement);
             if (!isUse) return;
             m_timeElapsed += timeElapsed;
             if (m_timeElapsed < m_minHoldTime) return;

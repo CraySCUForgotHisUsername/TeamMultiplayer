@@ -81,9 +81,22 @@ public class PlayerController : NetworkBehaviour {
         {
             return;
         }
-        m_motor.kFixedUpdate();
+        m_motor.kFixedUpdate(Time.fixedDeltaTime);
 
     }
+    void UpdateActionKey(NMotor.Motor motor, Action action, KeyCode key) {
+
+        if (Input.GetKeyDown(key))
+        {
+            Debug.Log("SHIFT");
+            action.use(motor);
+        }
+        else if (Input.GetKeyUp(key)) {
+            action.end(motor);
+        }
+
+    }
+
     // Update is called once per frame
     void Update () {
         //    Debug.Log(hasAuthority);
@@ -150,11 +163,8 @@ public class PlayerController : NetworkBehaviour {
         {
             m_motor.m_action2.end(m_motor);
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            Debug.Log("SHIFT");
-            m_motor.m_action3.use(m_motor);
-        }
+        UpdateActionKey(m_motor, m_motor.m_action3, KeyCode.LeftShift);
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("SHIFT");

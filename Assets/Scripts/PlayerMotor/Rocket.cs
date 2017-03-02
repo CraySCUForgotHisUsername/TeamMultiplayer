@@ -14,9 +14,9 @@ namespace NMotor {
         {
             base.jumpEnd();
         }
-        public override void kFixedUpdate()
+        public override void kFixedUpdate(float timeElapsed)
         {
-            base.kFixedUpdate();
+            base.kFixedUpdate(timeElapsed);
         }
         public override void kUpdate()
         {
