@@ -58,7 +58,6 @@ namespace NMotor {
         private Vector3
             m_moveDirection = Vector3.zero,
             m_velocity = Vector3.zero,
-            m_velocityOld = Vector3.zero,
             m_rotation = Vector3.zero,
             m_rotationFace = Vector3.zero;
 
@@ -193,10 +192,7 @@ namespace NMotor {
                 m_airControl += 1.0f * Time.fixedDeltaTime;
             }
             m_airControl = Mathf.Max(0, Mathf.Min(m_airControl, 1.0f));
-
-
-
-            m_velocityOld = m_velocity;
+            
 
             if (m_rotation != Vector3.zero)
                 m_rigidbody.MoveRotation(m_rigidbody.rotation * Quaternion.Euler(m_rotation * Time.fixedDeltaTime));
