@@ -88,7 +88,7 @@ public class PlayerController : NetworkBehaviour {
 
         if (Input.GetKeyDown(key))
         {
-            Debug.Log("SHIFT");
+            //Debug.Log("SHIFT");
             action.use(motor);
         }
         else if (Input.GetKeyUp(key)) {

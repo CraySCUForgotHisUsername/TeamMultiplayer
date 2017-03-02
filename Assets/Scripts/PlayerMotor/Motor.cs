@@ -11,9 +11,10 @@ namespace NMotor {
     [RequireComponent(typeof(Rigidbody))]
     public class Motor : NetworkBehaviour
     {
-        static float AIR_SURFING_FORCE = 30.0f;
+        const float AIR_SURFING_FORCE = 50.0f;
         const float AIR_SURFING_FORCE_LINEAR_MAX = 0.5f;
         const float JUMP_DELAY = 0.25f;
+        const float JUMP_POWER_HORIZONTAL = 50.0f;
         public delegate float DEL_RETURN_FLOAT();
         public delegate float DEL_GET_SCHALAR(Motor motor);
         public delegate void DEL_ME(Motor motor);
@@ -94,6 +95,14 @@ namespace NMotor {
 
             }
         }
+        public Vector3 VelocityDirHorizontal
+        {
+            get
+            {
+                return new Vector3(m_velocity.x,0, m_velocity.z).normalized;
+
+            }
+        }
         // Use this for initialization
         private void Awake()
         {
@@ -126,7 +135,7 @@ namespace NMotor {
         bool updateIsGrounded()
         {
             RaycastHit hit;
-            Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), - Vector3.up,out  hit, 0.2f);
+            Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), - Vector3.up,out  hit, 0.15f);
             m_upward = Vector3.up;
             if (hit.transform != null)
             {
@@ -216,7 +225,7 @@ namespace NMotor {
                 var bodyVelocityDirection = bodyVelocity_XZ.normalized;
               
                 var desiredVelocityDirection = new Vector3(m_velocity.x,0, m_velocity.z).normalized;
-                Debug.Log("desired to " + desiredVelocityDirection);
+                //Debug.Log("desired to " + desiredVelocityDirection);
                 //float ratioDifference = 1-Vector3.Dot(bodyVelocityDirection, desiredVelocityDirection);
 
                 //float possibleAccelerationRange = 1 - Mathf.Max(-1, Mathf.Min(1, Vector3.Dot(bodyVelocity_XZ, desiredVelocityDirection)));
@@ -225,14 +234,14 @@ namespace NMotor {
                 possibleAccelerationRange *= -1;
                 possibleAccelerationRange += 1;
                 possibleAccelerationRange /= 2.0f;
-                float maxForceAcquired = Mathf.Min(1-
+                float possibleAceelerationDueToSpeedDiff = Mathf.Min(1-
                     Vector3.Dot(bodyVelocity_XZ, desiredVelocityDirection) / m_velocity.magnitude, 1.0f);
                 //possibleAccelerationRange = Mathf.Min( Mathf.Max(0, possibleAccelerationRange * 2.0f),1.0f);
                 //Debug.Log();
                 //possibleAccelerationRange = 1.0f;
                 //var directionCorrect = desiredVelocityDirection - bodyVelocityDirection;
                 //directionCorrect.Normalize();
-                possibleAccelerationRange = Mathf.Max(maxForceAcquired* AIR_SURFING_FORCE_LINEAR_MAX, possibleAccelerationRange);
+                possibleAccelerationRange = Mathf.Max(possibleAceelerationDueToSpeedDiff* AIR_SURFING_FORCE_LINEAR_MAX, possibleAccelerationRange);
                 Vector3 force = desiredVelocityDirection * possibleAccelerationRange;// *  Mathf.Min(1.0f, 100.0f * timeElapsed);
                 //Debug.Log(possibleAccelerationRange + " , " +force);
                 //Debug.Log(m_velocity + " , " + possibleAccelerationRange + " , " +  force);
@@ -255,7 +264,7 @@ namespace NMotor {
             {
                 m_evntMoves[i](this,horizontal, vertical);
             }
-            Vector3 direction = (m_avatar.transform.right * horizontal + m_avatar.transform.forward * vertical).normalized;//.normalized;
+            Vector3 direction = (m_right * horizontal + m_forward * vertical).normalized;//.normalized;
             m_velocity = direction * Speed; ;
             if (vertical > 0)
                 m_velocity *= 0.9f;
@@ -270,11 +279,12 @@ namespace NMotor {
             if (!updateIsGrounded()) return;
             if (m_isJumpAvailable) {
                 m_rigidbody.AddForce(m_avatar.transform.up * m_jumpPower);
+                //Vector3 direction = (m_avatar.transform.right * horizontal + m_avatar.transform.forward * vertical).normalized;//.normalized;//.normalized;
+                m_rigidbody.AddForce(VelocityDirHorizontal * Speed* JUMP_POWER_HORIZONTAL);
                 setJumpAvailable(false);
             }
 
-            //Vector3 direction = ( m_avatar.transform.right * horizontal + m_avatar.transform.forward * vertical).normalized;//.normalized;//.normalized;
-           
+            
 
         }
         void setJumpAvailable(bool value) {
@@ -319,7 +329,6 @@ namespace NMotor {
 
             }
 
-            m_velocity = (m_forward * m_moveDirection.z + m_right * m_moveDirection.x).normalized * Speed;
             //Debug.Log(m_right);
             if (isUpdateMovement) updateMovement(Time.fixedDeltaTime);
 
