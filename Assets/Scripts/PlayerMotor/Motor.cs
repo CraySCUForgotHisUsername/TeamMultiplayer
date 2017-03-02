@@ -63,6 +63,14 @@ namespace NMotor {
         {
             get { return m_rigidbody; }
         }
+        public Vector3 Velocity
+        {
+            get
+            {
+                return m_velocity;
+
+            }
+        }
         // Use this for initialization
         private void Awake()
         {
@@ -342,6 +350,10 @@ namespace NMotor {
         {
             m_avatar.m_head.transform.rotation = rotation;
         }
+       
+
+
+
     }
 
 }

@@ -8,7 +8,7 @@ public class UI : MonoBehaviour
     [SerializeField]
     GameObject screenSelectTeam, screenSelectHero;
     [SerializeField]
-    Button bttnTeamSpectator, bttnTeamA, bttnTeamB, bttnHeroA, httnHeroB;
+    Button bttnTeamSpectator, bttnTeamA, bttnTeamB, bttnHeroA, bttnHeroB, bttnHeroC;
     // Use this for initialization
     void Start()
     {
@@ -16,7 +16,8 @@ public class UI : MonoBehaviour
         bttnTeamA.onClick.AddListener(h_teamA);
         bttnTeamB.onClick.AddListener(h_teamB);
         bttnHeroA.onClick.AddListener(h_heroA);
-        httnHeroB.onClick.AddListener(h_heroB);
+        bttnHeroB.onClick.AddListener(h_heroB);
+        bttnHeroC.onClick.AddListener(h_heroC);
     }
 
     void h_teamSpectator()
@@ -45,6 +46,12 @@ public class UI : MonoBehaviour
     void h_heroB()
     {
         ClientCommunication.ME.CmdSelectHero(GameData.HERO.B);
+        screenSelectHero.SetActive(false);
+
+    }
+    void h_heroC()
+    {
+        ClientCommunication.ME.CmdSelectHero(GameData.HERO.C);
         screenSelectHero.SetActive(false);
 
     }
