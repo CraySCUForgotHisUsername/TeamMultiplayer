@@ -5,10 +5,13 @@ using UnityEngine;
 
 namespace NAction {
 
-    public class Fly :  Action{
+    public class Fly :  Action
+    {
+        public float m_airResistance = 3.0f;
         public float speed;
         bool isUse = false;
-        Vector3 movementDirection;
+        Vector3 m_dirHorizontal;
+        Vector3 m_dirVertical = Vector3.zero;
         public override void use(Motor motor)
         {
             base.use(motor);
@@ -16,42 +19,53 @@ namespace NAction {
             {
 
                 isUse = false;
-                movementDirection = Vector3.zero;
+                m_dirHorizontal = Vector3.zero;
                 motor.isUpdateMovement = true;
+
                 motor.m_evntMoves.Remove(flyHorizontally);
-                motor.m_evntJump.Remove(flyVertically);
                 motor.m_evntCrawl.Remove(flyDown);
+                motor.m_evntJump.Remove(flyUp);
+                motor.m_evntJumpStop.Remove(flyUpDownStop);
+                motor.m_evntCrawlStop.Remove(flyUpDownStop);
             }
             else
             {
                 isUse = true;
                 motor.isUpdateMovement = false;
                 motor.m_evntMoves.Add(flyHorizontally);
-                motor.m_evntJump.Add(flyVertically);
                 motor.m_evntCrawl.Add(flyDown);
+                motor.m_evntJump.Add(flyUp);
+                motor.m_evntJumpStop.Add(flyUpDownStop);
+                motor.m_evntCrawlStop.Add(flyUpDownStop);
 
             }
         }
         void flyHorizontally(Motor motor, float horizontal, float vertical)
         {
-            movementDirection = (motor.getCollisionAvatar().m_head.transform.forward * vertical + motor.getCollisionAvatar().m_head.transform.right * horizontal).normalized;
+            m_dirHorizontal = (motor.getCollisionAvatar().m_head.transform.forward * vertical + motor.getCollisionAvatar().m_head.transform.right * horizontal).normalized;
         }
-        void flyVertically(Motor motor, float horizontal, float vertical)
+        void flyUp(Motor motor, float horizontal, float vertical)
         {
+            m_dirVertical = Vector3.up;
+        }
+        void flyUpDownStop(Motor motor)
+        {
+            m_dirVertical = Vector3.zero;
 
         }
         void flyDown(Motor motor)
         {
+            m_dirVertical = Vector3.down;
 
         }
         public override void kFixedUpdate(Motor motor, float timeElapsed)
         {
             if (!isUse) return;
-            //Debug.Log("FLYING");
             base.kUpdate(motor, timeElapsed);
-            motor.Rigidbody.AddForce(-Physics.gravity);
-            motor.Rigidbody.velocity -= motor.Rigidbody.velocity*2.0f * timeElapsed;
-            motor.Rigidbody.MovePosition(motor.transform.position + movementDirection * speed * timeElapsed);
+            Vector3 dir = (m_dirHorizontal + m_dirVertical ).normalized;
+            //motor.Rigidbody.AddForce(-Physics.gravity);
+            motor.Rigidbody.velocity -= motor.Rigidbody.velocity *Mathf.Min(1, m_airResistance * timeElapsed);
+            motor.Rigidbody.MovePosition(motor.transform.position + dir * speed * timeElapsed);
            // motor.Rigidbody.AddForce(-motor.Rigidbody.velocity*500*timeElapsed);
            // motor.Rigidbody.AddForce(movementDirection  * speed* motor.m_entity.getModSpeed() * timeElapsed );
         }

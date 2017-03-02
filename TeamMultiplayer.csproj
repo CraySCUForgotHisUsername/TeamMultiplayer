@@ -83,6 +83,7 @@
     <Compile Include="Assets\Scripts\Action\Action_Hitscan.cs" />
     <Compile Include="Assets\Scripts\Action\Dash.cs" />
     <Compile Include="Assets\Scripts\Action\Fly.cs" />
+    <Compile Include="Assets\Scripts\Action\FlyHover.cs" />
     <Compile Include="Assets\Scripts\Action\Melee.cs" />
     <Compile Include="Assets\Scripts\Action\Projectile.cs" />
     <Compile Include="Assets\Scripts\Avatar.cs" />

@@ -15,7 +15,7 @@ public class Dash : Action
     bool m_isActive = false;
     float m_timeElapsed = 0,
         m_distanceMoved = 0,
-        m_distanceMovedOld = 0,
+        //m_distanceMovedOld = 0,
         m_velocity = 0;
     Vector3 m_direction = new Vector3();
 
@@ -25,7 +25,7 @@ public class Dash : Action
         m_isActive = true;
         m_timeElapsed = 0;
         m_distanceMoved = 0;
-        m_distanceMovedOld = 0;
+        //m_distanceMovedOld = 0;
         m_velocity = m_distance / m_duration;
         if (m_useVelocityDirection)
         {
@@ -46,25 +46,27 @@ public class Dash : Action
 
         base.use(motor);
     }
-    public override void kUpdate(Motor motor, float timeElapsed)
+    public override void kFixedUpdate(Motor motor, float timeElapsed)
     {
-        base.kUpdate(motor, timeElapsed);
+        base.kFixedUpdate(motor, timeElapsed);
         if (m_isActive)
         {
             m_timeElapsed += timeElapsed;
             float ratio = Mathf.Min(1, m_timeElapsed / m_duration);
             m_distanceMoved = m_distance * ratio;
 
-            float move = m_distanceMoved - m_distanceMovedOld;
+            //float move = m_distanceMoved - m_distanceMovedOld;
 
-            motor.Rigidbody.MovePosition(motor.transform.position + m_direction * move);
+            motor.Rigidbody.velocity = m_direction * m_velocity;
+            //motor.Rigidbody.MovePosition(motor.transform.position + m_direction * move);
 
 
-            m_distanceMovedOld = m_distanceMoved;
+            //m_distanceMovedOld = m_distanceMoved;
 
-            if(timeElapsed >= m_duration)
+            if(m_timeElapsed >= m_duration)
             {
-                m_isActive = false;
+                motor.Rigidbody.velocity = Vector3.zero;
+               m_isActive = false;
 
             }
         }

@@ -15,6 +15,8 @@ namespace NMotor {
         public List<DEL_MOVE> m_evntMoves = new List<DEL_MOVE>();
         public List<DEL_MOVE> m_evntJump = new List<DEL_MOVE>();
         public List<DEL_ME> m_evntCrawl = new List<DEL_ME>();
+        public List<DEL_ME> m_evntJumpStop = new List<DEL_ME>();
+        public List<DEL_ME> m_evntCrawlStop = new List<DEL_ME>();
 
         public Avatar
             PREFAB_AVATAR,
@@ -28,6 +30,8 @@ namespace NMotor {
             m_avatarThirdPerson;
 
         //public Transform m_head,m_weapon;
+        public Action
+            m_actJump;
         public Action
             m_action1,
             m_action2,
@@ -248,6 +252,14 @@ namespace NMotor {
             //m_rigidbody.AddForce(direction * m_speed * 40.0f);
 
         }
+        public virtual void jumpEnd()
+        {
+            for (int i = 0; i < m_evntJumpStop.Count; i++)
+            {
+                m_evntJumpStop[i](this);
+            }
+
+        }
         public virtual void crawl()
         {
             for (int i = 0; i < m_evntCrawl.Count; i++)
@@ -265,9 +277,11 @@ namespace NMotor {
         public void rotateHead(Vector3 velocity)
         {
         }
-        public void kFixedUpdate()
+        public virtual void kFixedUpdate()
         {
 
+            if (m_actJump != null)
+                m_actJump.kFixedUpdate(this, Time.fixedDeltaTime);
             if (m_action1 != null)
                 m_action1.kFixedUpdate(this, Time.fixedDeltaTime);
             if (m_action2 != null)
@@ -276,10 +290,14 @@ namespace NMotor {
                 m_action3.kFixedUpdate(this, Time.fixedDeltaTime);
             if (m_action4 != null)
                 m_action4.kFixedUpdate(this, Time.fixedDeltaTime);
+            if (m_action5 != null)
+                m_action5.kFixedUpdate(this, Time.fixedDeltaTime);
         }
         // Update is called once per frame
-        public void kUpdate()
+        public virtual void kUpdate()
         {
+            if (m_actJump != null)
+                m_actJump.kUpdate(this, Time.deltaTime);
             if (m_action1 != null)
                 m_action1.kUpdate(this, Time.deltaTime);
             if (m_action2 != null)
