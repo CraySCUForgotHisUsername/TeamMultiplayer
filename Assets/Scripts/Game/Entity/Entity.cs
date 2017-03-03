@@ -5,25 +5,36 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 namespace NEntity {
+    
     public class Entity : NetworkBehaviour
     {
         public delegate float DEL_MODIFIER();
+        public delegate void DEL_ME(Entity me); 
         static float DAMAGE_AVOID_DISTANCE = 1.0f;
-        
-        [SyncVar]
+
+        public List<DEL_ME> m_lazyEvents = new List<DEL_ME>();
+
+        [SyncVar] 
         [SerializeField]
-        // Basic properties of all interactable objects in the game
-        float health = 100.0f;
+        public float
+            health = 100.0f,
+            healthMax = 100.0f,
+            shield = 0.0f;
+        float m_healthBefore = 0;
+
+        [SerializeField]
+        public int m_ammo, m_ammoMax;
+        [SerializeField]
+        public float m_resourceNow, m_resourceMax;
 
         [SyncVar]
         [SerializeField]
         float
             m_speed = 10.0f,
+            m_speedRotation = 1.0f,
             m_jumpPower = 300.0f,
             m_gravityPower = 800.0f;
-        [SyncVar]
-        [SerializeField]
-        float shield = 0.0f; //this is the type of health that regenerates
+
 
         [SyncVar]
         [SerializeField]
@@ -81,6 +92,11 @@ namespace NEntity {
                 return 1.0f;
             }
         }
+        void raiseLazyEvent()
+        {
+            for (int i = 0; i < m_lazyEvents.Count; i++)
+                m_lazyEvents[i](this);
+        }
         bool isTakingDamage = true;
         // Use this for initialization
         void Start()
@@ -91,6 +107,11 @@ namespace NEntity {
         // Update is called once per frame
         void Update()
         {
+            if(m_healthBefore != health)
+            {
+                m_healthBefore = health;
+                raiseLazyEvent();
+            }
 
         }
 
@@ -109,6 +130,7 @@ namespace NEntity {
                 health = 0;
 
             }
+            raiseLazyEvent();
         }
         public bool IsTakeDamage
         {
@@ -131,6 +153,7 @@ namespace NEntity {
                 health = 0;
 
             }
+            raiseLazyEvent();
             return true;
         }
         [Command]
@@ -152,6 +175,41 @@ namespace NEntity {
         public float getModSpeed()
         {
             return 1.0f;
+        }
+        public int useAmmoTest(int amount, bool isStream)
+        {
+            if (!isStream && m_ammo < amount)
+            {
+                return 0;
+            }
+            int ammoUsed = Mathf.Min(amount, m_ammo);
+            return ammoUsed;
+
+        }
+        public int useAmmo(int amount, bool isStream)
+        {
+            int ammoUsed = useAmmoTest(amount, isStream);
+            Debug.Log("AMMOUS ED " + amount + ", " + ammoUsed);
+            m_ammo -= ammoUsed;
+            raiseLazyEvent();
+            return ammoUsed;
+
+        }
+        public float useResourceTest(float amount, bool isStream)
+        {
+            if (!isStream && m_resourceNow < amount)
+            {
+                return 0;
+            }
+            float resourceUsed = Mathf.Min(amount, m_resourceNow);
+            return resourceUsed;
+        }
+        public float useResource(float amount, bool isStream)
+        {
+            float resourceUsed = useResourceTest(amount, isStream);
+            m_resourceNow -= resourceUsed;
+            raiseLazyEvent();
+            return resourceUsed;
         }
     }
 

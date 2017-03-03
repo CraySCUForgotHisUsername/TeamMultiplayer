@@ -53,10 +53,12 @@ public class PlayerController : NetworkBehaviour {
     {
         m_entity = entity;
         m_motor = motor;
-        m_motor.setAvatar(m_team, hasAuthority);
+        m_motor.m_avatarManager.setAvatar(entity, m_team, hasAuthority);
         motor.m_avatarManager.addToHead(m_eye.transform);
         m_eye.transform.localPosition = Vector3.zero;
-        NUI.Game.ME.link(motor);
+
+        if (!hasAuthority) return;
+        NUI.Game.ME.link(m_team, m_hero, entity);
     }
     [ClientRpc]
     public void RpcLink(NetworkInstanceId id)
@@ -76,12 +78,13 @@ public class PlayerController : NetworkBehaviour {
         m_hero = myHero;
     }
     [TargetRpc]
-    public void TargetLink(NetworkConnection target, NetworkInstanceId id)
+    public void TargetLink(NetworkConnection target, GameData.TEAM team, GameData.HERO hero, NetworkInstanceId id)
     {
         var obj = ClientScene.FindLocalObject(id);
         var entity = obj.GetComponent<NEntity.Entity>();
         var motor = obj.GetComponent<NMotor.Motor>();
-        NUI.Game.ME.link(motor);
+        m_team = team;
+        m_hero = hero;
         link(entity,motor);
     }
     [Command]
@@ -105,20 +108,21 @@ public class PlayerController : NetworkBehaviour {
         //    Debug.Log(hasAuthority);
         if (!hasAuthority)
         {
-            //Debug.Log("I AM RESETTING!!!!!!!!!!!!! head rotation" + headRotation.eulerAngles);
+            Debug.Log("I AM RESETTING!!!!!!!!!!!!! head rotation" + m_motor + ","+ m_motor.m_avatarManager);
             m_motor.m_avatarManager.HeadRotation =  headRotation;
             return;
         }
         m_motor.kUpdate(m_entity, Time.deltaTime);
         updateMotorInput();
     }
-    void updateMotorInput()
+    public virtual void updateMotorInput()
     {
         m_motor.move(m_entity.Speed,Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         m_motor.rotate(m_entity.RotationSpeed, Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
         headRotation = m_motor.m_avatarManager.HeadRotation;
         CmdSetHeadRotation(headRotation.eulerAngles.x, headRotation.eulerAngles.y, headRotation.eulerAngles.z);
+
         
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -128,33 +132,54 @@ public class PlayerController : NetworkBehaviour {
         {
             m_motor.jumpEnd(m_entity);
         }
+
+        //if (!m_motor.IsReadyForInput)
+        //    return;
+
+
         if (Input.GetMouseButtonDown(0)){
-            m_motor.ability1Begin(m_entity);
+            m_motor.actLMBBegin(m_entity);
         }
         else if (Input.GetMouseButtonUp(0)) {
-            m_motor.ability2End(m_entity);
+            m_motor.actRMBEnd(m_entity);
         }
         if (Input.GetMouseButtonDown(1)){
-            m_motor.ability2Begin(m_entity);
+            m_motor.actRMBBegin(m_entity);
         }
         else if (Input.GetMouseButtonUp(1)){
-            m_motor.ability2End(m_entity);
+            m_motor.actRMBEnd(m_entity);
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            m_motor.ability3Begin(m_entity);
+            m_motor.actShiftBegin(m_entity);
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
-            m_motor.ability3End(m_entity);
+            m_motor.actShiftEnd(m_entity);
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            m_motor.ability4Begin(m_entity);
+            m_motor.actEBegin(m_entity);
         }
         else if (Input.GetKeyUp(KeyCode.E))
         {
-            m_motor.ability4End(m_entity);
+            m_motor.actEEnd(m_entity);
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            m_motor.actFBegin(m_entity);
+        }
+        else if (Input.GetKeyUp(KeyCode.F))
+        {
+            m_motor.actFEnd(m_entity);
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            m_motor.actQBegin(m_entity);
+        }
+        else if (Input.GetKeyUp(KeyCode.Q))
+        {
+            m_motor.actQEnd(m_entity);
         }
     }
     [Command]

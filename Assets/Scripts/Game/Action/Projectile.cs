@@ -20,7 +20,7 @@ namespace NAction {
         {
 
         }
-        public override void use(NEntity.Entity entity, NMotor.Motor motor)
+        public override void useProcess(NEntity.Entity entity, NMotor.Motor motor)
         {
             base.use(entity,motor);
             Avatar avatar = motor.m_avatarManager.getAvatar();

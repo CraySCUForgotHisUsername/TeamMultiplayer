@@ -14,9 +14,7 @@ namespace NEntity {
         List<int> m_collidedIds = new List<int>();
         Rigidbody m_body;
         int state = 0;
-
-        [SerializeField]
-        float m_speed = 10.0f;
+        
         [SerializeField]
         float m_forceApply = 10.0f;
         // Use this for initialization
@@ -50,7 +48,7 @@ namespace NEntity {
 
                 if (m_colliders.Count == 0)
                 {
-                    m_body.MovePosition(transform.position + transform.forward * m_speed * getModSpeed() * Time.fixedDeltaTime);
+                    m_body.MovePosition(transform.position + transform.forward * Speed * Time.fixedDeltaTime);
                     return;
                 }
                 m_colliders.Clear();

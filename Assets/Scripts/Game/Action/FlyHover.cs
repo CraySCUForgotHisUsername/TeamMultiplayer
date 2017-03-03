@@ -13,13 +13,13 @@ namespace NAction
         public float m_force;
         bool isUse = false, isActivated = false;
         float m_timeElapsed = 0;
-        public override void use(NEntity.Entity entity,Motor motor)
+        public override void useProcess(NEntity.Entity entity,Motor motor)
         {
             base.use(entity,motor);
             if (isUse) return;
             setActive(motor,true);
         }
-        public override void end(NEntity.Entity entity, Motor motor)
+        public override void endProcess(NEntity.Entity entity, Motor motor)
         {
             base.end(entity, motor);
             if (!isUse) return;

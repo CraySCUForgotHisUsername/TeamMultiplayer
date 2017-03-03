@@ -6,15 +6,19 @@ using System.Collections.Generic;
 
 
 namespace NMotor {
-    
+
+    //Weak delay can be overriden by using other ability.
+    //Strong delay cannot be overriden by using other ability.
+    //public enum DELAY_TYPE { WEAK,STRONG};
     [RequireComponent(typeof(Rigidbody))]
     public class Motor : NetworkBehaviour
     {
         const float AIR_SURFING_FORCE = 50.0f;
-        const float AIR_SURFING_FORCE_LINEAR_MAX = 0.5f;
+        const float AIR_SURFING_FORCE_LINEAR_MAX = 0.3f;
         const float JUMP_DELAY = 0.25f;
         const float MINI_JUMP_PUSH_POWER = 30.0f;
         const float JUMP_POWER_HORIZONTAL = 50.0f;
+
         public delegate float DEL_RETURN_FLOAT();
         public delegate float DEL_GET_SCHALAR(Motor motor);
         public delegate void DEL_ME(Motor motor);
@@ -26,7 +30,9 @@ namespace NMotor {
         public List<DEL_ME> m_evntCrawl = new List<DEL_ME>();
         public List<DEL_ME> m_evntJumpStop = new List<DEL_ME>();
         public List<DEL_ME> m_evntCrawlStop = new List<DEL_ME>();
-        
+
+        [SerializeField]
+        string m_playerName = "PlayerNameHere";
         [SerializeField]
         float
             m_lookSensitivity = 100.0f;
@@ -40,11 +46,13 @@ namespace NMotor {
        
         public List<Action>
             m_actJump,
-            m_actions1,
-            m_actions2,
-            m_actions3,
-            m_actions4,
-            m_actions5;
+            m_actLMB,
+            m_actRMB,
+            m_actR,
+            m_actF,
+            m_actShift,
+            m_actE,
+            m_actQ;
 
         private Vector3
             m_moveDirection = Vector3.zero,
@@ -62,8 +70,11 @@ namespace NMotor {
             m_right = Vector3.zero,
             m_upward = Vector3.up;
         bool wasGrounded = true;
-        float m_timeRunning = 0;
+        bool m_isInAir = false;
 
+        bool m_isReadyForInput = true;
+        float m_inputDelay = 0;
+        
         public Rigidbody Rigidbody
         {
             get { return m_rigidbody; }
@@ -84,6 +95,12 @@ namespace NMotor {
             {
                 return new Vector3(m_velocity.x, 0, m_velocity.z).normalized;
 
+            }
+        }
+        public bool IsReadyForInput
+        {
+            get{
+                return m_isReadyForInput;
             }
         }
         // Use this for initialization
@@ -108,16 +125,15 @@ namespace NMotor {
                 m_right = (Quaternion.FromToRotation(this.transform.up, hit.normal) * this.transform.right);
                 //m_right = (Quaternion.LookRotation(hit.normal) * this.tran.up);
 
+            }else
+            {
+                m_upward = transform.up;
+                m_forward = transform.forward;
+                m_right = transform.right;
             }
-            return hit.transform != null;
-            //return Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), hit - Vector3.up, 0.15f);
-            /*
-                Physics.Raycast(transform.position + new Vector3(0.2f, 0.01f, 0), -Vector3.up, 0.02f) ||
-
-                Physics.Raycast(transform.position + new Vector3(-0.2f, 0.01f, 0), -Vector3.up, 0.02f) ||
-                Physics.Raycast(transform.position + new Vector3(0, 0.01f, 0.2f), -Vector3.up, 0.02f) ||
-                Physics.Raycast(transform.position + new Vector3(0, 0.01f, -0.2f), -Vector3.up, 0.02f);
-             **/
+            m_isInAir = !(hit.transform != null);
+            return !m_isInAir;
+            
         }
         //Run during fixedupdate
         public virtual void updateMovement(NEntity.Entity entity, float timeElapsed)
@@ -264,20 +280,24 @@ namespace NMotor {
             //Debug.Log(m_right);
             if (isUpdateMovement) updateMovement(entity,timeElapsed);
 
-            hprFixedUpdate(entity,m_actions1, timeElapsed);
-            hprFixedUpdate(entity,m_actions2, timeElapsed);
-            hprFixedUpdate(entity,m_actions3, timeElapsed);
-            hprFixedUpdate(entity,m_actions4, timeElapsed);
-            hprFixedUpdate(entity,m_actions5, timeElapsed);
+            hprFixedUpdate(entity,m_actLMB, timeElapsed);
+            hprFixedUpdate(entity,m_actRMB, timeElapsed);
+            hprFixedUpdate(entity,m_actR, timeElapsed);
+            hprFixedUpdate(entity,m_actF, timeElapsed);
+            hprFixedUpdate(entity,m_actShift, timeElapsed);
         }
         // Update is called once per frame
         public virtual void kUpdate(NEntity.Entity entity, float timeElapsed)
         {
-            hprUpdate(entity,m_actions1, timeElapsed);
-            hprUpdate(entity,m_actions2, timeElapsed);
-            hprUpdate(entity,m_actions3, timeElapsed);
-            hprUpdate(entity,m_actions4, timeElapsed);
-            hprUpdate(entity,m_actions5, timeElapsed);
+            hprUpdate(entity,m_actLMB, timeElapsed);
+            hprUpdate(entity,m_actRMB, timeElapsed);
+            hprUpdate(entity,m_actR, timeElapsed);
+            hprUpdate(entity,m_actF, timeElapsed);
+            hprUpdate(entity,m_actShift, timeElapsed);
+        }
+        public virtual void delay(float time)
+        {
+
         }
         public virtual void jumpBegin(NEntity.Entity entity, float horizontal, float vertical)
         {
@@ -306,42 +326,69 @@ namespace NMotor {
             }
 
         }
-        public virtual void ability1Begin(NEntity.Entity entity)
+        public virtual void actLMBBegin(NEntity.Entity entity)
         {
-            hprUse(entity,m_actions1);
+            hprUse(entity,m_actLMB);
 
         }
-        public virtual void ability1End(NEntity.Entity entity)
+        public virtual void actLMBEnd(NEntity.Entity entity)
         {
-            hprEnd(entity, m_actions1);
+            hprEnd(entity, m_actLMB);
 
         }
-        public virtual void ability2Begin(NEntity.Entity entity)
+        public virtual void actRMBBegin(NEntity.Entity entity)
         {
-            hprUse(entity, m_actions2);
+            hprUse(entity, m_actRMB);
 
         }
-        public virtual void ability2End(NEntity.Entity entity)
+        public virtual void actRMBEnd(NEntity.Entity entity)
         {
-            hprEnd(entity, m_actions2);
+            hprEnd(entity, m_actRMB);
         }
-        public virtual void ability3Begin(NEntity.Entity entity)
+        public virtual void actRBegin(NEntity.Entity entity)
         {
-            hprUse(entity, m_actions3);
+            hprUse(entity, m_actR);
 
         }
-        public virtual void ability3End(NEntity.Entity entity)
+        public virtual void actREnd(NEntity.Entity entity)
         {
-            hprEnd(entity, m_actions3);
+            hprEnd(entity, m_actR);
 
         }
-        public virtual void ability4Begin(NEntity.Entity entity)
+        public virtual void actFBegin(NEntity.Entity entity)
         {
-            hprUse(entity, m_actions4);
+            hprUse(entity, m_actF);
         }
-        public virtual void ability4End(NEntity.Entity entity)
+        public virtual void actFEnd(NEntity.Entity entity)
         {
-            hprEnd(entity, m_actions4);
+            hprEnd(entity, m_actF);
+
+        }
+        public virtual void actShiftBegin(NEntity.Entity entity)
+        {
+            hprUse(entity, m_actShift);
+        }
+        public virtual void actShiftEnd(NEntity.Entity entity)
+        {
+            hprEnd(entity, m_actShift);
+
+        }
+        public virtual void actEBegin(NEntity.Entity entity)
+        {
+            hprUse(entity, m_actE);
+        }
+        public virtual void actEEnd(NEntity.Entity entity)
+        {
+            hprEnd(entity, m_actE);
+
+        }
+        public virtual void actQBegin(NEntity.Entity entity)
+        {
+            hprUse(entity, m_actQ);
+        }
+        public virtual void actQEnd(NEntity.Entity entity)
+        {
+            hprEnd(entity, m_actQ);
 
         }
 
@@ -355,10 +402,6 @@ namespace NMotor {
 
         
        
-        public void setAvatar(GameData.TEAM team,  bool isFirstPersonView)
-        {
-            m_avatarManager.setAvatar(team, isFirstPersonView);
-        }
        
         void hprFixedUpdate(NEntity.Entity entity, List<Action> actions, float timeElapsed)
         {

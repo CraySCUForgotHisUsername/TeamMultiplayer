@@ -11,14 +11,14 @@ public class Accelerate : Action
     bool m_isActive = false;
 
 
-    public override void use(NEntity.Entity entity,Motor motor)
+    public override void useProcess(NEntity.Entity entity,Motor motor)
     {
         base.use(entity,motor);
         if (m_isActive) return;
         m_isActive = true;
         motor.m_scalarsSpeed.Add(getBonusSpeed);
     }
-    public override void end(NEntity.Entity entity, Motor motor)
+    public override void endProcess(NEntity.Entity entity, Motor motor)
     {
         base.end(entity,motor);
         if (!m_isActive) return;

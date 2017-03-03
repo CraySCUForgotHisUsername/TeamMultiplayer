@@ -9,6 +9,7 @@ namespace GameData
 {
     public enum TEAM { SPECTATOR, RED, BLUE };
     public enum HERO { A, B ,C,D };
+   
     public class PlayerInfo {
         public TEAM team;
         public HERO hero;

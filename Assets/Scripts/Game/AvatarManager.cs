@@ -9,7 +9,14 @@ public class AvatarManager : MonoBehaviour {
             PREFAB_AVATAR_RED_THIRDPERSON,
             PREFAB_AVATAR_BLUE_FIRSTPERSON,
             PREFAB_AVATAR_BLUE_THIRDPERSON;
-    Avatar m_collison, m_model;
+    [SerializeField]
+    NUI.Entity 
+        PREFAB_UI_PLAYER_NAMETAG_RED, 
+        PREFAB_UI_PLAYER_NAMETAG_BLUE;
+
+    Avatar 
+        m_collison, 
+        m_model;
     private void Awake()
     {
         m_collison = Instantiate<Avatar>(PREFAB_AVATAR_COLLISION);
@@ -25,13 +32,23 @@ public class AvatarManager : MonoBehaviour {
     void Update () {
 		
 	}
-    public void setAvatar(GameData.TEAM team, bool isFirstPersonView)
+    public void setAvatar(NEntity.Entity entity, GameData.TEAM team, bool isFirstPersonView)
     {
         Avatar avatar = null;
+        NUI.Entity uiEntity = null;
         Debug.Log(team);
+        if (!isFirstPersonView)
+        {
+            if(team == GameData.TEAM.RED)
+                uiEntity = Instantiate<NUI.Entity>(PREFAB_UI_PLAYER_NAMETAG_RED);
+            else
+                uiEntity = Instantiate<NUI.Entity>(PREFAB_UI_PLAYER_NAMETAG_BLUE);
+            uiEntity.transform.parent = m_collison.m_head.transform;
+            uiEntity.transform.localPosition = Vector3.zero;// + new Vector3(0, 0.5f, 0);
+            uiEntity.setEntity(entity);
+        }
         if (team == GameData.TEAM.RED)
         {
-
             if (isFirstPersonView)
             {
                 avatar = Instantiate<Avatar>(PREFAB_AVATAR_RED_FIRSTPERSON);
@@ -53,7 +70,8 @@ public class AvatarManager : MonoBehaviour {
             }
 
         }
-        if(avatar != null)
+        
+        if (avatar != null)
             addAvatar(avatar);
     }
     void addAvatar(Avatar avatar)

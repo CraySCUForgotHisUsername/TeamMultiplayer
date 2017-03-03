@@ -39,7 +39,7 @@ public class ServerCommunication : MonoBehaviour {
             var info = m_playerInfos[i];
             if(info.controller != null && info.motor != null)
             {
-                info.controller.TargetLink(targetPlayer, info.motor.netId);
+                info.controller.TargetLink(targetPlayer, info.team, info.hero, info.motor.netId);
 
             }
         }
@@ -104,7 +104,7 @@ public class ServerCommunication : MonoBehaviour {
     }
     public void DistributeEffect(NetworkConnection playerConnection, NetworkInstanceId playerMotorId, Vector3 from, Vector3 to)
     {
-        Debug.Log("DistributeEffect " + m_playerInfos.Count);
+        //Debug.Log("DistributeEffect " + m_playerInfos.Count);
         var playerInfo = m_playerInfos[playerConnection.connectionId];
 
         for (int i = 0; i < m_playerInfos.Count; i++)
@@ -112,7 +112,7 @@ public class ServerCommunication : MonoBehaviour {
             //if (i == playerConnection.connectionId) continue;
             if (m_playerInfos[i].connection.connectionId == playerConnection.connectionId)
                 continue;
-            Debug.Log("DistributeEffect " + m_playerInfos[i].connection.connectionId + " , " + playerConnection.connectionId);
+            //Debug.Log("DistributeEffect " + m_playerInfos[i].connection.connectionId + " , " + playerConnection.connectionId);
             EffectManager.ME.TargetGetBulletTrail_FromTo(m_playerInfos[i].connection, (m_playerInfos[i].team == playerInfo.team), playerMotorId,from, to);
 
         }

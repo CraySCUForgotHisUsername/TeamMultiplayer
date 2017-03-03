@@ -10,10 +10,11 @@ namespace NUI {
 
         [SerializeField]
         UnityEngine.UI.Text
-            m_healthCurrent, m_healthMax,
-            m_ammoCurrent, m_ammoMax,
-            m_resourceCurrent, m_resourceMax,
-            m_skillACooldown,m_skillBCooldown;
+            m_healthNow, m_healthMax,
+            m_ammoNow, m_ammoMax,
+            m_resourceNow, m_resourceMax,
+            m_skillACooldown,
+            m_skillBCooldown;
         // Use this for initialization
         void Awake()
         {
@@ -29,9 +30,22 @@ namespace NUI {
         {
 
         }
-        public void link(NMotor.Motor motor)
+        public void cheapUpdate(NEntity.Entity entity)
         {
+            m_healthNow.text = "" + entity.Health;
+            m_healthMax.text = "" + entity.healthMax;
+            m_ammoNow.text = "" + entity.m_ammo;
+            m_ammoMax.text = "" + entity.m_ammoMax;
+            m_resourceNow.text = "" + entity.m_resourceNow;
+            m_resourceMax.text = "" + entity.m_resourceMax;
 
+        }
+        //Depending on the team and hero, different loadout should be loaded
+        public void link(GameData.TEAM team, GameData.HERO hero, NEntity.Entity entity)
+        {
+            cheapUpdate(entity);
+            entity.m_lazyEvents.Add(cheapUpdate);
+            Debug.Log("LINK TO UI");
         }
     }
 

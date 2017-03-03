@@ -20,7 +20,7 @@ public class Dash : Action
     Vector3 m_direction = new Vector3();
 
      
-    public override void use(NEntity.Entity entity, Motor motor)
+    public override void useProcess(NEntity.Entity entity, Motor motor)
     {
         m_isActive = true;
         m_timeElapsed = 0;
@@ -44,7 +44,7 @@ public class Dash : Action
         }
 
 
-        base.use(entity,motor);
+        base.useProcess(entity,motor);
     }
     public override void kFixedUpdate(NEntity.Entity entity, Motor motor, float timeElapsed)
     {

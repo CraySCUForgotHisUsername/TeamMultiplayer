@@ -12,7 +12,7 @@ namespace NAction {
         bool isUse = false;
         Vector3 m_dirHorizontal;
         Vector3 m_dirVertical = Vector3.zero;
-        public override void use(NEntity.Entity entity, Motor motor)
+        public override void useProcess(NEntity.Entity entity, Motor motor)
         {
             base.use(entity,motor);
             if (isUse)

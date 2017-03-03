@@ -21,7 +21,7 @@ namespace NAction
         {
 
         }
-        public override void use(NEntity.Entity entity, NMotor.Motor motor)
+        public override void useProcess(NEntity.Entity entity, NMotor.Motor motor)
         {
             var avatar = motor.m_avatarManager.getAvatar();
             var avatarCollision = motor.m_avatarManager.getAvatarCollision();
