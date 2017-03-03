@@ -44,7 +44,7 @@ public class EffectManager : NetworkBehaviour
     void getBulletTrail(bool isAlly, NetworkInstanceId playerMotorId, Vector3 to)
     {
         var trail = GameObject.Instantiate<Trail>( (isAlly)? PREFAB_TRAIL_ALLY :PREFAB_TRAIL_ENEMY);
-        var playerObjMotorAvatar = ClientScene.FindLocalObject(playerMotorId).GetComponent<NMotor.Motor>().getAvatar();
+        var playerObjMotorAvatar = ClientScene.FindLocalObject(playerMotorId).GetComponent<NMotor.Motor>().m_avatarManager.getAvatar();
 
         trail.init(playerObjMotorAvatar.m_weapon.transform.position, to);
     }

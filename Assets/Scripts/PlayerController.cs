@@ -7,9 +7,12 @@ using System.Collections;
 public class PlayerController : NetworkBehaviour {
 
 
-    
+    [SerializeField]
+    GameData.TEAM m_team;
+    GameData.HERO m_hero;
     [SerializeField]
     public GameObject m_eye;
+    public NEntity.Entity m_entity;
     public NMotor.Motor m_motor;
 
     [SyncVar]
@@ -46,29 +49,40 @@ public class PlayerController : NetworkBehaviour {
        // m_motor.setAvatar(isLocalPlayer);
 
     }
-    public void link(NMotor.Motor motor)
+    public void link(NEntity.Entity entity, NMotor.Motor motor)
     {
+        m_entity = entity;
         m_motor = motor;
-        m_motor.setAvatar(hasAuthority);
-        motor.addToHead(m_eye.transform);
-        //m_eye.transform.parent = m_motor.m_avatar.m_head.transform;
+        m_motor.setAvatar(m_team, hasAuthority);
+        motor.m_avatarManager.addToHead(m_eye.transform);
         m_eye.transform.localPosition = Vector3.zero;
+        NUI.Game.ME.link(motor);
     }
     [ClientRpc]
     public void RpcLink(NetworkInstanceId id)
     {
         var obj = ClientScene.FindLocalObject(id);
-        link( obj.GetComponent<NMotor.Motor>());
+        link(obj.GetComponent<NEntity.Entity>(), obj.GetComponent<NMotor.Motor>());
        // m_motor = motor;
        // m_eye.transform.parent = m_motor.m_head.transform;
        // m_eye.transform.localPosition = Vector3.zero;
     }
 
+
+    [ClientRpc]
+    public void RpcLinkInformation(GameData.TEAM myTeam, GameData.HERO myHero)
+    {
+        m_team = myTeam;
+        m_hero = myHero;
+    }
     [TargetRpc]
     public void TargetLink(NetworkConnection target, NetworkInstanceId id)
     {
         var obj = ClientScene.FindLocalObject(id);
-        link(obj.GetComponent<NMotor.Motor>());
+        var entity = obj.GetComponent<NEntity.Entity>();
+        var motor = obj.GetComponent<NMotor.Motor>();
+        NUI.Game.ME.link(motor);
+        link(entity,motor);
     }
     [Command]
     public void CmdSetHeadRotation(float x, float y, float z)
@@ -81,21 +95,10 @@ public class PlayerController : NetworkBehaviour {
         {
             return;
         }
-        m_motor.kFixedUpdate(Time.fixedDeltaTime);
+        m_motor.kFixedUpdate(m_entity, Time.fixedDeltaTime);
 
     }
-    void UpdateActionKey(NMotor.Motor motor, Action action, KeyCode key) {
 
-        if (Input.GetKeyDown(key))
-        {
-            //Debug.Log("SHIFT");
-            action.use(motor);
-        }
-        else if (Input.GetKeyUp(key)) {
-            action.end(motor);
-        }
-
-    }
 
     // Update is called once per frame
     void Update () {
@@ -103,100 +106,56 @@ public class PlayerController : NetworkBehaviour {
         if (!hasAuthority)
         {
             //Debug.Log("I AM RESETTING!!!!!!!!!!!!! head rotation" + headRotation.eulerAngles);
-            m_motor.setHeadRotation( headRotation);
+            m_motor.m_avatarManager.HeadRotation =  headRotation;
             return;
         }
-        m_motor.kUpdate();
-        //Calculate movement velocity 
-        float xMove = Input.GetAxisRaw("Horizontal"),
-            zMove = Input.GetAxisRaw("Vertical");
-        //Vector3 velocity = ( xMove,0,+ m_motor.transform.forward * zMove ).normalized;
-        //
-        m_motor.move(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-       
-        m_motor.rotate( Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
-        //m_motor.rotateHead(new Vector3(Input.GetAxisRaw("Mouse Y"), 0, 0) );
-        headRotation = m_motor.getHeadRotation();
+        m_motor.kUpdate(m_entity, Time.deltaTime);
+        updateMotorInput();
+    }
+    void updateMotorInput()
+    {
+        m_motor.move(m_entity.Speed,Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        m_motor.rotate(m_entity.RotationSpeed, Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
+
+        headRotation = m_motor.m_avatarManager.HeadRotation;
         CmdSetHeadRotation(headRotation.eulerAngles.x, headRotation.eulerAngles.y, headRotation.eulerAngles.z);
-        //Debug.Log("I AM refershing head rotation" + headRotation.eulerAngles);
-
-
-        // CmdUpdateHeadRotation(m_head.rotation);
-
-        //attack1();
-        //CmdAttack1();
+        
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            m_motor.jump(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-            if(m_motor.m_actJump != null) m_motor.m_actJump.use(m_motor);
+            m_motor.jumpBegin(m_entity, Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         }
         else if (Input.GetKeyUp(KeyCode.Space))
         {
-            m_motor.jumpEnd();
-            if (m_motor.m_actJump != null) m_motor.m_actJump.end(m_motor);
-
+            m_motor.jumpEnd(m_entity);
         }
-        if (Input.GetMouseButtonDown(0))
-        {
-            m_motor.m_action1.use(m_motor);
+        if (Input.GetMouseButtonDown(0)){
+            m_motor.ability1Begin(m_entity);
         }
-        else if (Input.GetMouseButton(0))
-        {
-            m_motor.m_action1.hold(m_motor);
-
+        else if (Input.GetMouseButtonUp(0)) {
+            m_motor.ability2End(m_entity);
         }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            m_motor.m_action1.end(m_motor);
+        if (Input.GetMouseButtonDown(1)){
+            m_motor.ability2Begin(m_entity);
         }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            m_motor.m_action2.use(m_motor);
-        }
-        else if (Input.GetMouseButton(1))
-        {
-            m_motor.m_action2.hold(m_motor);
-
-        }
-        else if (Input.GetMouseButtonUp(1))
-        {
-            m_motor.m_action2.end(m_motor);
-        }
-        UpdateActionKey(m_motor, m_motor.m_action3, KeyCode.LeftShift);
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("SHIFT");
-            m_motor.m_action4.use(m_motor);
-        }
-        
-
-        /*
-
-
-
-        if (Input.GetMouseButtonDown(1))
-        {
-
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            reload();
+        else if (Input.GetMouseButtonUp(1)){
+            m_motor.ability2End(m_entity);
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            ability1();
+            m_motor.ability3Begin(m_entity);
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            m_motor.ability3End(m_entity);
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            ability2();
+            m_motor.ability4Begin(m_entity);
         }
-        if (Input.GetKeyDown(KeyCode.Q))
+        else if (Input.GetKeyUp(KeyCode.E))
         {
-            ability3();
+            m_motor.ability4End(m_entity);
         }
-         * */
     }
     [Command]
     void CmdUpdateHeadRotation(Quaternion rotation)

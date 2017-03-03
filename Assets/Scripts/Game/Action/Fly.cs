@@ -12,9 +12,9 @@ namespace NAction {
         bool isUse = false;
         Vector3 m_dirHorizontal;
         Vector3 m_dirVertical = Vector3.zero;
-        public override void use(Motor motor)
+        public override void use(NEntity.Entity entity, Motor motor)
         {
-            base.use(motor);
+            base.use(entity,motor);
             if (isUse)
             {
 
@@ -42,7 +42,9 @@ namespace NAction {
         }
         void flyHorizontally(Motor motor, float horizontal, float vertical)
         {
-            m_dirHorizontal = (motor.getCollisionAvatar().m_head.transform.forward * vertical + motor.getCollisionAvatar().m_head.transform.right * horizontal).normalized;
+            var avatar = motor.m_avatarManager.getAvatar();
+            var avatarCollision = motor.m_avatarManager.getAvatarCollision();
+            m_dirHorizontal = (avatar.m_head.transform.forward * vertical + avatarCollision.m_head.transform.right * horizontal).normalized;
         }
         void flyUp(Motor motor, float horizontal, float vertical)
         {
@@ -58,10 +60,10 @@ namespace NAction {
             m_dirVertical = Vector3.down;
 
         }
-        public override void kFixedUpdate(Motor motor, float timeElapsed)
+        public override void kFixedUpdate(NEntity.Entity entity, Motor motor, float timeElapsed)
         {
             if (!isUse) return;
-            base.kUpdate(motor, timeElapsed);
+            base.kUpdate(entity,motor, timeElapsed);
             Vector3 dir = (m_dirHorizontal + m_dirVertical ).normalized;
             //motor.Rigidbody.AddForce(-Physics.gravity);
             motor.Rigidbody.velocity -= motor.Rigidbody.velocity *Mathf.Min(1, m_airResistance * timeElapsed);
@@ -69,7 +71,7 @@ namespace NAction {
            // motor.Rigidbody.AddForce(-motor.Rigidbody.velocity*500*timeElapsed);
            // motor.Rigidbody.AddForce(movementDirection  * speed* motor.m_entity.getModSpeed() * timeElapsed );
         }
-        public override void kUpdate(Motor motor, float timeElapsed)
+        public override void kUpdate(NEntity.Entity entity, Motor motor, float timeElapsed)
         {
             //Debug.Log("FLYING");
             //base.kUpdate(motor, timeElapsed);

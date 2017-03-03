@@ -29,6 +29,10 @@ namespace NUI {
         {
 
         }
+        public void link(NMotor.Motor motor)
+        {
+
+        }
     }
 
 }

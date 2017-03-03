@@ -18,24 +18,24 @@ public class Action : MonoBehaviour  {
     {
 
     }
-    public virtual void use(NMotor.Motor motor)
+    public virtual void use(NEntity.Entity entity, NMotor.Motor motor)
     {
 
     }
-    public virtual void hold(NMotor.Motor motor)
+    public virtual void hold(NEntity.Entity entity, NMotor.Motor motor)
     {
 
     }
-    public virtual void end(NMotor.Motor motor)
+    public virtual void end(NEntity.Entity entity, NMotor.Motor motor)
     {
 
     }
     
-    public virtual void kFixedUpdate(NMotor.Motor motor, float timeElapsed)
+    public virtual void kUpdate(NEntity.Entity entity, NMotor.Motor motor, float timeElapsed)
     {
 
     }
-    public virtual void kUpdate(NMotor.Motor motor, float timeElapsed)
+    public virtual void kFixedUpdate(NEntity.Entity entity, NMotor.Motor motor, float timeElapsed)
     {
 
     }

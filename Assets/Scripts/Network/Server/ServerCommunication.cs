@@ -95,7 +95,9 @@ public class ServerCommunication : MonoBehaviour {
 
         NetworkServer.SpawnWithClientAuthority(playerInfo.motor.gameObject, playerConnection);
         NetworkServer.SpawnWithClientAuthority(playerInfo.controller.gameObject, playerConnection);
+
         //playerInfo.controller.link(playerInfo.motor);
+        playerInfo.controller.RpcLinkInformation(playerInfo.team, playerInfo.hero);
         playerInfo.controller.RpcLink(playerInfo.motor.netId);
         playerInfo.motor.RpcSetPlayerTeam((int)playerInfo.team);
 

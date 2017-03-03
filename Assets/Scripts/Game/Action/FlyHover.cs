@@ -13,15 +13,15 @@ namespace NAction
         public float m_force;
         bool isUse = false, isActivated = false;
         float m_timeElapsed = 0;
-        public override void use(Motor motor)
+        public override void use(NEntity.Entity entity,Motor motor)
         {
-            base.use(motor);
+            base.use(entity,motor);
             if (isUse) return;
             setActive(motor,true);
         }
-        public override void end(Motor motor)
+        public override void end(NEntity.Entity entity, Motor motor)
         {
-            base.end(motor);
+            base.end(entity, motor);
             if (!isUse) return;
             setActive(motor,false);
         }
@@ -41,11 +41,11 @@ namespace NAction
                 activate(motor, false);
             }
         }
-        public override void kFixedUpdate(Motor motor, float timeElapsed)
+        public override void kFixedUpdate(NEntity.Entity entity, Motor motor, float timeElapsed)
         {
            // Debug.Log(isActivated);
             if (!isUse) return;
-            base.kUpdate(motor, timeElapsed);
+            base.kUpdate(entity, motor, timeElapsed);
             //motor.Rigidbody.AddForce(-Physics.gravity);
             if (isActivated)
             {
@@ -65,7 +65,7 @@ namespace NAction
             isActivated = value;
             motor.isUpdateMovement = !value;
         }
-        public override void kUpdate(Motor motor, float timeElapsed)
+        public override void kUpdate(NEntity.Entity entity, Motor motor, float timeElapsed)
         {
            // Debug.Log(motor.isUpdateMovement);
             if (!isUse) return;

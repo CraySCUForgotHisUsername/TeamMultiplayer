@@ -20,7 +20,7 @@ public class Dash : Action
     Vector3 m_direction = new Vector3();
 
      
-    public override void use(Motor motor)
+    public override void use(NEntity.Entity entity, Motor motor)
     {
         m_isActive = true;
         m_timeElapsed = 0;
@@ -34,7 +34,7 @@ public class Dash : Action
         }
         else
         {
-            m_direction = motor.getAvatar().m_head.transform.forward;
+            m_direction = motor.m_avatarManager.getAvatar().m_head.transform.forward;
 
         }
         if (!m_enableYDirection)
@@ -44,11 +44,11 @@ public class Dash : Action
         }
 
 
-        base.use(motor);
+        base.use(entity,motor);
     }
-    public override void kFixedUpdate(Motor motor, float timeElapsed)
+    public override void kFixedUpdate(NEntity.Entity entity, Motor motor, float timeElapsed)
     {
-        base.kFixedUpdate(motor, timeElapsed);
+        base.kFixedUpdate(entity,motor, timeElapsed);
         if (m_isActive)
         {
             m_timeElapsed += timeElapsed;

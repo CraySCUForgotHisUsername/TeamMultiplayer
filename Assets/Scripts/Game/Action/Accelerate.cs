@@ -11,16 +11,16 @@ public class Accelerate : Action
     bool m_isActive = false;
 
 
-    public override void use(Motor motor)
+    public override void use(NEntity.Entity entity,Motor motor)
     {
-        base.use(motor);
+        base.use(entity,motor);
         if (m_isActive) return;
         m_isActive = true;
         motor.m_scalarsSpeed.Add(getBonusSpeed);
     }
-    public override void end(Motor motor)
+    public override void end(NEntity.Entity entity, Motor motor)
     {
-        base.end(motor);
+        base.end(entity,motor);
         if (!m_isActive) return;
         motor.m_scalarsSpeed.Remove(getBonusSpeed);
         m_isActive = false;
@@ -29,9 +29,9 @@ public class Accelerate : Action
         return m_speedBonus;
     }
     
-    public override void kFixedUpdate(Motor motor, float timeElapsed)
+    public override void kFixedUpdate(NEntity.Entity entity,Motor motor, float timeElapsed)
     {
-        base.kFixedUpdate(motor, timeElapsed);
+        base.kFixedUpdate(entity,motor, timeElapsed);
         if (m_isActive)
         {
         }

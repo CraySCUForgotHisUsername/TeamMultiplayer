@@ -24,12 +24,12 @@ public class Action_Hitscan : Action {
 
         //    );
     }
-    public override void use(NMotor.Motor motor)
+    public override void use(NEntity.Entity entity, NMotor.Motor motor)
     {
         //Debug.Log("Fired");
-        base.use(motor);
-        
-        fire(motor.m_playerInfo.team, motor.netId,  motor.getAvatar().m_head.transform.position, motor.getAvatar().m_head.transform.forward , m_damage, m_maxTravelDistance, m_bounce);
+        base.use(entity, motor);
+        Avatar avatar = motor.m_avatarManager.getAvatar();
+        fire(motor.m_playerInfo.team, motor.netId, avatar.m_head.transform.position, avatar.m_head.transform.forward , m_damage, m_maxTravelDistance, m_bounce);
 
     }
     public void fire(
