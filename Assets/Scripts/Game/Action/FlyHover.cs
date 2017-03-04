@@ -8,9 +8,10 @@ namespace NAction
 
     public class FlyHover : Action
     {
-        public float m_airResistance = 3.0f;
+        [SerializeField]
+        float m_resourceUseRate = 1.0f;
         public float m_minHoldTime = 1.0f;
-        public float m_force;
+        public float m_forceUpward;
         [SerializeField]
         float m_forceAdjustmentMax;
         bool isUse = false, isActivated = false;
@@ -60,13 +61,19 @@ namespace NAction
 
 
                 //if(bodyDownwardForce>0.1f) Debug.Log(bodyDownwardForce);
-                motor.Rigidbody.AddForce(Vector3.up * m_force * timeElapsed, ForceMode.Impulse);
+                motor.Rigidbody.AddForce(Vector3.up * m_forceUpward * timeElapsed, ForceMode.Impulse);
                 motor.Rigidbody.AddForce(Vector3.up * bodyDownwardForce * Mathf.Min(1, 3 * timeElapsed), ForceMode.Impulse);
                 motor.Rigidbody.AddForce(stablize * Mathf.Min(1, 1.5f * timeElapsed), ForceMode.Impulse);
-                float fuel = (Vector3.up * m_force * timeElapsed).magnitude + (Vector3.up * bodyDownwardForce * Mathf.Min(1, 3 * timeElapsed)).magnitude +
-                    (stablize * Mathf.Min(1, 1.5f * timeElapsed)).magnitude;
-                entity.useResource(fuel, true);
-                Debug.Log("USED FUEL " + fuel);
+                float resourceRequired = (Vector3.up * m_forceUpward * timeElapsed).magnitude + (Vector3.up * bodyDownwardForce * Mathf.Min(1, 3 * timeElapsed)).magnitude +
+                    (stablize * Mathf.Min(1, 1.5f * timeElapsed)).magnitude ;
+                resourceRequired *= m_resourceUseRate;
+                float resourceUsed = entity.useResource(resourceRequired, true);
+                Debug.Log("USED FUEL " + resourceRequired);
+                if (resourceUsed < resourceRequired)
+                {
+                    setActive(motor, false);
+
+                }
                 //motor.Rigidbody.AddForce(-motor.Rigidbody.velocity * 0.9f);
                 //motor.Rigidbody.AddForce(dirFly * m_force * timeElapsed, ForceMode.Impulse);
             }

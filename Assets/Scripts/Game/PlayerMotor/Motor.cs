@@ -289,7 +289,8 @@ namespace NMotor {
             hprFixedUpdate(entity, m_actLMB, timeElapsed);
             hprFixedUpdate(entity,m_actRMB, timeElapsed);
             hprFixedUpdate(entity, m_actJump, timeElapsed);
-            hprFixedUpdate(entity,m_actR, timeElapsed);
+            hprFixedUpdate(entity, m_actR, timeElapsed);
+            hprFixedUpdate(entity, m_actE, timeElapsed);
             hprFixedUpdate(entity,m_actF, timeElapsed);
             hprFixedUpdate(entity,m_actShift, timeElapsed);
         }
@@ -300,6 +301,7 @@ namespace NMotor {
             hprUpdate(entity, m_actRMB, timeElapsed);
             hprUpdate(entity, m_actJump, timeElapsed);
             hprUpdate(entity, m_actR, timeElapsed);
+            hprUpdate(entity, m_actE, timeElapsed);
             hprUpdate(entity, m_actF, timeElapsed);
             hprUpdate(entity, m_actShift, timeElapsed);
             if (m_isInputDelayed)

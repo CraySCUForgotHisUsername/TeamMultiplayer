@@ -75,6 +75,11 @@ public class Action : MonoBehaviour  {
     {
 
     }
+    protected void setReady(bool value)
+    {
+        m_isReady = value;
+        m_delayTimeElapsed = 0;
+    }
     public virtual void kUpdate(NEntity.Entity entity, NMotor.Motor motor, float timeElapsed)
     {
         if (m_isReady) return;

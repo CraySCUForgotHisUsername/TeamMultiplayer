@@ -14,7 +14,7 @@ namespace NAction {
         Vector3 m_dirVertical = Vector3.zero;
         public override void useProcess(NEntity.Entity entity, Motor motor)
         {
-            base.use(entity,motor);
+            base.useProcess(entity,motor);
             if (isUse)
             {
 
