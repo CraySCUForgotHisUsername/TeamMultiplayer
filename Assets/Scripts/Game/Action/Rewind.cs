@@ -25,6 +25,7 @@ namespace NAction
         }
         void setActive(Entity entity, Motor motor, bool state)
         {
+            Debug.Log("REWIND SET " + state);
             if (isUse == state) return;
             isUse = state;
             if (isUse)
@@ -49,9 +50,11 @@ namespace NAction
         {
             base.kUpdate(entity, motor, timeElapsed);
             if (!isUse) return;
-            float resourceUsed = entity.useResource(m_resourcePerSecond*timeElapsed, true);
-            if (resourceUsed <= 0.1)
+            float resource = m_resourcePerSecond * timeElapsed;
+            float resourceUsed = entity.useResource(resource, true);
+            if (resourceUsed < resource)
             {
+                //Debug.Log("SET FALSE TO" + resourceUsed + " AND " + resource);
                 setActive(entity, motor, false);
 
             }
