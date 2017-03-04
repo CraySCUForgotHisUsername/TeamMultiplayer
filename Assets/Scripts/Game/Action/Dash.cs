@@ -7,9 +7,12 @@ using UnityEngine.Networking;
 public class Dash : Action
 {
     [SerializeField]
-    float m_distance,m_duration;
+    float
+        m_resourceActivation, 
+        m_distance,m_duration;
     [SerializeField]
     bool 
+        m_enableAirDash,
         m_enableYDirection,
         m_useVelocityDirection;
     bool m_isActive = false;
@@ -19,9 +22,18 @@ public class Dash : Action
         m_velocity = 0;
     Vector3 m_direction = new Vector3();
 
-     
+
     public override void useProcess(NEntity.Entity entity, Motor motor)
     {
+        if ((!m_enableAirDash && !motor.IsGrounded) ||
+            entity.useResource(m_resourceActivation, false) == 0)
+        {
+            Debug.Log("FAIL");
+            //Was in the air
+            //Or failed to pay activation cost
+            setReady(true);
+            return;
+        }
         m_isActive = true;
         m_timeElapsed = 0;
         m_distanceMoved = 0;

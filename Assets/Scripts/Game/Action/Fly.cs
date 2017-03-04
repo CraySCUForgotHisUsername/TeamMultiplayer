@@ -7,6 +7,8 @@ namespace NAction {
 
     public class Fly :  Action
     {
+        public List<DEL.VOID_ENTITY_MOTOR> m_evntFlyBegin = new List<DEL.VOID_ENTITY_MOTOR>();
+        public List<DEL.VOID_ENTITY_MOTOR> m_evntFlyEnd = new List<DEL.VOID_ENTITY_MOTOR>();
         public float m_resourceActivation = 10.0f;
         public float m_resourcePerSecond = 10.0f;
         public float m_speed = 3.0f;
@@ -41,6 +43,7 @@ namespace NAction {
                 motor.m_evntJumpStop.Remove(flyUpDownStop);
                 motor.m_evntCrawlBegin.Remove(flyDown);
                 motor.m_evntCrawlEnd.Remove(flyUpDownStop);
+                DEL.RAISE(m_evntFlyEnd, entity, motor);
             }
             else
             {
@@ -57,6 +60,7 @@ namespace NAction {
                 motor.m_evntJumpStop.Add(flyUpDownStop);
                 motor.m_evntCrawlBegin.Add(flyDown);
                 motor.m_evntCrawlEnd.Add(flyUpDownStop);
+                DEL.RAISE(m_evntFlyBegin, entity, motor);
 
             }
 

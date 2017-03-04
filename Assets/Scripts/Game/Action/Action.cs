@@ -5,7 +5,8 @@ using UnityEngine.Networking;
 
 
 public class Action : MonoBehaviour  {
-    
+
+    public bool m_isReceiveInput = true;
     bool m_isReady = true;
     float m_delayTimeElapsed = 0;
 
@@ -41,6 +42,7 @@ public class Action : MonoBehaviour  {
     }
     public void use(NEntity.Entity entity, NMotor.Motor motor)
     {
+        if (!m_isReceiveInput) return;
         if (!m_isReady) return;
         m_isReady = false;
         bool canUse = true;
@@ -55,12 +57,15 @@ public class Action : MonoBehaviour  {
         
         useProcess(entity, motor);
     }
+    
     public void hold(NEntity.Entity entity, NMotor.Motor motor)
     {
+        if (!m_isReceiveInput) return;
 
     }
     public void end(NEntity.Entity entity, NMotor.Motor motor)
     {
+        if (!m_isReceiveInput) return;
         endProcess(entity, motor);
     }
     public virtual void useProcess(NEntity.Entity entity, NMotor.Motor motor)

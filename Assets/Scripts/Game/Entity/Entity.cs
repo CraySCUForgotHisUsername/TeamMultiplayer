@@ -9,8 +9,9 @@ namespace NEntity {
     public class Entity : NetworkBehaviour
     {
         public delegate float DEL_MODIFIER();
-        public delegate void DEL_ME(Entity me); 
-        static float DAMAGE_AVOID_DISTANCE = 1.0f;
+        public delegate void DEL_ME(Entity me);
+        const float DAMAGE_AVOID_DISTANCE = 1.0f;
+        const float DAMAGE_AVOID_REDUCTION = 0.5f;
 
         public List<DEL_ME> m_lazyEvents = new List<DEL_ME>();
 
@@ -131,6 +132,10 @@ namespace NEntity {
             //mod = Mathf.Max(1.0f )
             //Debug.Log("Raw damage " + amount);
             health -= amount;
+
+            if (!isServer)
+                CmdClinetUpdatingHealth(amount);
+
             if (health < 1)
             {
                 health = 0;
@@ -154,6 +159,8 @@ namespace NEntity {
             Debug.Log("takeDamage damage " + amount);
             if (!isTakingDamage) return false;
             health -= amount;
+            if(!isServer)
+                CmdClinetUpdatingHealth(amount);
             if (health < 1)
             {
                 health = 0;
@@ -163,19 +170,26 @@ namespace NEntity {
             return true;
         }
         [Command]
-        void CmdClinetUpdatingHealth(float h)
+        void CmdClinetUpdatingHealth(float amountOfDamageTaken)
         {
-            this.health = h;
+            this.health -= amountOfDamageTaken;
         }
         [TargetRpc]
         public void TargetTakeDamage(NetworkConnection target, Vector3 impactPoint, float damage)
         {
+            //Hello I am told I am taking damage?
             Debug.Log("Hello I am told I am taking damage " + this.gameObject.name);
             if ((this.transform.position - impactPoint).magnitude > DAMAGE_AVOID_DISTANCE)
             {
-                //do nothing;
+                //Ok I think I kinda avoided it.
+                //I deserve to take less damage from it.
+                takeDamage(damage * DAMAGE_AVOID_REDUCTION);
             }
-            takeDamage(damage);
+            else
+            {
+                takeDamage(damage);
+
+            }
         }
 
         public float getModSpeed()

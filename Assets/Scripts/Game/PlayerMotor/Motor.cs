@@ -72,7 +72,7 @@ namespace NMotor {
             m_right = Vector3.zero,
             m_upward = Vector3.up;
         bool wasGrounded = true;
-        bool m_isInAir = false;
+        bool m_isTouchingGround = false;
 
         bool m_isInputDelayed = true;
         float m_timeInputDelay = 0;
@@ -105,6 +105,13 @@ namespace NMotor {
                 return !m_isInputDelayed;
             }
         }
+        public bool IsGrounded {
+            get
+            {
+                return m_isTouchingGround;
+            }
+        }
+        
         // Use this for initialization
         private void Awake()
         {
@@ -133,19 +140,18 @@ namespace NMotor {
                 m_forward = transform.forward;
                 m_right = transform.right;
             }
-            m_isInAir = !(hit.transform != null);
-            return !m_isInAir;
+            m_isTouchingGround = (hit.transform != null);
+            return m_isTouchingGround;
             
         }
         //Run during fixedupdate
         public virtual void updateMovement(NEntity.Entity entity, float timeElapsed)
         {
-            bool isGrounded = updateIsGrounded();
             //Debug.Log("GRAVITY " + (-m_upward * entity.Gravity * timeElapsed));
             m_rigidbody.AddForce(-m_upward * entity.Gravity  * timeElapsed ,ForceMode.Impulse);
             m_rigidbody.drag = 10.0f;
             m_rigidbody.angularDrag = 10.0f;
-            if (!isGrounded)
+            if (!IsGrounded)
             {
                 m_rigidbody.drag = 0.0f;
                 m_rigidbody.angularDrag = 0.0f;
@@ -166,8 +172,8 @@ namespace NMotor {
 
             }
 
-            wasGrounded = isGrounded;
-            if (isGrounded)
+            wasGrounded = IsGrounded;
+            if (IsGrounded)
             {
                 //entity should restore the air control
             }
@@ -182,7 +188,7 @@ namespace NMotor {
             }
             //land control
 
-            if (isGrounded)
+            if (IsGrounded)
             {
                 // m_timeRunning += Time.fixedDeltaTime;
                 //Debug.Log("MOVING " + Time.time);
@@ -190,7 +196,7 @@ namespace NMotor {
 
             }
             //air control
-            if (!isGrounded)
+            if (!IsGrounded)
             {
                 // m_timeRunning = 0;
                 var bodyVelocity_XZ = m_rigidbody.velocity;
@@ -294,7 +300,11 @@ namespace NMotor {
             }
 
             //Debug.Log(m_right);
-            if (isUpdateMovement) updateMovement(entity,timeElapsed);
+            if (isUpdateMovement)
+            {
+                updateIsGrounded();
+                updateMovement(entity, timeElapsed);
+            }
 
             hprFixedUpdate(entity, m_actLMB, timeElapsed);
             hprFixedUpdate(entity,m_actRMB, timeElapsed);
@@ -341,7 +351,7 @@ namespace NMotor {
                 m_evntJump[i](entity, this, horizontal, vertical);
             }
 
-            if (!updateIsGrounded()) return;
+            if (!IsGrounded) return;
             if (m_isJumpAvailable)
             {
                 m_rigidbody.AddForce(m_avatarManager.Up * entity.Jump,ForceMode.Impulse);
