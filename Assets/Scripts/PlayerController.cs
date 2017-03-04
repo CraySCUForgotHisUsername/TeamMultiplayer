@@ -119,7 +119,7 @@ public class PlayerController : NetworkBehaviour {
     public virtual void updateMotorInput()
     {
         
-        m_motor.move(m_entity.Speed,Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        m_motor.move(m_entity, m_entity.Speed,Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         m_motor.rotate(m_entity.RotationSpeed, Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
         headRotation = m_motor.m_avatarManager.HeadRotation;
@@ -134,9 +134,14 @@ public class PlayerController : NetworkBehaviour {
         {
             m_motor.jumpEnd(m_entity);
         }
-
-        if (!m_motor.IsReadyForInput)
-            return;
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            m_motor.crawlBegin(m_entity);
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftControl))
+        {
+            m_motor.crawlEnd(m_entity);
+        }
 
         if (!m_motor.IsReadyForInput) return;
         if (Input.GetMouseButton(0)){

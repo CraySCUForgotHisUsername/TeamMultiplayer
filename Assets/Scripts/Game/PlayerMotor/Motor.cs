@@ -22,14 +22,16 @@ namespace NMotor {
         public delegate float DEL_RETURN_FLOAT();
         public delegate float DEL_GET_SCHALAR(Motor motor);
         public delegate void DEL_ME(Motor motor);
-        public delegate void DEL_MOVE(Motor motor, float horizontal, float vertical);
+        public delegate void DEL_ENTITY_ME(NEntity.Entity entity, Motor motor);
+        public delegate void DEL_MOVE(NEntity.Entity entity, Motor motor, float horizontal, float vertical);
+        public delegate void DEL_JUMP(NEntity.Entity entity, Motor motor, float horizontal, float vertical);
 
         public List<DEL_GET_SCHALAR> m_scalarsSpeed = new List<DEL_GET_SCHALAR>();
         public List<DEL_MOVE> m_evntMoves = new List<DEL_MOVE>();
-        public List<DEL_MOVE> m_evntJump = new List<DEL_MOVE>();
-        public List<DEL_ME> m_evntCrawl = new List<DEL_ME>();
-        public List<DEL_ME> m_evntJumpStop = new List<DEL_ME>();
-        public List<DEL_ME> m_evntCrawlStop = new List<DEL_ME>();
+        public List<DEL_JUMP> m_evntJump = new List<DEL_JUMP>();
+        public List<DEL_ENTITY_ME> m_evntJumpStop = new List<DEL_ENTITY_ME>();
+        public List<DEL_ENTITY_ME> m_evntCrawlBegin = new List<DEL_ENTITY_ME>();
+        public List<DEL_ENTITY_ME> m_evntCrawlEnd = new List<DEL_ENTITY_ME>();
 
         [SerializeField]
         string m_playerName = "PlayerNameHere";
@@ -203,11 +205,14 @@ namespace NMotor {
                 //float ratioDifference = 1-Vector3.Dot(bodyVelocityDirection, desiredVelocityDirection);
 
                 //float possibleAccelerationRange = 1 - Mathf.Max(-1, Mathf.Min(1, Vector3.Dot(bodyVelocity_XZ, desiredVelocityDirection)));
+
+                /* Don't need these I do it better way
                 float possibleAccelerationRange = Mathf.Max(-1, Mathf.Min(1,
                     Vector3.Dot(bodyVelocity_XZ, desiredVelocityDirection) / desiredVelocityDirection.magnitude));
                 possibleAccelerationRange *= -1;
                 possibleAccelerationRange += 1;
                 possibleAccelerationRange /= 2.0f;
+                 * */
                 float possibleAceelerationDueToSpeedDiff = Mathf.Min(
                     (desiredVelocityXZ.magnitude -
                     Vector3.Dot(bodyVelocity_XZ, desiredVelocityDirection)) / desiredVelocityXZ.magnitude, 1.0f);
@@ -218,8 +223,8 @@ namespace NMotor {
                 //var directionCorrect = desiredVelocityDirection - bodyVelocityDirection;
                 //directionCorrect.Normalize();
                 //possibleAccelerationRange = Mathf.Max(possibleAceelerationDueToSpeedDiff * AIR_SURFING_FORCE_LINEAR_MAX, possibleAccelerationRange);
-                possibleAccelerationRange = possibleAceelerationDueToSpeedDiff;// * AIR_SURFING_FORCE_LINEAR_MAX;
-                Vector3 force = desiredVelocityXZ * possibleAccelerationRange;// *  Mathf.Min(1.0f, 100.0f * timeElapsed);
+                //possibleAccelerationRange = possibleAceelerationDueToSpeedDiff;// * AIR_SURFING_FORCE_LINEAR_MAX;
+                Vector3 force = desiredVelocityXZ * possibleAceelerationDueToSpeedDiff;// *  Mathf.Min(1.0f, 100.0f * timeElapsed);
                 //Debug.Log(possibleAccelerationRange + " , " +force);
                 //Debug.Log(m_velocity + " , " + possibleAccelerationRange + " , " +  force);
                 m_rigidbody.AddForce(addThisVelocity * AIR_SURFING_FORCE_LINEAR_MAX, ForceMode.Impulse);
@@ -234,13 +239,13 @@ namespace NMotor {
         {
             this.m_playerInfo.team = (GameData.TEAM)team;
         }
-        public virtual void move(float speed, float horizontal, float vertical)
+        public virtual void move(NEntity.Entity entity, float speed, float horizontal, float vertical)
         {
             m_moveDirection.x = horizontal;
             m_moveDirection.z = vertical;
             for (int i = 0; i < m_evntMoves.Count; i++)
             {
-                m_evntMoves[i](this, horizontal, vertical);
+                m_evntMoves[i](entity,this, horizontal, vertical);
             }
             Vector3 direction = (m_right * horizontal + m_forward * vertical).normalized;//.normalized;
             m_velocity = direction * speed; ;
@@ -253,15 +258,20 @@ namespace NMotor {
             m_jumpTimeElapsed = 0;
 
         }
-        
-        public virtual void crawl()
+
+        public virtual void crawlBegin(NEntity.Entity entity)
         {
-            for (int i = 0; i < m_evntCrawl.Count; i++)
+            for (int i = 0; i < m_evntCrawlBegin.Count; i++)
             {
-                m_evntCrawl[i](this);
+                m_evntCrawlBegin[i](entity,this);
             }
-
-
+        }
+        public virtual void crawlEnd(NEntity.Entity entity)
+        {
+            for (int i = 0; i < m_evntCrawlEnd.Count; i++)
+            {
+                m_evntCrawlEnd[i](entity, this);
+            }
         }
         public void rotate(float rotateScalar, float horizontal, float vertical)
         {
@@ -328,7 +338,7 @@ namespace NMotor {
             hprUse(entity, m_actJump);
             for (int i = 0; i < m_evntJump.Count; i++)
             {
-                m_evntJump[i](this, horizontal, vertical);
+                m_evntJump[i](entity, this, horizontal, vertical);
             }
 
             if (!updateIsGrounded()) return;
@@ -339,18 +349,13 @@ namespace NMotor {
                 m_rigidbody.AddForce(VelocityDirHorizontal * entity.Speed * JUMP_POWER_HORIZONTAL, ForceMode.Impulse);
                 setJumpAvailable(false);
             }
-
-            for (int i = 0; i < m_evntJumpStop.Count; i++)
-            {
-                m_evntJumpStop[i](this);
-            }
-
+            
         }
         public virtual void jumpEnd(NEntity.Entity entity)
         {
             for (int i = 0; i < m_evntJumpStop.Count; i++)
             {
-                m_evntJumpStop[i](this);
+                m_evntJumpStop[i](entity, this);
             }
             hprEnd(entity, m_actJump);
 
