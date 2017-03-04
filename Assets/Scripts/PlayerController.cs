@@ -108,7 +108,7 @@ public class PlayerController : NetworkBehaviour {
         //    Debug.Log(hasAuthority);
         if (!hasAuthority)
         {
-            Debug.Log("I AM RESETTING!!!!!!!!!!!!! head rotation" + m_motor + ","+ m_motor.m_avatarManager);
+
             m_motor.m_avatarManager.HeadRotation =  headRotation;
             return;
         }

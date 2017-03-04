@@ -25,8 +25,11 @@ namespace NUI {
         void Update()
         {
             m_healthBar.transform.localScale = new Vector3(m_entity.health/m_entity.healthMax, 1,1);
-           
+            if(Camera.main != null)
+            {
             transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+
+            }
         }
     }
 
