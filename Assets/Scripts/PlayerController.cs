@@ -112,11 +112,13 @@ public class PlayerController : NetworkBehaviour {
             m_motor.m_avatarManager.HeadRotation =  headRotation;
             return;
         }
-        m_motor.kUpdate(m_entity, Time.deltaTime);
         updateMotorInput();
+        m_entity.kUpdate(Time.deltaTime);
+        m_motor.kUpdate(m_entity, Time.deltaTime);
     }
     public virtual void updateMotorInput()
     {
+        
         m_motor.move(m_entity.Speed,Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         m_motor.rotate(m_entity.RotationSpeed, Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
@@ -133,21 +135,29 @@ public class PlayerController : NetworkBehaviour {
             m_motor.jumpEnd(m_entity);
         }
 
-        //if (!m_motor.IsReadyForInput)
-        //    return;
+        if (!m_motor.IsReadyForInput)
+            return;
 
-
-        if (Input.GetMouseButtonDown(0)){
+        if (!m_motor.IsReadyForInput) return;
+        if (Input.GetMouseButton(0)){
             m_motor.actLMBBegin(m_entity);
         }
         else if (Input.GetMouseButtonUp(0)) {
             m_motor.actRMBEnd(m_entity);
         }
-        if (Input.GetMouseButtonDown(1)){
+        if (Input.GetMouseButton(1)){
             m_motor.actRMBBegin(m_entity);
         }
         else if (Input.GetMouseButtonUp(1)){
             m_motor.actRMBEnd(m_entity);
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            m_motor.actRBegin(m_entity);
+        }
+        else if (Input.GetKeyUp(KeyCode.R))
+        {
+            m_motor.actREnd(m_entity);
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {

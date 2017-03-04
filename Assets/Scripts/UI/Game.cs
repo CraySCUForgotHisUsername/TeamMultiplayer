@@ -32,12 +32,12 @@ namespace NUI {
         }
         public void cheapUpdate(NEntity.Entity entity)
         {
-            m_healthNow.text = "" + entity.Health;
-            m_healthMax.text = "" + entity.healthMax;
-            m_ammoNow.text = "" + entity.m_ammo;
-            m_ammoMax.text = "" + entity.m_ammoMax;
-            m_resourceNow.text = "" + entity.m_resourceNow;
-            m_resourceMax.text = "" + entity.m_resourceMax;
+            m_healthNow.text = "" + (int)entity.Health;
+            m_healthMax.text = "" + (int)entity.healthMax;
+            m_ammoNow.text = "" + (int)entity.m_ammo;
+            m_ammoMax.text = "" + (int)entity.m_ammoMax;
+            m_resourceNow.text = "" + (int)entity.m_resourceNow;
+            m_resourceMax.text = "" + (int)entity.m_resourceMax;
 
         }
         //Depending on the team and hero, different loadout should be loaded

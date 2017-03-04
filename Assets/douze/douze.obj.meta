@@ -1,0 +1,227 @@
+fileFormatVersion: 2
+guid: 8ae0400f75a8c5a4a8b085355116b2c8
+timeCreated: 1488584262
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: slot120
+    100004: slot121
+    100006: slot162
+    100008: slot187
+    100010: slot189
+    100012: slot2
+    100014: slot227
+    100016: slot228
+    100018: slot238
+    100020: slot243
+    100022: slot25
+    100024: slot27
+    100026: slot293
+    100028: slot294
+    100030: slot295
+    100032: slot296
+    100034: slot297
+    100036: slot298
+    100038: slot299
+    100040: slot3
+    100042: slot32
+    100044: slot39
+    100046: slot4
+    100048: slot46
+    100050: slot48
+    100052: slot5
+    100054: slot55
+    100056: slot6
+    100058: slot60
+    100060: slot7
+    400000: //RootNode
+    400002: slot120
+    400004: slot121
+    400006: slot162
+    400008: slot187
+    400010: slot189
+    400012: slot2
+    400014: slot227
+    400016: slot228
+    400018: slot238
+    400020: slot243
+    400022: slot25
+    400024: slot27
+    400026: slot293
+    400028: slot294
+    400030: slot295
+    400032: slot296
+    400034: slot297
+    400036: slot298
+    400038: slot299
+    400040: slot3
+    400042: slot32
+    400044: slot39
+    400046: slot4
+    400048: slot46
+    400050: slot48
+    400052: slot5
+    400054: slot55
+    400056: slot6
+    400058: slot60
+    400060: slot7
+    2300000: slot120
+    2300002: slot121
+    2300004: slot162
+    2300006: slot187
+    2300008: slot189
+    2300010: slot2
+    2300012: slot227
+    2300014: slot228
+    2300016: slot238
+    2300018: slot243
+    2300020: slot25
+    2300022: slot27
+    2300024: slot293
+    2300026: slot294
+    2300028: slot295
+    2300030: slot296
+    2300032: slot297
+    2300034: slot298
+    2300036: slot299
+    2300038: slot3
+    2300040: slot32
+    2300042: slot39
+    2300044: slot4
+    2300046: slot46
+    2300048: slot48
+    2300050: slot5
+    2300052: slot55
+    2300054: slot6
+    2300056: slot60
+    2300058: slot7
+    3300000: slot120
+    3300002: slot121
+    3300004: slot162
+    3300006: slot187
+    3300008: slot189
+    3300010: slot2
+    3300012: slot227
+    3300014: slot228
+    3300016: slot238
+    3300018: slot243
+    3300020: slot25
+    3300022: slot27
+    3300024: slot293
+    3300026: slot294
+    3300028: slot295
+    3300030: slot296
+    3300032: slot297
+    3300034: slot298
+    3300036: slot299
+    3300038: slot3
+    3300040: slot32
+    3300042: slot39
+    3300044: slot4
+    3300046: slot46
+    3300048: slot48
+    3300050: slot5
+    3300052: slot55
+    3300054: slot6
+    3300056: slot60
+    3300058: slot7
+    4300000: slot120
+    4300002: slot121
+    4300004: slot162
+    4300006: slot187
+    4300008: slot189
+    4300010: slot2
+    4300012: slot227
+    4300014: slot228
+    4300016: slot238
+    4300018: slot243
+    4300020: slot25
+    4300022: slot27
+    4300024: slot293
+    4300026: slot294
+    4300028: slot295
+    4300030: slot296
+    4300032: slot297
+    4300034: slot298
+    4300036: slot299
+    4300038: slot3
+    4300040: slot32
+    4300042: slot39
+    4300044: slot4
+    4300046: slot46
+    4300048: slot48
+    4300050: slot5
+    4300052: slot55
+    4300054: slot6
+    4300056: slot60
+    4300058: slot7
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

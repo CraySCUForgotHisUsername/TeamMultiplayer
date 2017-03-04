@@ -11,6 +11,8 @@ namespace NAction
         public float m_airResistance = 3.0f;
         public float m_minHoldTime = 1.0f;
         public float m_force;
+        [SerializeField]
+        float m_forceAdjustmentMax;
         bool isUse = false, isActivated = false;
         float m_timeElapsed = 0;
         public override void useProcess(NEntity.Entity entity,Motor motor)
@@ -21,7 +23,7 @@ namespace NAction
         }
         public override void endProcess(NEntity.Entity entity, Motor motor)
         {
-            base.end(entity, motor);
+            base.endProcess(entity, motor);
             if (!isUse) return;
             setActive(motor,false);
         }
@@ -52,10 +54,21 @@ namespace NAction
                 //Vector3 bodyVelocity = new Vector3(motor.Rigidbody.velocity.x,0, motor.Rigidbody.velocity.z);
                 //motor.Rigidbody.velocity -= motor.Rigidbody.velocity * Mathf.Min(1, m_airResistance * timeElapsed);
                 Vector3 dirFly = (motor.Velocity ).normalized;
+                float bodyDownwardForce = Mathf.Min(m_forceAdjustmentMax, Mathf.Max(0,-motor.Rigidbody.velocity.y) );
+                Vector3 bodyVelocity = new Vector3(motor.Rigidbody.velocity.x, 0, motor.Rigidbody.velocity.z);
+                Vector3 stablize = (motor.Velocity - bodyVelocity);
 
-                motor.Rigidbody.AddForce(Vector3.up * 800.0f * timeElapsed);
+
+                //if(bodyDownwardForce>0.1f) Debug.Log(bodyDownwardForce);
+                motor.Rigidbody.AddForce(Vector3.up * m_force * timeElapsed, ForceMode.Impulse);
+                motor.Rigidbody.AddForce(Vector3.up * bodyDownwardForce * Mathf.Min(1, 3 * timeElapsed), ForceMode.Impulse);
+                motor.Rigidbody.AddForce(stablize * Mathf.Min(1, 1.5f * timeElapsed), ForceMode.Impulse);
+                float fuel = (Vector3.up * m_force * timeElapsed).magnitude + (Vector3.up * bodyDownwardForce * Mathf.Min(1, 3 * timeElapsed)).magnitude +
+                    (stablize * Mathf.Min(1, 1.5f * timeElapsed)).magnitude;
+                entity.useResource(fuel, true);
+                Debug.Log("USED FUEL " + fuel);
                 //motor.Rigidbody.AddForce(-motor.Rigidbody.velocity * 0.9f);
-                motor.Rigidbody.AddForce(dirFly * m_force * timeElapsed);
+                //motor.Rigidbody.AddForce(dirFly * m_force * timeElapsed, ForceMode.Impulse);
             }
             // motor.Rigidbody.AddForce(-motor.Rigidbody.velocity*500*timeElapsed);
             // motor.Rigidbody.AddForce(movementDirection  * speed* motor.m_entity.getModSpeed() * timeElapsed );
@@ -63,7 +76,7 @@ namespace NAction
         void activate(Motor motor, bool value)
         {
             isActivated = value;
-            motor.isUpdateMovement = !value;
+            //motor.isUpdateMovement = !value;
         }
         public override void kUpdate(NEntity.Entity entity, Motor motor, float timeElapsed)
         {

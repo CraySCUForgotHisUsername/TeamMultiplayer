@@ -26,6 +26,8 @@ namespace NEntity {
         public int m_ammo, m_ammoMax;
         [SerializeField]
         public float m_resourceNow, m_resourceMax;
+        [SerializeField]
+        public float m_resourceRegen;
 
         [SyncVar]
         [SerializeField]
@@ -110,9 +112,13 @@ namespace NEntity {
             if(m_healthBefore != health)
             {
                 m_healthBefore = health;
-                raiseLazyEvent();
             }
+                raiseLazyEvent();
 
+        }
+        public void kUpdate(float timeElapsed)
+        {
+            m_resourceNow = Mathf.Min(m_resourceMax, m_resourceNow +  m_resourceRegen * timeElapsed);
         }
 
         public void takeDamageRaw(float amount)

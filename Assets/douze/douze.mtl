@@ -1,0 +1,92 @@
+# mtl file of Cube 2 level
+
+newmtl slot2
+map_Kd aardograss_1.jpg
+
+newmtl slot3
+map_Kd ik_floor_brick128a.jpg
+
+newmtl slot4
+map_Kd ik_floor_wood128b.jpg
+
+newmtl slot5
+map_Kd ik_ground_cobbles128.jpg
+
+newmtl slot6
+map_Kd ik_brick_3216d.jpg
+
+newmtl slot7
+map_Kd ik_brick_6464c.jpg
+
+newmtl slot25
+map_Kd mad063.jpg
+
+newmtl slot27
+map_Kd mur073.jpg
+
+newmtl slot32
+map_Kd muv185.jpg
+
+newmtl slot39
+map_Kd mur039.jpg
+
+newmtl slot46
+map_Kd mur063.jpg
+
+newmtl slot48
+map_Kd mur067.jpg
+
+newmtl slot55
+map_Kd mur109_old.jpg
+
+newmtl slot60
+map_Kd mur127.jpg
+
+newmtl slot120
+map_Kd ik_brick_6432a.jpg
+
+newmtl slot121
+map_Kd ik_brick_6464a.jpg
+
+newmtl slot162
+map_Kd ik_gtrimv_lit1a.jpg
+
+newmtl slot187
+map_Kd Box12b.jpg
+
+newmtl slot189
+map_Kd Brick58_512x512.jpg
+
+newmtl slot227
+map_Kd 032-01a.jpg
+
+newmtl slot228
+map_Kd 032-03a.jpg
+
+newmtl slot238
+map_Kd block01a.jpg
+
+newmtl slot243
+map_Kd lig_032-01b1.jpg
+
+newmtl slot293
+map_Kd platten.jpg
+
+newmtl slot294
+map_Kd dirt01.jpg
+
+newmtl slot295
+map_Kd platten_var1.jpg
+
+newmtl slot296
+map_Kd payne_512x256.jpg
+
+newmtl slot297
+map_Kd dirt02.jpg
+
+newmtl slot298
+map_Kd Box12b.jpg
+
+newmtl slot299
+map_Kd Box12b.jpg
+

@@ -61,7 +61,7 @@ public class Action : MonoBehaviour  {
     }
     public void end(NEntity.Entity entity, NMotor.Motor motor)
     {
-
+        endProcess(entity, motor);
     }
     public virtual void useProcess(NEntity.Entity entity, NMotor.Motor motor)
     {
