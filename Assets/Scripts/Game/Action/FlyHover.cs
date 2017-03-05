@@ -68,7 +68,7 @@ namespace NAction
                     (stablize * Mathf.Min(1, 1.5f * timeElapsed)).magnitude ;
                 resourceRequired *= m_resourceUseRate;
                 float resourceUsed = entity.useResource(resourceRequired, true);
-                Debug.Log("USED FUEL " + resourceRequired);
+                //Debug.Log("USED FUEL " + resourceRequired);
                 if (resourceUsed < resourceRequired)
                 {
                     setActive(motor, false);

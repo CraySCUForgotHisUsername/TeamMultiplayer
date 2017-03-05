@@ -15,7 +15,7 @@ namespace NAction
         public override void useProcess(NEntity.Entity entity, Motor motor)
         {
             base.useProcess(entity, motor);
-            Debug.Log("USE " + !isUse);
+            //Debug.Log("USE " + !isUse);
             setActive(entity, motor,!isUse);
         }
         public override void endProcess(Entity entity, Motor motor)
@@ -25,7 +25,7 @@ namespace NAction
         }
         void setActive(Entity entity, Motor motor, bool state)
         {
-            Debug.Log("REWIND SET " + state);
+            //Debug.Log("REWIND SET " + state);
             if (isUse == state) return;
             isUse = state;
             if (isUse)

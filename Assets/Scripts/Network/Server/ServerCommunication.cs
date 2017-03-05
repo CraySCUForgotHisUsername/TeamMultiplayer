@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 using GameData;
 
-public class ServerCommunication : MonoBehaviour {
+public class ServerCommunication : NetworkBehaviour {
     static public ServerCommunication ME;
+    public UnityEngine.UI.Text debugText;
     public PlayerController PREFAB_PLAYER_CONTROLLER;
     public NMotor.Motor HERO_A, HERO_B, HERO_C, HERO_D, HERO_E, HERO_F, HERO_G;
 
@@ -24,7 +25,13 @@ public class ServerCommunication : MonoBehaviour {
 	void Update () {
 		
 	}
+    int n = 0;
     
+    void OnPlayerConnected(NetworkPlayer player)
+    {
+        debugText.text = "NEW PLAYER " + (n++) + " , "+ player.ipAddress + "AND" + player.externalIP + " AND " + player.port;
+        Debug.Log("Player " + player);
+    }
     public void onNewPlayer(NetworkConnection connection)
     {
         var info = new PlayerInfo();
