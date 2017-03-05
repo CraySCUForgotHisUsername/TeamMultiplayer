@@ -12,7 +12,7 @@ public class UI : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        bttnTeamSpectator.onClick.AddListener(h_teamSpectator);
+        //bttnTeamSpectator.onClick.AddListener(h_teamSpectator);
         bttnTeamA.onClick.AddListener(h_teamA);
         bttnTeamB.onClick.AddListener(h_teamB);
         bttnHeroA.onClick.AddListener(h_heroA);

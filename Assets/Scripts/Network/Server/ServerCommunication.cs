@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using GameData;
 
-public class ServerCommunication : NetworkBehaviour {
+public class ServerCommunication : MonoBehaviour {
     static public ServerCommunication ME;
     public UnityEngine.UI.Text debugText;
     public PlayerController PREFAB_PLAYER_CONTROLLER;
@@ -93,7 +93,8 @@ public class ServerCommunication : NetworkBehaviour {
                     motor = GameObject.Instantiate(HERO_D.gameObject).GetComponent<NMotor.Motor>();
                     break;
             }
-            playerInfo.motor = motor; 
+            playerInfo.motor = motor;
+            motor.transform.position = new Vector3(0,10,0);
         }
        // m_playerInfos[playerConnection.connectionId] = playerInfo;
         Debug.Log(playerConnection.playerControllers);

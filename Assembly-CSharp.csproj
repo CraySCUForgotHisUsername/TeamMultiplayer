@@ -72,6 +72,7 @@
      <Compile Include="Assets\Scripts\GameData.cs" />
      <Compile Include="Assets\Scripts\HitboxApply.cs" />
      <Compile Include="Assets\Scripts\Network\Client\ClientCommunication.cs" />
+     <Compile Include="Assets\Scripts\Network\Server\KNetworkManager.cs" />
      <Compile Include="Assets\Scripts\Network\Server\ServerCommunication.cs" />
      <Compile Include="Assets\Scripts\NetworkEffect.cs" />
      <Compile Include="Assets\Scripts\Physics\TriggerEnter.cs" />
