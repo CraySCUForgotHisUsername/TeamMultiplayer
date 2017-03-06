@@ -15,12 +15,11 @@ namespace NEntity {
 
         public List<DEL_ME> m_lazyEvents = new List<DEL_ME>();
 
-        [SyncVar] 
+        [SyncVar]
         [SerializeField]
         public float
             health = 100.0f,
-            healthMax = 100.0f,
-            shield = 0.0f;
+            healthMax = 100.0f;
         float m_healthBefore = 0;
 
         [SerializeField]

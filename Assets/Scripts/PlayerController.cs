@@ -53,8 +53,8 @@ public class PlayerController : NetworkBehaviour {
     {
         m_entity = entity;
         m_motor = motor;
-        m_motor.m_avatarManager.setAvatar(entity, m_team, hasAuthority);
-        motor.m_avatarManager.addToHead(m_eye.transform);
+        //m_motor.m_avatarManager.setAvatar(entity, m_team, hasAuthority);
+        //motor.m_avatarManager.addToHead(m_eye.transform);
         m_eye.transform.localPosition = Vector3.zero;
 
         if (!hasAuthority) return;
@@ -109,7 +109,7 @@ public class PlayerController : NetworkBehaviour {
         if (!hasAuthority)
         {
 
-            m_motor.m_avatarManager.HeadRotation =  headRotation;
+            //m_motor.m_avatarManager.HeadRotation =  headRotation;
             return;
         }
         updateMotorInput();
@@ -118,7 +118,7 @@ public class PlayerController : NetworkBehaviour {
     }
     public virtual void updateMotorInput()
     {
-        
+        /*
         m_motor.move(m_entity, m_entity.Speed,Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         m_motor.rotate(m_entity.RotationSpeed, Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
@@ -196,6 +196,7 @@ public class PlayerController : NetworkBehaviour {
         {
             m_motor.actQEnd(m_entity);
         }
+         * */
     }
     [Command]
     void CmdUpdateHeadRotation(Quaternion rotation)
