@@ -81,6 +81,7 @@
      <Compile Include="Assets\Scripts\UI.cs" />
      <Compile Include="Assets\Scripts\UI\Entity.cs" />
      <Compile Include="Assets\Scripts\UI\Game.cs" />
+     <Compile Include="Assets\Test\Player.cs" />
      <Compile Include="Assets\UI_World.cs" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
