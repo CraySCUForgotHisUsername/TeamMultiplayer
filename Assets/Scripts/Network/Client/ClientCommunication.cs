@@ -64,6 +64,7 @@ public class ClientCommunication : NetworkBehaviour
     [Command]
     public void CmdAddMeClient()
     {
+
         ServerCommunication.ME.onNewPlayer(connectionToClient);
 
     }
@@ -71,7 +72,7 @@ public class ClientCommunication : NetworkBehaviour
     {
         gameObject.name = "MeClientCommunication";
         ME = this;
-        CmdAddMeClient();
+        
     }
     [Command]
     public void CmdSelectTeam(TEAM team)
