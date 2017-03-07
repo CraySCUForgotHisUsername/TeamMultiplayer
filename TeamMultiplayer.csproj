@@ -114,6 +114,11 @@
     <Compile Include="Assets\Scripts\UI.cs" />
     <Compile Include="Assets\Scripts\UI\Entity.cs" />
     <Compile Include="Assets\Scripts\UI\Game.cs" />
+    <Compile Include="Assets\Test\AvatarBank.cs" />
+    <Compile Include="Assets\Test\Player.cs" />
+    <Compile Include="Assets\Test\PlayerMovement.cs" />
+    <Compile Include="Assets\Test\PrefabBank.cs" />
+    <Compile Include="Assets\Test\UIManager.cs" />
     <Compile Include="Assets\UI_World.cs" />
   </ItemGroup>
   <ItemGroup>

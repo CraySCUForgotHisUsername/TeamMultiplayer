@@ -5,11 +5,16 @@ using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
+    
     [SerializeField]
     GameObject screenSelectTeam, screenSelectHero;
     [SerializeField]
     Button bttnTeamSpectator, bttnTeamA, bttnTeamB, bttnHeroA, bttnHeroB, bttnHeroC, bttnHeroD;
     // Use this for initialization
+
+    public bool             newInput = true;
+    public GameData.TEAM    m_teamSelected;
+    public GameData.HERO    m_heroSelected;
     void Start()
     {
         //bttnTeamSpectator.onClick.AddListener(h_teamSpectator);
@@ -27,39 +32,31 @@ public class UI : MonoBehaviour
     }
     void h_teamA()
     {
-        ClientCommunication.ME.CmdSelectTeam(GameData.TEAM.RED);
-        screenSelectTeam.SetActive(false);
-        screenSelectHero.SetActive(true);
+        newInput = true;
+        m_teamSelected = GameData.TEAM.RED;
     }
     void h_teamB()
     {
-        ClientCommunication.ME.CmdSelectTeam(GameData.TEAM.BLUE);
-        screenSelectTeam.SetActive(false);
-        screenSelectHero.SetActive(true);
-        
+        newInput = true;
+        m_teamSelected = GameData.TEAM.BLUE;
     }
     void h_heroA()
     {
-        ClientCommunication.ME.CmdSelectHero(GameData.HERO.A);
-        screenSelectHero.SetActive(false);
-
+        newInput = true;
+        m_heroSelected = GameData.HERO.A;
     }
     void h_heroB()
     {
-        ClientCommunication.ME.CmdSelectHero(GameData.HERO.B);
-        screenSelectHero.SetActive(false);
-
+        newInput = true;
+        m_heroSelected = GameData.HERO.B;
     }
     void h_heroC()
     {
-        ClientCommunication.ME.CmdSelectHero(GameData.HERO.C);
-        screenSelectHero.SetActive(false);
-
+        newInput = true;
+        m_heroSelected = GameData.HERO.C;
     }
     void h_heroD()
     {
-        ClientCommunication.ME.CmdSelectHero(GameData.HERO.D);
-        screenSelectHero.SetActive(false);
 
     }
     // Update is called once per frame
