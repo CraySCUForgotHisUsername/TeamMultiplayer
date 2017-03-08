@@ -14,19 +14,7 @@ public class Player : NetworkBehaviour {
     public Entity m_entity;
     public EntityMotor m_entityMotor;
     public PlayerInput m_playerInput;
-
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-        m_entity = GetComponent<Entity>();
-        Debug.Log("client" + GetComponent<Entity>());
-    }
-    public override void OnStartServer()
-    {
-        base.OnStartServer();
-        m_entity = GetComponent<Entity>();
-        Debug.Log("server" + GetComponent<Entity>());
-    }
+    
     public override void OnStartAuthority()
     {
         base.OnStartAuthority();
@@ -86,7 +74,7 @@ public class Player : NetworkBehaviour {
         }
 
         if (avt == null) return;
-        if(m_avatar != null)GameObject.Destroy(m_avatar.gameObject);
+        if(m_avatar != null) GameObject.Destroy(m_avatar.gameObject);
         Avatar me = GameObject.Instantiate<Avatar>(avt);
         me.transform.parent = this.transform;
         me.transform.localPosition = Vector3.zero;
@@ -101,11 +89,14 @@ public class Player : NetworkBehaviour {
         }
         m_avatar = me;
     }
+    private void FixedUpdate()
+    {
+
+        if (!isLocalPlayer) return;
+        m_entityMotor.kFixedUpdate(this.transform,  m_entity, Time.fixedDeltaTime);
+    }
     void Update()
     {
-        m_entity = GetComponent<Entity>();
-        Debug.Log("Entity " + GetComponent<Entity>());
-        Debug.Log( GetComponent<Player>());
 
         if (!isLocalPlayer) return;
         if (UIManager.IS_NEW_INPUT)
@@ -121,6 +112,7 @@ public class Player : NetworkBehaviour {
             m_mainCamera.transform.rotation = m_avatar.m_head.transform.rotation;
         }
         m_playerInput.KUpdate(m_entity, m_entityMotor, m_avatar, Time.deltaTime);
+        m_entityMotor.kUpdate(m_entity, Time.deltaTime);
 
 
     }

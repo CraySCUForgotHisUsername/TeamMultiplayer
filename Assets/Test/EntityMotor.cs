@@ -119,17 +119,17 @@ public class EntityMotor : NetworkBehaviour
         m_rigidbody = GetComponent<Rigidbody>();
 
     }
-    bool updateIsGrounded()
+    bool updateIsGrounded(Transform body)
     {
         RaycastHit hit;
         Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), -Vector3.up, out hit, 0.2f);
         m_upward = Vector3.up;
         if (hit.transform != null)
         {
-            var rotation = Quaternion.Euler(0, this.transform.rotation.eulerAngles.y, 0);
+            var rotation = Quaternion.Euler(0, body.rotation.eulerAngles.y, 0);
             m_upward = hit.normal;
-            m_forward = (Quaternion.FromToRotation(this.transform.up, hit.normal) * this.transform.forward);
-            m_right = (Quaternion.FromToRotation(this.transform.up, hit.normal) * this.transform.right);
+            m_forward = (Quaternion.FromToRotation(body.up, hit.normal) * body.forward);
+            m_right = (Quaternion.FromToRotation(body.up, hit.normal) * body.right);
             //m_right = (Quaternion.LookRotation(hit.normal) * this.tran.up);
 
         }
@@ -144,7 +144,7 @@ public class EntityMotor : NetworkBehaviour
 
     }
     //Run during fixedupdate
-    public virtual void updateMovement(Entity entity, float timeElapsed)
+    public virtual void updateMovement( Entity entity,   float timeElapsed)
     {
         //Debug.Log("GRAVITY " + (-m_upward * entity.Gravity * timeElapsed));
         m_rigidbody.AddForce(-m_upward * entity.Gravity * timeElapsed, ForceMode.Impulse);
@@ -244,7 +244,7 @@ public class EntityMotor : NetworkBehaviour
     {
         this.m_playerInfo.team = (GameData.TEAM)team;
     }
-    public virtual void move(Entity entity, float speed, float horizontal, float vertical)
+    public virtual void move(Entity entity,  float speed, float horizontal, float vertical)
     {
         m_moveDirection.x = horizontal;
         m_moveDirection.z = vertical;
@@ -279,16 +279,17 @@ public class EntityMotor : NetworkBehaviour
             m_evntCrawlEnd[i](entity, this);
         }
     }
-    public void rotate(float rotateScalar, float horizontal, float vertical)
+    public void rotate(Transform trnasformBody, Transform trnasforhHead, float rotateScalar, float horizontal, float vertical)
     {
-        transform.Rotate(new Vector3(0, horizontal, 0) * m_lookSensitivity * rotateScalar);
+        trnasformBody.Rotate(new Vector3(0, horizontal, 0) * m_lookSensitivity * rotateScalar);
+        trnasforhHead.Rotate(new Vector3(-vertical, 0, 0) * m_lookSensitivity * rotateScalar);
         //m_avatarManager.rotoate(new Vector3(-vertical, 0, 0) * m_lookSensitivity * rotateScalar);
     }
     public void rotateHead(Vector3 velocity)
     {
     }
 
-    public virtual void kFixedUpdate(Entity entity, float timeElapsed)
+    public virtual void kFixedUpdate(Transform transform, Entity entity, float timeElapsed)
     {
         if (!m_isJumpAvailable)
         {
@@ -304,7 +305,7 @@ public class EntityMotor : NetworkBehaviour
         //Debug.Log(m_right);
         if (isUpdateMovement)
         {
-            updateIsGrounded();
+            updateIsGrounded(transform);
             updateMovement(entity, timeElapsed);
         }
 

@@ -23,7 +23,8 @@ public class PlayerInput : NetworkBehaviour
     public void KUpdate(Entity entity, EntityMotor motor, Avatar m_avatar ,float timeElapsed)
     {
         if (entity == null) return;
-        
+        motor.move(entity, entity.Speed, Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        motor.rotate(this.transform, m_avatar.m_head.transform, entity.RotationSpeed, Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
         //move(m_rigidbody,m_speedMove, Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), timeElapsed);
         //rotate(m_rigidbody, m_avatar,m_speedRotate, Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
         //updateMotorInput();

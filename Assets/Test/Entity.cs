@@ -68,6 +68,13 @@ public class Entity : NetworkBehaviour
         }
 
     }
+    public float RotationSpeed
+    {
+        get
+        {
+            return m_speedRotation;
+        }
+    }
     public float Jump
     {
         get
@@ -87,13 +94,7 @@ public class Entity : NetworkBehaviour
     }
 
 
-    public float RotationSpeed
-    {
-        get
-        {
-            return 1.0f;
-        }
-    }
+    
     void raiseLazyEvent()
     {
         for (int i = 0; i < m_lazyEvents.Count; i++)
