@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 namespace GameData
 {
     public enum TEAM { SPECTATOR, RED, BLUE };
-    public enum HERO { A, B ,C,D };
+    public enum HERO { A, B ,C , D , E, F,G};
    
     public class PlayerInfo {
         public TEAM team;

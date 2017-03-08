@@ -12,7 +12,8 @@ public class UIManager : MonoBehaviour
     static public List<DEL_HERO> EVENT_HERO = new List<DEL_HERO>();
 
     [SerializeField]
-    Button bttnTeamSpectator, bttnTeamRed, bttnTeamBlue, bttnHeroA, bttnHeroB, bttnHeroC, bttnHeroD;
+    Button bttnTeamSpectator, bttnTeamRed, bttnTeamBlue, 
+        bttnHeroA, bttnHeroB, bttnHeroC, bttnHeroD, bttnHeroE, bttnHeroF;
     // Use this for initialization
 
     static public bool IS_NEW_INPUT = false;
@@ -30,6 +31,9 @@ public class UIManager : MonoBehaviour
         bttnHeroA.onClick.AddListener(h_heroA);
         bttnHeroB.onClick.AddListener(h_heroB);
         bttnHeroC.onClick.AddListener(h_heroC);
+        bttnHeroD.onClick.AddListener(h_heroD);
+        bttnHeroE.onClick.AddListener(h_heroE);
+        bttnHeroF.onClick.AddListener(h_heroF);
         //bttnHeroD.onClick.AddListener(h_heroD);
     }
     
@@ -64,7 +68,23 @@ public class UIManager : MonoBehaviour
     }
     void h_heroD()
     {
-
+        IS_NEW_INPUT = true;
+        HERO_SELECTED = GameData.HERO.D;
+    }
+    void h_heroE()
+    {
+        IS_NEW_INPUT = true;
+        HERO_SELECTED = GameData.HERO.E;
+    }
+    void h_heroF()
+    {
+        IS_NEW_INPUT = true;
+        HERO_SELECTED = GameData.HERO.F;
+    }
+    void h_heroG()
+    {
+        IS_NEW_INPUT = true;
+        HERO_SELECTED = GameData.HERO.G;
     }
     // Update is called once per frame
     void Update()

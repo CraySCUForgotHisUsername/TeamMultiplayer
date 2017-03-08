@@ -60,6 +60,15 @@ public class Player : NetworkBehaviour {
             case GameData.HERO.C:
                 avt = PREFAB_BANK.AVT_TRICKSTER;
                 break;
+            case GameData.HERO.D:
+                avt = PREFAB_BANK.AVT_HEAVY;
+                break;
+            case GameData.HERO.E:
+                avt = PREFAB_BANK.AVT_SHIELD;
+                break;
+            case GameData.HERO.F:
+                avt = PREFAB_BANK.AVT_MEDIC;
+                break;
         }
 
         if (avt == null) return;
