@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using NEntity;
-using NMotor;
+
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -14,6 +13,7 @@ namespace NAction {
 
         bool m_isReloading = false;
         float m_reloadingDelayTimeElapsed = 0;
+        /*
         public override void useProcess(Entity entity, Motor motor)
         {
             base.useProcess(entity, motor);
@@ -35,6 +35,7 @@ namespace NAction {
 
             }
         }
+         * */
 
     }
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using NEntity;
+
 using UnityEngine;
 
 public class HitboxApply : TriggerEnter {
@@ -17,6 +17,7 @@ public class HitboxApply : TriggerEnter {
 	void Update () {
 		
 	}
+    /*
     public override void onObjectEnter(Rigidbody body, Entity entity)
     {
         Debug.Log("qweqweqweqwe");
@@ -26,4 +27,5 @@ public class HitboxApply : TriggerEnter {
         body.AddForce(dir*m_force);
         //entity.damage
     }
+     * */
 }

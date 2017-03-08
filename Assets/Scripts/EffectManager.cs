@@ -43,10 +43,9 @@ public class EffectManager : NetworkBehaviour
     }
     void getBulletTrail(bool isAlly, NetworkInstanceId playerMotorId, Vector3 to)
     {
-        var trail = GameObject.Instantiate<Trail>( (isAlly)? PREFAB_TRAIL_ALLY :PREFAB_TRAIL_ENEMY);
-        var playerObjMotorAvatar = ClientScene.FindLocalObject(playerMotorId).GetComponent<NMotor.Motor>().m_avatarManager.getAvatar();
-
-        trail.init(playerObjMotorAvatar.m_weapon.transform.position, to);
+        //var trail = GameObject.Instantiate<Trail>( (isAlly)? PREFAB_TRAIL_ALLY :PREFAB_TRAIL_ENEMY);
+        //var playerObjMotorAvatar = ClientScene.FindLocalObject(playerMotorId).GetComponent<NMotor.Motor>().m_avatarManager.getAvatar();
+        //trail.init(playerObjMotorAvatar.m_weapon.transform.position, to);
     }
     [TargetRpc]
     public void TargetGetBulletTrail_FromTo(NetworkConnection target, bool isAlly, NetworkInstanceId playerMotorId, Vector3 from, Vector3 to)
@@ -81,7 +80,7 @@ public class EffectManager : NetworkBehaviour
         //var playerObjMotorAvatar = ClientScene.FindLocalObject(playerMotorId).GetComponent<PlayerMotor>().getAvatar();
         //
         //trail.init(playerObjMotorAvatar.m_weapon.transform.position, to);
-        ClientCommunication.ME.CmdEffectPlayerBulletTrail_FromTo(playerMotorId,from, to);
+        //ClientCommunication.ME.CmdEffectPlayerBulletTrail_FromTo(playerMotorId,from, to);
     }
     public void getPlayerBulletTrail(GameData.TEAM team, NetworkInstanceId playerMotorId, Vector3 to)
     {
@@ -104,7 +103,7 @@ public class EffectManager : NetworkBehaviour
         //var playerObjMotorAvatar = ClientScene.FindLocalObject(playerMotorId).GetComponent<PlayerMotor>().getAvatar();
         //
         //trail.init(playerObjMotorAvatar.m_weapon.transform.position, to);
-        ClientCommunication.ME.CmdEffectPlayerBulletTrail( playerMotorId,  to);
+        //ClientCommunication.ME.CmdEffectPlayerBulletTrail( playerMotorId,  to);
     }
     
 }

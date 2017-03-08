@@ -3,100 +3,104 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+namespace NAction {
 
-public class Action : MonoBehaviour  {
-
-    public bool m_isReceiveInput = true;
-    bool m_isReady = true;
-    float m_delayTimeElapsed = 0;
-
-    [SerializeField]
-    float m_delayMax = 0;
-
-    [SerializeField]
-    bool    m_ammoIsNeeded = false,
-            m_ammoIsStream = false;
-    [SerializeField]
-    int m_ammoRequired = 0;
-
-    [SerializeField]
-    bool    m_resourceIsNeeded = false,
-            m_resourceIsStream = false;
-    [SerializeField]
-    float m_resourceRequired = 0;
-
-    
-
-    public virtual void init(NMotor.Motor motor)
+    public class Action : MonoBehaviour
     {
 
-    }
-    // Use this for initialization
-    public virtual void runLocal(PlayerController playerController)
-    {
+        public bool m_isReceiveInput = true;
+        bool m_isReady = true;
+        float m_delayTimeElapsed = 0;
 
-    }
-    public virtual void runServer(PlayerController playerController)
-    {
+        [SerializeField]
+        float m_delayMax = 0;
 
-    }
-    public void use(NEntity.Entity entity, NMotor.Motor motor)
-    {
-        if (!m_isReceiveInput) return;
-        if (!m_isReady) return;
-        m_isReady = false;
-        bool canUse = true;
-        if (m_ammoIsNeeded && entity.useAmmoTest(m_ammoRequired, m_ammoIsStream) == 0)
-            canUse = false;
-        if (m_resourceIsNeeded && entity.useResourceTest(m_resourceRequired, m_resourceIsStream) == 0)
-            canUse = false;
-        if (!canUse) return;
+        [SerializeField]
+        bool m_ammoIsNeeded = false,
+                m_ammoIsStream = false;
+        [SerializeField]
+        int m_ammoRequired = 0;
 
-        if (m_ammoIsNeeded) entity.useAmmo(m_ammoRequired, m_ammoIsStream);
-        if (m_resourceIsNeeded) entity.useResource(m_resourceRequired, m_resourceIsStream);
-        
-        useProcess(entity, motor);
-    }
-    
-    public void hold(NEntity.Entity entity, NMotor.Motor motor)
-    {
-        if (!m_isReceiveInput) return;
+        [SerializeField]
+        bool m_resourceIsNeeded = false,
+                m_resourceIsStream = false;
+        [SerializeField]
+        float m_resourceRequired = 0;
 
-    }
-    public void end(NEntity.Entity entity, NMotor.Motor motor)
-    {
-        if (!m_isReceiveInput) return;
-        endProcess(entity, motor);
-    }
-    public virtual void useProcess(NEntity.Entity entity, NMotor.Motor motor)
-    {
 
-    }
-    public virtual void holdProcess(NEntity.Entity entity, NMotor.Motor motor)
-    {
 
-    }
-    public virtual void endProcess(NEntity.Entity entity, NMotor.Motor motor)
-    {
-
-    }
-    protected void setReady(bool value)
-    {
-        m_isReady = value;
-        m_delayTimeElapsed = 0;
-    }
-    public virtual void kUpdate(NEntity.Entity entity, NMotor.Motor motor, float timeElapsed)
-    {
-        if (m_isReady) return;
-        m_delayTimeElapsed += timeElapsed;
-        if (m_delayTimeElapsed > m_delayMax)
+        public virtual void init(EntityMotor motor)
         {
-            m_isReady = true;
+
+        }
+        // Use this for initialization
+        public virtual void runLocal(PlayerController playerController)
+        {
+
+        }
+        public virtual void runServer(PlayerController playerController)
+        {
+
+        }
+        public void use(Entity entity, EntityMotor motor)
+        {
+            if (!m_isReceiveInput) return;
+            if (!m_isReady) return;
+            m_isReady = false;
+            bool canUse = true;
+            if (m_ammoIsNeeded && entity.useAmmoTest(m_ammoRequired, m_ammoIsStream) == 0)
+                canUse = false;
+            if (m_resourceIsNeeded && entity.useResourceTest(m_resourceRequired, m_resourceIsStream) == 0)
+                canUse = false;
+            if (!canUse) return;
+
+            if (m_ammoIsNeeded) entity.useAmmo(m_ammoRequired, m_ammoIsStream);
+            if (m_resourceIsNeeded) entity.useResource(m_resourceRequired, m_resourceIsStream);
+
+            useProcess(entity, motor);
+        }
+
+        public void hold(Entity entity, EntityMotor motor)
+        {
+            if (!m_isReceiveInput) return;
+
+        }
+        public void end(Entity entity, EntityMotor motor)
+        {
+            if (!m_isReceiveInput) return;
+            endProcess(entity, motor);
+        }
+        public virtual void useProcess(Entity entity, EntityMotor motor)
+        {
+
+        }
+        public virtual void holdProcess(Entity entity, EntityMotor motor)
+        {
+
+        }
+        public virtual void endProcess(Entity entity, EntityMotor motor)
+        {
+
+        }
+        protected void setReady(bool value)
+        {
+            m_isReady = value;
             m_delayTimeElapsed = 0;
         }
-    }
-    public virtual void kFixedUpdate(NEntity.Entity entity, NMotor.Motor motor, float timeElapsed)
-    {
+        public virtual void kUpdate(Entity entity, EntityMotor motor, float timeElapsed)
+        {
+            if (m_isReady) return;
+            m_delayTimeElapsed += timeElapsed;
+            if (m_delayTimeElapsed > m_delayMax)
+            {
+                m_isReady = true;
+                m_delayTimeElapsed = 0;
+            }
+        }
+        public virtual void kFixedUpdate(Entity entity, EntityMotor motor, float timeElapsed)
+        {
 
+        }
     }
+
 }

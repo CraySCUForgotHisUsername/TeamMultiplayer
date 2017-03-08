@@ -6,13 +6,27 @@ using UnityEngine.Networking;
 public class Player : NetworkBehaviour {
     
     public PrefabBank PREFAB_BANK;
+    public NetworkTransformChild m_netTransformChildHead;
     public GameObject m_mainCamera;
 
     public Rigidbody m_rigidbody;
-    public NetworkTransformChild m_netTransformChildHead;
     public Avatar m_avatar;
-    public PlayerMovement m_playerMovement;
-    
+    public Entity m_entity;
+    public EntityMotor m_entityMotor;
+    public PlayerInput m_playerInput;
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        m_entity = GetComponent<Entity>();
+        Debug.Log("client" + GetComponent<Entity>());
+    }
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        m_entity = GetComponent<Entity>();
+        Debug.Log("server" + GetComponent<Entity>());
+    }
     public override void OnStartAuthority()
     {
         base.OnStartAuthority();
@@ -21,7 +35,7 @@ public class Player : NetworkBehaviour {
     {
         base.OnStartLocalPlayer();
         m_mainCamera.SetActive(true);
-        m_playerMovement.enabled = true;
+        m_playerInput.enabled = true;
     }
     [Command]
     void CmdChangeTeam(GameData.TEAM team)
@@ -89,6 +103,10 @@ public class Player : NetworkBehaviour {
     }
     void Update()
     {
+        m_entity = GetComponent<Entity>();
+        Debug.Log("Entity " + GetComponent<Entity>());
+        Debug.Log( GetComponent<Player>());
+
         if (!isLocalPlayer) return;
         if (UIManager.IS_NEW_INPUT)
         {
@@ -102,7 +120,7 @@ public class Player : NetworkBehaviour {
             m_mainCamera.transform.position = m_avatar.m_head.transform.position;
             m_mainCamera.transform.rotation = m_avatar.m_head.transform.rotation;
         }
-        m_playerMovement.KUpdate(m_rigidbody, m_avatar, Time.deltaTime);
+        m_playerInput.KUpdate(m_entity, m_entityMotor, m_avatar, Time.deltaTime);
 
 
     }

@@ -21,6 +21,7 @@ namespace NAction
         {
 
         }
+        /*
         public override void useProcess(NEntity.Entity entity, NMotor.Motor motor)
         {
             var avatar = motor.m_avatarManager.getAvatar();
@@ -41,6 +42,7 @@ namespace NAction
         {
             Debug.Log("Melee action class enter" + other);
         }
+         * */
     }
 
 }

@@ -63,7 +63,7 @@ using UnityEngine;
                     if (!isAlreadyChecked)
                     {
                         m_collidedIds.Add(body.gameObject.GetInstanceID());
-                        onObjectEnter(body, body.GetComponent<NEntity.Entity>());
+                        onObjectEnter(body, body.GetComponent<Entity>());
                         //float upward = Mathf.Min(1, Mathf.Max(0.1f, 1 - (body.transform.position - m_colliderExplosion.transform.position).magnitude / m_explosionRadius));
                         //upward *= upward;
                         //body.AddExplosionForce(m_forceApply, m_colliderExplosion.transform.position, m_explosionRadius, upward);
@@ -90,7 +90,7 @@ using UnityEngine;
             return rigidbody;
         }
 
-        public virtual void onObjectEnter(Rigidbody body, NEntity.Entity entity)
+        public virtual void onObjectEnter(Rigidbody body, Entity entity)
         {
 
         }

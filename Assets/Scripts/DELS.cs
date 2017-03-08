@@ -5,14 +5,11 @@ using System.Text;
 
 public class DEL {
 
-    public delegate void VOID_ENTITY_MOTOR(NEntity.Entity entity, NMotor.Motor motor);
+    public delegate void VOID_ENTITY_MOTOR(Entity entity, EntityMotor motor);
 
-    public static void RAISE( List<VOID_ENTITY_MOTOR> events, NEntity.Entity entity, NMotor.Motor motor)
-    {
-        for(int i = 0; i< events.Count; i++)
-        {
-            events[i](entity, motor);
-        }
-
-    }
+    //public static void RAISE( List<VOID_ENTITY_MOTOR> events, NEntity.Entity entity, EntityMotor motor)
+    //{
+    //   
+    //
+    //}
 }

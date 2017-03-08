@@ -16,6 +16,7 @@ namespace NAction {
         bool isUse = false;
         Vector3 m_dirHorizontal;
         Vector3 m_dirVertical = Vector3.zero;
+        /*
         public override void useProcess(NEntity.Entity entity, Motor motor)
         {
             base.useProcess(entity,motor);
@@ -107,6 +108,7 @@ namespace NAction {
             // motor.Rigidbody.AddForce(-motor.Rigidbody.velocity*500*timeElapsed);
             // motor.Rigidbody.AddForce(movementDirection  * speed* motor.m_entity.getModSpeed() * timeElapsed );
         }
+         * */
     }
 
 }

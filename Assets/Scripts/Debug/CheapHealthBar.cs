@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CheapHealthBar : MonoBehaviour {
-    public NEntity.Entity health;
+    public Entity health;
     public TextMesh text;
 	// Use this for initialization
 	void Start () {

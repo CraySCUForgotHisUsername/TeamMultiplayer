@@ -4,6 +4,8 @@ using NMotor;
 using UnityEngine;
 using UnityEngine.Networking;
 
+namespace NAction {
+
 public class Dash : Action
 {
     [SerializeField]
@@ -22,7 +24,7 @@ public class Dash : Action
         m_velocity = 0;
     Vector3 m_direction = new Vector3();
 
-
+    /*
     public override void useProcess(NEntity.Entity entity, Motor motor)
     {
         if ((!m_enableAirDash && !motor.IsGrounded) ||
@@ -82,5 +84,6 @@ public class Dash : Action
 
             }
         }
+     * */
     }
 }

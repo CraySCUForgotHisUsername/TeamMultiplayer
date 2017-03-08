@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+namespace NAction {
 
 public class Action_Hitscan : Action {
 
@@ -24,6 +25,7 @@ public class Action_Hitscan : Action {
 
         //    );
     }
+        /*
     public override void useProcess(NEntity.Entity entity, NMotor.Motor motor)
     {
         //Debug.Log("Fired");
@@ -33,12 +35,14 @@ public class Action_Hitscan : Action {
         fire(motor.m_playerInfo.team, motor.netId, avatar.m_head.transform.position, avatar.m_head.transform.forward , m_damage, m_maxTravelDistance, m_bounce);
 
     }
+         * */
     public void fire(
         GameData.TEAM team,
         NetworkInstanceId myMotor,
         Vector3 posBegin, Vector3 direction,
         float damage, float maxTravelDistance,int bounce, bool isBouncing = false)
     {
+            /*
         bool isHitSomething = false;
         float travelDistance = 0;
         var ray = new Ray(posBegin, direction);
@@ -69,9 +73,8 @@ public class Action_Hitscan : Action {
             {
                 var targetMotor = hit.transform.GetComponent<NetworkIdentity>();
                 //Debug.Log(ClientCommunication.ME.gameObject.name);
-                ClientCommunication.ME.CmdTest();
-                //ClientCommunication.ME.CmdDamageRaw(myMotor, targetMotor.netId, hit.point, damage / 2, damage / 2);
-                ClientCommunication.ME.CmdDamage(myMotor, targetMotor.netId, hit.point, targetEntity.howMuchDamageWillBeTaken(damage / 2), damage / 2);
+                //ClientCommunication.ME.CmdTest();
+                //ClientCommunication.ME.CmdDamage(myMotor, targetMotor.netId, hit.point, targetEntity.howMuchDamageWillBeTaken(damage / 2), damage / 2);
                 
             }
             else
@@ -90,9 +93,11 @@ public class Action_Hitscan : Action {
             //ClientCommunication.ME.CmdDamage_(myMotor, targetMotor.netId, hit.point, targetEntity.howMuchDamageWillBeTaken(damage / 2), damage / 2);
             //return;
         }
+             * */
         //return this.transform.position + this.transform.forward * travelDistance;
         // trail.transform.position = transform.position;
     }
 
 
+}
 }

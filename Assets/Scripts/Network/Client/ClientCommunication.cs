@@ -9,6 +9,7 @@ public class ClientCommunication : NetworkBehaviour
 
     public static ClientCommunication ME;
     GameData.PlayerInfo m_myInfo = new PlayerInfo();
+    /*
     // Use this for initialization
     void Start () {
 		
@@ -101,7 +102,8 @@ public class ClientCommunication : NetworkBehaviour
         ServerCommunication.ME.DistributeEffect(connectionToClient, playerMotorId, to);
 
     }
-
+    
+     * */
 
 
 }

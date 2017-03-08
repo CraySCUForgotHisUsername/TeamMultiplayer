@@ -16,6 +16,7 @@ namespace NAction
         float m_forceAdjustmentMax;
         bool isUse = false, isActivated = false;
         float m_timeElapsed = 0;
+        /*
         public override void useProcess(NEntity.Entity entity,Motor motor)
         {
             base.use(entity,motor);
@@ -96,6 +97,7 @@ namespace NAction
             //base.kUpdate(motor, timeElapsed);
             //motor.Rigidbody.AddForce(-Physics.gravity *2.0f * timeElapsed);
         }
+         * */
     }
 
 }

@@ -6,8 +6,6 @@ namespace NAction {
 
     public class Projectile : Action
     {
-        [SerializeField]
-        NEntity.Projectile PREFAB_PROJECTILE;
         
         // Use this for initialization
         void Start()
@@ -20,6 +18,7 @@ namespace NAction {
         {
 
         }
+        /*
         public override void useProcess(NEntity.Entity entity, NMotor.Motor motor)
         {
             base.use(entity,motor);
@@ -30,6 +29,7 @@ namespace NAction {
             Physics.IgnoreCollision(proj.m_colliderProjectile.GetComponent<Collider>(), avatar.m_headCollider);
             Physics.IgnoreCollision(proj.m_colliderProjectile.GetComponent<Collider>(), avatar.m_bodyColldier);
         }
+         * */
     }
 
 }

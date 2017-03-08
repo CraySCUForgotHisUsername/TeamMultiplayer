@@ -8,6 +8,7 @@ namespace NAction
 
     public class Fly_Disable : Fly
     {
+        /*
         [SerializeField]
         List<Action> m_disabledActions;
         void Awake()
@@ -33,6 +34,7 @@ namespace NAction
             }
 
         }
+         * */
     }
 
 }

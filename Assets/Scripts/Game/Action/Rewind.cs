@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using NEntity;
+
 using NMotor;
 using UnityEngine;
 
@@ -9,6 +9,7 @@ namespace NAction
 
     public class Rewind : Action
     {
+        /*
         public float m_activationCost, m_resourcePerSecond;
         bool isUse = false;
         Vector3 m_positionBefore = Vector3.zero;
@@ -59,6 +60,7 @@ namespace NAction
 
             }
         }
+         * */
     }
 
 }
