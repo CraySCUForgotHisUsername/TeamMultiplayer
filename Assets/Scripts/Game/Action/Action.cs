@@ -33,6 +33,10 @@ namespace NAction {
         {
 
         }
+        public virtual void unInit(EntityMotor motor)
+        {
+
+        }
         // Use this for initialization
         public virtual void runLocal(PlayerController playerController)
         {
@@ -87,7 +91,7 @@ namespace NAction {
             m_isReady = value;
             m_delayTimeElapsed = 0;
         }
-        public virtual void kUpdate(Entity entity, EntityMotor motor, float timeElapsed)
+        public virtual void kUpdate(Entity entity, EntityMotor motor, Avatar avatar, float timeElapsed)
         {
             if (m_isReady) return;
             m_delayTimeElapsed += timeElapsed;
@@ -97,7 +101,7 @@ namespace NAction {
                 m_delayTimeElapsed = 0;
             }
         }
-        public virtual void kFixedUpdate(Entity entity, EntityMotor motor, float timeElapsed)
+        public virtual void kFixedUpdate(Entity entity, EntityMotor motor, Avatar avatar, float timeElapsed)
         {
 
         }

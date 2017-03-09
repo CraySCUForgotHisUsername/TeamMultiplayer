@@ -86,9 +86,9 @@ namespace NAction {
             m_dirVertical = Vector3.down;
 
         }
-        public override void kFixedUpdate(Entity entity, EntityMotor motor, float timeElapsed)
+        public override void kFixedUpdate(Entity entity, EntityMotor motor, Avatar avatar, float timeElapsed)
         {
-            base.kFixedUpdate(entity,motor, timeElapsed);
+            base.kFixedUpdate(entity,motor, avatar,timeElapsed);
             if (!isUse) return;
             Vector3 dir = (m_dirHorizontal + m_dirVertical ).normalized;
             Vector3 velocityDesired = dir * m_speed;

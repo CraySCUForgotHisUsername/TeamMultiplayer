@@ -18,6 +18,7 @@ public class EntityMotor : NetworkBehaviour
     public delegate float DEL_RETURN_FLOAT();
     public delegate float DEL_GET_SCHALAR(EntityMotor motor);
     public delegate void DEL_ME(EntityMotor motor);
+    public delegate void DEL_ENTITY_ME_AVATAR(EntityMotor motor);
     public delegate void DEL_ENTITY_ME(Entity entity, EntityMotor motor);
     public delegate void DEL_MOVE(Entity entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical);
     public delegate void DEL_JUMP(Entity entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical);
@@ -43,6 +44,7 @@ public class EntityMotor : NetworkBehaviour
 
 
     public List<NAction.Action>
+        m_actPassive,
         m_actJump,
         m_actLMB,
         m_actRMB,
@@ -58,7 +60,9 @@ public class EntityMotor : NetworkBehaviour
         m_rotation = Vector3.zero,
         m_rotationFace = Vector3.zero;
 
-    public bool isUpdateMovement = true;
+    public bool 
+        isUpdateGravity = true,
+        isUpdateMovement = true;
     bool m_isJumpAvailable = false;
     float m_jumpTimeElapsed = 0;
     Rigidbody m_rigidbody;
@@ -305,7 +309,7 @@ public class EntityMotor : NetworkBehaviour
     {
     }
 
-    public virtual void kFixedUpdate(Transform transform, Entity entity, float timeElapsed)
+    public virtual void kFixedUpdate(Transform transform, Entity entity, Avatar avatar, float timeElapsed)
     {
         if (!m_isJumpAvailable)
         {
@@ -318,7 +322,7 @@ public class EntityMotor : NetworkBehaviour
 
         }
 
-        updateGravity(entity, timeElapsed);
+        if(isUpdateGravity)updateGravity(entity, timeElapsed);
         //Debug.Log(m_right);
         if (isUpdateMovement)
         {
@@ -326,24 +330,26 @@ public class EntityMotor : NetworkBehaviour
             updateMovement(entity, timeElapsed);
         }
 
-        hprFixedUpdate(entity, m_actLMB, timeElapsed);
-        hprFixedUpdate(entity, m_actRMB, timeElapsed);
-        hprFixedUpdate(entity, m_actJump, timeElapsed);
-        hprFixedUpdate(entity, m_actR, timeElapsed);
-        hprFixedUpdate(entity, m_actE, timeElapsed);
-        hprFixedUpdate(entity, m_actF, timeElapsed);
-        hprFixedUpdate(entity, m_actShift, timeElapsed);
+        hprFixedUpdate(entity, avatar,m_actPassive, timeElapsed);
+        hprFixedUpdate(entity, avatar,m_actLMB, timeElapsed);
+        hprFixedUpdate(entity, avatar,m_actRMB, timeElapsed);
+        hprFixedUpdate(entity, avatar,m_actJump, timeElapsed);
+        hprFixedUpdate(entity, avatar,m_actR, timeElapsed);
+        hprFixedUpdate(entity, avatar,m_actE, timeElapsed);
+        hprFixedUpdate(entity, avatar,m_actF, timeElapsed);
+        hprFixedUpdate(entity, avatar,m_actShift, timeElapsed);
     }
     // Update is called once per frame
-    public virtual void kUpdate(Entity entity, float timeElapsed)
+    public virtual void kUpdate(Entity entity, Avatar avatar, float timeElapsed)
     {
-        hprUpdate(entity, m_actLMB, timeElapsed);
-        hprUpdate(entity, m_actRMB, timeElapsed);
-        hprUpdate(entity, m_actJump, timeElapsed);
-        hprUpdate(entity, m_actR, timeElapsed);
-        hprUpdate(entity, m_actE, timeElapsed);
-        hprUpdate(entity, m_actF, timeElapsed);
-        hprUpdate(entity, m_actShift, timeElapsed);
+        hprUpdate(entity,avatar,m_actPassive, timeElapsed);
+        hprUpdate(entity,avatar,m_actLMB, timeElapsed);
+        hprUpdate(entity,avatar,m_actRMB, timeElapsed);
+        hprUpdate(entity,avatar,m_actJump, timeElapsed);
+        hprUpdate(entity,avatar,m_actR, timeElapsed);
+        hprUpdate(entity,avatar,m_actE, timeElapsed);
+        hprUpdate(entity,avatar,m_actF, timeElapsed);
+        hprUpdate(entity, avatar, m_actShift, timeElapsed);
         if (m_isInputDelayed)
         {
             m_timeInputDelay -= timeElapsed;
@@ -366,7 +372,6 @@ public class EntityMotor : NetworkBehaviour
     }
     public virtual void jumpBegin(Entity entity, Avatar avatar, float horizontal, float vertical)
     {
-        Debug.Log("jump");
    
         hprUse(m_actJump,entity, avatar);
         for (int i = 0; i < m_evntJump.Count; i++)
@@ -380,7 +385,7 @@ public class EntityMotor : NetworkBehaviour
             m_rigidbody.AddForce(Vector3.up * entity.Jump, ForceMode.Impulse);
             //Vector3 direction = (m_avatar.transform.right * horizontal + m_avatar.transform.forward * vertical).normalized;//.normalized;//.normalized;
             m_rigidbody.AddForce(VelocityDirHorizontal * entity.Speed * JUMP_POWER_HORIZONTAL, ForceMode.Impulse);
-            Debug.Log("JUMP POWER " + VelocityDirHorizontal * entity.Speed * JUMP_POWER_HORIZONTAL);
+            //Debug.Log("JUMP POWER " + VelocityDirHorizontal * entity.Speed * JUMP_POWER_HORIZONTAL);
             setJumpAvailable(false);
         }
 
@@ -478,18 +483,18 @@ public class EntityMotor : NetworkBehaviour
 
 
 
-    void hprFixedUpdate(Entity entity, List<NAction.Action> actions, float timeElapsed)
+    void hprFixedUpdate(Entity entity, Avatar avatar, List<NAction.Action> actions, float timeElapsed)
     {
         for (int i = 0; i < actions.Count; i++)
         {
-            actions[i].kFixedUpdate(entity, this, timeElapsed);
+            actions[i].kFixedUpdate(entity,this, avatar, timeElapsed);
         }
     }
-    void hprUpdate(Entity entity, List<NAction.Action> actions, float timeElapsed)
+    void hprUpdate(Entity entity, Avatar avatar, List<NAction.Action> actions, float timeElapsed)
     {
         for (int i = 0; i < actions.Count; i++)
         {
-            actions[i].kUpdate(entity, this, timeElapsed);
+            actions[i].kUpdate(entity, this, avatar, timeElapsed);
         }
     }
     void hprUse( List<NAction.Action> actions, Entity entity, Avatar avatar)

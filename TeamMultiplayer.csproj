@@ -99,6 +99,7 @@
     <Compile Include="Assets\Scripts\Game\Action\Projectile.cs" />
     <Compile Include="Assets\Scripts\Game\Action\Reload.cs" />
     <Compile Include="Assets\Scripts\Game\Action\Rewind.cs" />
+    <Compile Include="Assets\Scripts\Game\Action\Wallride.cs" />
     <Compile Include="Assets\Scripts\Game\Avatar.cs" />
     <Compile Include="Assets\Scripts\Game\PlayerMotor\Weapon.cs" />
     <Compile Include="Assets\Scripts\GameData.cs" />

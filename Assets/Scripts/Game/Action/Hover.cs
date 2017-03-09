@@ -53,11 +53,11 @@ namespace NAction
             isActivated = value;
             motor.isUpdateMovement = !value;
         }
-        public override void kFixedUpdate(Entity entity, EntityMotor motor, float timeElapsed)
+        public override void kFixedUpdate(Entity entity, EntityMotor motor, Avatar m_avatar, float timeElapsed)
         {
            // Debug.Log(isActivated);
             if (!isUse) return;
-            base.kUpdate(entity, motor, timeElapsed);
+            base.kUpdate(entity, motor, m_avatar, timeElapsed);
             //motor.Rigidbody.AddForce(-Physics.gravity);
             if (isActivated)
             {
@@ -102,7 +102,7 @@ namespace NAction
         /*
        
          * */
-        public override void kUpdate(Entity entity, EntityMotor motor, float timeElapsed)
+        public override void kUpdate(Entity entity, EntityMotor motor, Avatar avatar, float timeElapsed)
         {
            // Debug.Log(motor.isUpdateMovement);
             if (!isUse) return;

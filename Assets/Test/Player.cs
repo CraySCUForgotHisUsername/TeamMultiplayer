@@ -66,6 +66,7 @@ public class Player : NetworkBehaviour {
                 break;
             case GameData.HERO.C:
                 avt = BANK_PREFAB.AVT_TRICKSTER;
+                actions = BANK_ACTION.AVT_TRICKSTER;
                 break;
             case GameData.HERO.D:
                 avt = BANK_PREFAB.AVT_HEAVY;
@@ -105,15 +106,12 @@ public class Player : NetworkBehaviour {
         {
             m_entityMotorActions = GameObject.Instantiate<EntityMotorActions>(actions);
             m_entityMotorActions.link(m_entityMotor);
-
-
         }
     }
     private void FixedUpdate()
     {
-
         if (!isLocalPlayer) return;
-        m_entityMotor.kFixedUpdate(this.transform,  m_entity, Time.fixedDeltaTime);
+        m_entityMotor.kFixedUpdate(this.transform,  m_entity,m_avatar, Time.fixedDeltaTime);
     }
     void Update()
     {
@@ -133,7 +131,7 @@ public class Player : NetworkBehaviour {
         }
         m_entity.kUpdate(Time.deltaTime);
         m_playerInput.KUpdate(m_entity, m_entityMotor, m_avatar, Time.deltaTime);
-        m_entityMotor.kUpdate(m_entity, Time.deltaTime);
+        m_entityMotor.kUpdate(m_entity, m_avatar, Time.deltaTime);
 
 
     }
