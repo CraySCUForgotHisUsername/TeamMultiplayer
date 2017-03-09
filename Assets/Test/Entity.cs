@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 
 public class Entity : NetworkBehaviour
 {
+    public static Entity LOCAL_PLAYER_ENTITY;
     public delegate float DEL_MODIFIER();
     public delegate void DEL_ME(Entity me);
     const float DAMAGE_AVOID_DISTANCE = 1.0f;
@@ -32,8 +33,8 @@ public class Entity : NetworkBehaviour
     float
         m_speed = 10.0f,
         m_speedRotation = 1.0f,
-        m_jumpPower = 300.0f,
-        m_gravityPower = 800.0f;
+        m_jumpPower = 10,
+        m_gravityPower = 20;
 
 
     [SyncVar]
@@ -44,6 +45,7 @@ public class Entity : NetworkBehaviour
             modDefense = 0.0f, //Reduced damage or increased damage taken and such
             modSpeed = 0.0f;   //Increased speed or decreased speed 
 
+    public bool m_isRegenResource = true;
 
     public List<DEL_MODIFIER> scalarOffense = new List<DEL_MODIFIER>();
     public List<DEL_MODIFIER> scalarDefense = new List<DEL_MODIFIER>();
@@ -119,7 +121,8 @@ public class Entity : NetworkBehaviour
     }
     public void kUpdate(float timeElapsed)
     {
-        m_resourceNow = Mathf.Min(m_resourceMax, m_resourceNow + m_resourceRegen * timeElapsed);
+        if(m_isRegenResource)
+            m_resourceNow = Mathf.Min(m_resourceMax, m_resourceNow + m_resourceRegen * timeElapsed);
     }
 
     public void takeDamageRaw(float amount)

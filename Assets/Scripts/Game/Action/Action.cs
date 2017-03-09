@@ -42,7 +42,7 @@ namespace NAction {
         {
 
         }
-        public void use(Entity entity, EntityMotor motor)
+        public void use(Entity entity, EntityMotor motor,Avatar avatar)
         {
             if (!m_isReceiveInput) return;
             if (!m_isReady) return;
@@ -57,7 +57,7 @@ namespace NAction {
             if (m_ammoIsNeeded) entity.useAmmo(m_ammoRequired, m_ammoIsStream);
             if (m_resourceIsNeeded) entity.useResource(m_resourceRequired, m_resourceIsStream);
 
-            useProcess(entity, motor);
+            useProcess(entity, motor, avatar);
         }
 
         public void hold(Entity entity, EntityMotor motor)
@@ -65,12 +65,12 @@ namespace NAction {
             if (!m_isReceiveInput) return;
 
         }
-        public void end(Entity entity, EntityMotor motor)
+        public void end(Entity entity, EntityMotor motor, Avatar avatar)
         {
             if (!m_isReceiveInput) return;
-            endProcess(entity, motor);
+            endProcess(entity, motor, avatar);
         }
-        public virtual void useProcess(Entity entity, EntityMotor motor)
+        public virtual void useProcess(Entity entity, EntityMotor motor, Avatar avatar)
         {
 
         }
@@ -78,7 +78,7 @@ namespace NAction {
         {
 
         }
-        public virtual void endProcess(Entity entity, EntityMotor motor)
+        public virtual void endProcess(Entity entity, EntityMotor motor, Avatar avatar)
         {
 
         }

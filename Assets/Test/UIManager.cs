@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     Button bttnTeamSpectator, bttnTeamRed, bttnTeamBlue, 
         bttnHeroA, bttnHeroB, bttnHeroC, bttnHeroD, bttnHeroE, bttnHeroF;
+    [SerializeField]
+    Text textResource;
     // Use this for initialization
 
     static public bool IS_NEW_INPUT = false;
@@ -89,6 +91,9 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(Entity.LOCAL_PLAYER_ENTITY != null)
+        {
+            textResource.text = "" + Entity.LOCAL_PLAYER_ENTITY.m_resourceNow + " / " + Entity.LOCAL_PLAYER_ENTITY.m_resourceMax;
+        }
     }
 }

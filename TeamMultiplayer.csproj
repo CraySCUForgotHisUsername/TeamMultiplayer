@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>5.5.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -90,7 +92,8 @@
     <Compile Include="Assets\Scripts\Game\Action\Action_Hitscan.cs" />
     <Compile Include="Assets\Scripts\Game\Action\Dash.cs" />
     <Compile Include="Assets\Scripts\Game\Action\Fly.cs" />
-    <Compile Include="Assets\Scripts\Game\Action\FlyHover.cs" />
+    <Compile Include="Assets\Scripts\Game\Action\AirDash.cs" />
+    <Compile Include="Assets\Scripts\Game\Action\Hover.cs" />
     <Compile Include="Assets\Scripts\Game\Action\Fly_Disable.cs" />
     <Compile Include="Assets\Scripts\Game\Action\Melee.cs" />
     <Compile Include="Assets\Scripts\Game\Action\Projectile.cs" />
@@ -108,11 +111,13 @@
     <Compile Include="Assets\Scripts\UI.cs" />
     <Compile Include="Assets\Scripts\UI\Entity.cs" />
     <Compile Include="Assets\Scripts\UI\Game.cs" />
+    <Compile Include="Assets\Test\EntityMotorActionBank.cs" />
     <Compile Include="Assets\Test\AvatarBank.cs" />
     <Compile Include="Assets\Test\Entity.cs" />
     <Compile Include="Assets\Test\EntityMotor.cs" />
     <Compile Include="Assets\Test\Player.cs" />
     <Compile Include="Assets\Test\PlayerInput.cs" />
+    <Compile Include="Assets\Test\EntityMotorActions.cs" />
     <Compile Include="Assets\Test\PrefabBank.cs" />
     <Compile Include="Assets\Test\UIManager.cs" />
     <Compile Include="Assets\UI_World.cs" />

@@ -23,15 +23,39 @@ public class PlayerInput : NetworkBehaviour
     public void KUpdate(Entity entity, EntityMotor motor, Avatar m_avatar ,float timeElapsed)
     {
         if (entity == null) return;
-        motor.move(entity, entity.Speed, Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        motor.move(entity, m_avatar, entity.Speed, Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         motor.rotate(this.transform, m_avatar.m_head.transform, entity.RotationSpeed, Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
         //move(m_rigidbody,m_speedMove, Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), timeElapsed);
         //rotate(m_rigidbody, m_avatar,m_speedRotate, Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
-        //updateMotorInput();
+        updateMotorInput(entity, motor, m_avatar);
     }
     
-    public virtual void updateMotorInput()
+    public virtual void updateMotorInput(Entity entity, EntityMotor motor, Avatar avatar)
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            motor.jumpBegin(entity, avatar, Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        }
+        else if (Input.GetKeyUp(KeyCode.Space))
+        {
+            motor.jumpEnd(entity, avatar);
+        }
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            motor.actShiftBegin(entity, avatar);
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            motor.actShiftEnd(entity, avatar);
+        }
+        if (Input.GetMouseButton(1))
+        {
+            motor.actRMBBegin(entity, avatar);
+        }
+        else if (Input.GetMouseButtonUp(1))
+        {
+            motor.actRMBEnd(entity, avatar);
+        }
         /*
         m_motor.move(m_entity, m_entity.Speed,Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         m_motor.rotate(m_entity.RotationSpeed, Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
@@ -64,12 +88,7 @@ public class PlayerInput : NetworkBehaviour
         else if (Input.GetMouseButtonUp(0)) {
             m_motor.actRMBEnd(m_entity);
         }
-        if (Input.GetMouseButton(1)){
-            m_motor.actRMBBegin(m_entity);
-        }
-        else if (Input.GetMouseButtonUp(1)){
-            m_motor.actRMBEnd(m_entity);
-        }
+        
         if (Input.GetKeyDown(KeyCode.R))
         {
             m_motor.actRBegin(m_entity);

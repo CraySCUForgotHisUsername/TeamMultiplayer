@@ -19,8 +19,8 @@ public class EntityMotor : NetworkBehaviour
     public delegate float DEL_GET_SCHALAR(EntityMotor motor);
     public delegate void DEL_ME(EntityMotor motor);
     public delegate void DEL_ENTITY_ME(Entity entity, EntityMotor motor);
-    public delegate void DEL_MOVE(Entity entity, EntityMotor motor, float horizontal, float vertical);
-    public delegate void DEL_JUMP(Entity entity, EntityMotor motor, float horizontal, float vertical);
+    public delegate void DEL_MOVE(Entity entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical);
+    public delegate void DEL_JUMP(Entity entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical);
 
     public List<DEL_GET_SCHALAR> m_scalarsSpeed = new List<DEL_GET_SCHALAR>();
     public List<DEL_MOVE> m_evntMoves = new List<DEL_MOVE>();
@@ -78,6 +78,12 @@ public class EntityMotor : NetworkBehaviour
         get { return m_rigidbody; }
     }
 
+    public Vector3 VelocityRelativeDir {
+        get
+        {
+            return m_moveDirection.normalized;
+        }
+    }
 
     public Vector3 Velocity
     {
@@ -119,6 +125,12 @@ public class EntityMotor : NetworkBehaviour
         m_rigidbody = GetComponent<Rigidbody>();
 
     }
+    public void resetState() {
+        m_isJumpAvailable = true;
+        m_isInputDelayed = false;
+    }
+
+
     bool updateIsGrounded(Transform body)
     {
         RaycastHit hit;
@@ -143,11 +155,15 @@ public class EntityMotor : NetworkBehaviour
         return m_isTouchingGround;
 
     }
+    public void updateGravity(Entity entity, float timeElapsed)
+    {
+        m_rigidbody.AddForce(-m_upward * entity.Gravity * timeElapsed, ForceMode.Impulse);
+
+    }
     //Run during fixedupdate
     public virtual void updateMovement( Entity entity,   float timeElapsed)
     {
         //Debug.Log("GRAVITY " + (-m_upward * entity.Gravity * timeElapsed));
-        m_rigidbody.AddForce(-m_upward * entity.Gravity * timeElapsed, ForceMode.Impulse);
         m_rigidbody.drag = 10.0f;
         m_rigidbody.angularDrag = 10.0f;
         if (!IsGrounded)
@@ -244,13 +260,13 @@ public class EntityMotor : NetworkBehaviour
     {
         this.m_playerInfo.team = (GameData.TEAM)team;
     }
-    public virtual void move(Entity entity,  float speed, float horizontal, float vertical)
+    public virtual void move(Entity entity, Avatar avatar,  float speed, float horizontal, float vertical)
     {
         m_moveDirection.x = horizontal;
         m_moveDirection.z = vertical;
         for (int i = 0; i < m_evntMoves.Count; i++)
         {
-            m_evntMoves[i](entity, this, horizontal, vertical);
+            m_evntMoves[i](entity, this, avatar, horizontal, vertical);
         }
         Vector3 direction = (m_right * horizontal + m_forward * vertical).normalized;//.normalized;
         m_velocity = direction * speed; ;
@@ -302,6 +318,7 @@ public class EntityMotor : NetworkBehaviour
 
         }
 
+        updateGravity(entity, timeElapsed);
         //Debug.Log(m_right);
         if (isUpdateMovement)
         {
@@ -347,33 +364,47 @@ public class EntityMotor : NetworkBehaviour
         m_isInputDelayed = true;
         m_timeInputDelay = Mathf.Max(time, m_timeInputDelay);
     }
-    public virtual void jumpBegin(Entity entity, float horizontal, float vertical)
+    public virtual void jumpBegin(Entity entity, Avatar avatar, float horizontal, float vertical)
     {
-        hprUse(entity, m_actJump);
+        Debug.Log("jump");
+   
+        hprUse(m_actJump,entity, avatar);
         for (int i = 0; i < m_evntJump.Count; i++)
         {
-            m_evntJump[i](entity, this, horizontal, vertical);
+            m_evntJump[i](entity, this, avatar, horizontal, vertical);
         }
 
         if (!IsGrounded) return;
         if (m_isJumpAvailable)
         {
-            //m_rigidbody.AddForce(m_avatarManager.Up * entity.Jump, ForceMode.Impulse);
+            m_rigidbody.AddForce(Vector3.up * entity.Jump, ForceMode.Impulse);
             //Vector3 direction = (m_avatar.transform.right * horizontal + m_avatar.transform.forward * vertical).normalized;//.normalized;//.normalized;
             m_rigidbody.AddForce(VelocityDirHorizontal * entity.Speed * JUMP_POWER_HORIZONTAL, ForceMode.Impulse);
+            Debug.Log("JUMP POWER " + VelocityDirHorizontal * entity.Speed * JUMP_POWER_HORIZONTAL);
             setJumpAvailable(false);
         }
 
     }
-    public virtual void jumpEnd(Entity entity)
+    public virtual void jumpEnd(Entity entity, Avatar avatar)
     {
         for (int i = 0; i < m_evntJumpStop.Count; i++)
         {
             m_evntJumpStop[i](entity, this);
         }
-        hprEnd(entity, m_actJump);
+        hprEnd(entity, m_actJump, avatar);
 
     }
+    public virtual void actRMBBegin(Entity entity, Avatar avatar)
+    {
+        hprUse(m_actRMB,entity, avatar);
+
+    }
+    public virtual void actRMBEnd(Entity entity, Avatar avatar)
+    {
+
+        hprEnd(entity, m_actRMB, avatar);
+    }
+    /*
     public virtual void actLMBBegin(Entity entity)
     {
         hprUse(entity, m_actLMB);
@@ -384,15 +415,7 @@ public class EntityMotor : NetworkBehaviour
         hprEnd(entity, m_actLMB);
 
     }
-    public virtual void actRMBBegin(Entity entity)
-    {
-        hprUse(entity, m_actRMB);
-
-    }
-    public virtual void actRMBEnd(Entity entity) { 
     
-        hprEnd(entity, m_actRMB);
-    }
     public virtual void actRBegin(Entity entity)
     {
         hprUse(entity, m_actR);
@@ -412,15 +435,8 @@ public class EntityMotor : NetworkBehaviour
         hprEnd(entity, m_actF);
 
     }
-    public virtual void actShiftBegin(Entity entity)
-    {
-        hprUse(entity, m_actShift);
-    }
-    public virtual void actShiftEnd(Entity entity)
-    {
-        hprEnd(entity, m_actShift);
-
-    }
+  
+    
     public virtual void actEBegin(Entity entity)
     {
         hprUse(entity, m_actE);
@@ -430,15 +446,26 @@ public class EntityMotor : NetworkBehaviour
         hprEnd(entity, m_actE);
 
     }
-    public virtual void actQBegin(Entity entity)
+    public virtual void actQBegin(Entity entity, Avatar avatar)
     {
-        hprUse(entity, m_actQ);
+        hprUse(entity, m_actQ),avatar;
     }
     public virtual void actQEnd(Entity entity)
     {
         hprEnd(entity, m_actQ);
 
     }
+     * */
+    public virtual void actShiftBegin(Entity entity, Avatar avatar)
+    {
+        hprUse(m_actShift,entity, avatar);
+    }
+    public virtual void actShiftEnd(Entity entity,Avatar avatar)
+    {
+        hprEnd(entity, m_actShift, avatar);
+
+    }
+    
 
     public Vector3 dirLook
     {
@@ -465,19 +492,19 @@ public class EntityMotor : NetworkBehaviour
             actions[i].kUpdate(entity, this, timeElapsed);
         }
     }
-    void hprUse(Entity entity, List<NAction.Action> actions)
+    void hprUse( List<NAction.Action> actions, Entity entity, Avatar avatar)
     {
         for (int i = 0; i < actions.Count; i++)
         {
-            actions[i].use(entity, this);
+            actions[i].use(entity, this, avatar);
         }
 
     }
-    void hprEnd(Entity entity, List<NAction.Action> actions)
+    void hprEnd(Entity entity, List<NAction.Action> actions, Avatar avatar)
     {
         for (int i = 0; i < actions.Count; i++)
         {
-            actions[i].end(entity, this);
+            actions[i].end(entity, this, avatar);
         }
 
     }

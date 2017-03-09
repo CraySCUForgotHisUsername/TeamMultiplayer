@@ -16,4 +16,26 @@ public class Avatar : MonoBehaviour {
 	void Update () {
 		
 	}
+    public Vector3 Look {
+        get
+        {
+            if(m_head != null)
+            {
+                return m_head.transform.forward;
+            }
+            return transform.forward;
+        }
+    }
+    public Vector3 Right {
+        get
+        {
+            if (m_body != null)
+            {
+                return m_body.transform.right;
+            }
+            return transform.right;
+        }
+    }
+
+
 }

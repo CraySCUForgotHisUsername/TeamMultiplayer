@@ -16,10 +16,10 @@ namespace NAction {
         bool isUse = false;
         Vector3 m_dirHorizontal;
         Vector3 m_dirVertical = Vector3.zero;
-        /*
-        public override void useProcess(NEntity.Entity entity, Motor motor)
+        
+        public override void useProcess(Entity entity, EntityMotor motor,Avatar avatar)
         {
-            base.useProcess(entity,motor);
+            base.useProcess(entity,motor,  avatar);
             if (isUse)
             {
                 setActive(entity,motor, false);
@@ -30,10 +30,11 @@ namespace NAction {
 
             }
         }
-        void setActive(NEntity.Entity entity, Motor motor,bool value)
+        void setActive(Entity entity, EntityMotor motor, bool value)
         {
             if (!value)
             {
+                entity.m_isRegenResource = true;
 
                 isUse = false;
                 m_dirHorizontal = Vector3.zero;
@@ -54,6 +55,7 @@ namespace NAction {
                     //Activation failed.
                     return;
                 }
+                entity.m_isRegenResource = false;
                 isUse = true;
                 motor.isUpdateMovement = false;
                 motor.m_evntMoves.Add(flyHorizontally);
@@ -66,27 +68,25 @@ namespace NAction {
             }
 
         }
-        void flyHorizontally(NEntity.Entity entity, Motor motor, float horizontal, float vertical)
+        void flyHorizontally(Entity entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical)
         {
-            var avatar = motor.m_avatarManager.getAvatar();
-            var avatarCollision = motor.m_avatarManager.getAvatarCollision();
-            m_dirHorizontal = (avatar.m_head.transform.forward * vertical + avatarCollision.m_head.transform.right * horizontal).normalized;
+            m_dirHorizontal = (avatar.Look * vertical + avatar.Right * horizontal).normalized;
         }
-        void flyUp(NEntity.Entity entity, Motor motor, float horizontal, float vertical)
+        void flyUp(Entity entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical)
         {
             m_dirVertical = Vector3.up;
         }
-        void flyUpDownStop(NEntity.Entity entity, Motor motor)
+        void flyUpDownStop(Entity entity, EntityMotor motor)
         {
             m_dirVertical = Vector3.zero;
 
         }
-        void flyDown(NEntity.Entity entity, Motor motor)
+        void flyDown(Entity entity, EntityMotor motor)
         {
             m_dirVertical = Vector3.down;
 
         }
-        public override void kFixedUpdate(NEntity.Entity entity, Motor motor, float timeElapsed)
+        public override void kFixedUpdate(Entity entity, EntityMotor motor, float timeElapsed)
         {
             base.kFixedUpdate(entity,motor, timeElapsed);
             if (!isUse) return;
@@ -108,7 +108,6 @@ namespace NAction {
             // motor.Rigidbody.AddForce(-motor.Rigidbody.velocity*500*timeElapsed);
             // motor.Rigidbody.AddForce(movementDirection  * speed* motor.m_entity.getModSpeed() * timeElapsed );
         }
-         * */
     }
 
 }
