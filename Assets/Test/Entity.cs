@@ -6,6 +6,11 @@ using UnityEngine.Networking;
 
 public class Entity : NetworkBehaviour
 {
+    [SerializeField]
+    public GameData.TEAM m_team;
+    [SerializeField]
+    public GameData.TYPE m_type;
+
     public static Entity LOCAL_PLAYER_ENTITY;
     public delegate float DEL_MODIFIER();
     public delegate void DEL_ME(Entity me);

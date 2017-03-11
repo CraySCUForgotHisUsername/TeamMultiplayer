@@ -18,6 +18,8 @@ namespace NAction
             var dir = motor.VelocityRelativeDir.z * avatar.Look + motor.VelocityRelativeDir.x * avatar.Right;
             if (motor.IsGrounded)
             {
+                dir.y = 0;
+                dir.Normalize();
                 dir.y = 1;
                 dir.Normalize();
             }

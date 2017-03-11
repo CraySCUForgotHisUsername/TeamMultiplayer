@@ -7,7 +7,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager ME;
     public delegate void DEL_TEAM(GameData.TEAM team);
-    public delegate void DEL_HERO(GameData.HERO hero);
+    public delegate void DEL_HERO(GameData.TYPE hero);
     static public List<DEL_TEAM> EVENT_TEAM = new List<DEL_TEAM>();
     static public List<DEL_HERO> EVENT_HERO = new List<DEL_HERO>();
 
@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
 
     static public bool IS_NEW_INPUT = false;
     static public GameData.TEAM TEAM_SELECTED;
-    static public GameData.HERO HERO_SELECTED;
+    static public GameData.TYPE HERO_SELECTED;
     private void Awake()
     {
         
@@ -56,37 +56,37 @@ public class UIManager : MonoBehaviour
     void h_heroA()
     {
         IS_NEW_INPUT = true;
-        HERO_SELECTED = GameData.HERO.A;
+        HERO_SELECTED = GameData.TYPE.A;
     }
     void h_heroB()
     {
         IS_NEW_INPUT = true;
-        HERO_SELECTED = GameData.HERO.B;
+        HERO_SELECTED = GameData.TYPE.B;
     }
     void h_heroC()
     {
         IS_NEW_INPUT = true;
-        HERO_SELECTED = GameData.HERO.C;
+        HERO_SELECTED = GameData.TYPE.C;
     }
     void h_heroD()
     {
         IS_NEW_INPUT = true;
-        HERO_SELECTED = GameData.HERO.D;
+        HERO_SELECTED = GameData.TYPE.D;
     }
     void h_heroE()
     {
         IS_NEW_INPUT = true;
-        HERO_SELECTED = GameData.HERO.E;
+        HERO_SELECTED = GameData.TYPE.E;
     }
     void h_heroF()
     {
         IS_NEW_INPUT = true;
-        HERO_SELECTED = GameData.HERO.F;
+        HERO_SELECTED = GameData.TYPE.F;
     }
     void h_heroG()
     {
         IS_NEW_INPUT = true;
-        HERO_SELECTED = GameData.HERO.G;
+        HERO_SELECTED = GameData.TYPE.G;
     }
     // Update is called once per frame
     void Update()

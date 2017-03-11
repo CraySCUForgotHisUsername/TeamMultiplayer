@@ -35,46 +35,51 @@ public class Player : NetworkBehaviour {
         RpcChangeTeam(team);
     }
     [Command]
-    void CmdChangeHero(GameData.HERO hero)
+    void CmdChangeHero(GameData.TYPE hero)
     {
         RpcChangeHero(hero);
     }
     [ClientRpc]
     public void RpcChangeTeam(GameData.TEAM team)
     {
+        if (m_entity == null) return;
+        m_entity.m_team = team;
+
     }
     [ClientRpc]
-    public void RpcChangeHero(GameData.HERO hero)
+    public void RpcChangeHero(GameData.TYPE hero)
     {
         instantiateAvatar(hero);
+        if (m_entity == null) return;
+        m_entity.m_type = hero;
     }
 
 
-    void instantiateAvatar(GameData.HERO hero)
+    void instantiateAvatar(GameData.TYPE hero)
     {
         Debug.Log("INSTA");
         Avatar avt = null;
         EntityMotorActions actions = null;
         switch (hero)
         {
-            case GameData.HERO.A:
+            case GameData.TYPE.A:
                 avt = BANK_PREFAB.AVT_DUELIST;
                 break;
-            case GameData.HERO.B:
+            case GameData.TYPE.B:
                 avt = BANK_PREFAB.AVT_ROCKET;
                 actions = BANK_ACTION.AVT_ROCKET;
                 break;
-            case GameData.HERO.C:
+            case GameData.TYPE.C:
                 avt = BANK_PREFAB.AVT_TRICKSTER;
                 actions = BANK_ACTION.AVT_TRICKSTER;
                 break;
-            case GameData.HERO.D:
+            case GameData.TYPE.D:
                 avt = BANK_PREFAB.AVT_HEAVY;
                 break;
-            case GameData.HERO.E:
+            case GameData.TYPE.E:
                 avt = BANK_PREFAB.AVT_SHIELD;
                 break;
-            case GameData.HERO.F:
+            case GameData.TYPE.F:
                 avt = BANK_PREFAB.AVT_MEDIC;
                 break;
         }

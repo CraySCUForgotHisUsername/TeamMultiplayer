@@ -14,7 +14,7 @@ public class UI : MonoBehaviour
 
     public bool             newInput = true;
     public GameData.TEAM    m_teamSelected;
-    public GameData.HERO    m_heroSelected;
+    public GameData.TYPE    m_heroSelected;
     void Start()
     {
         //bttnTeamSpectator.onClick.AddListener(h_teamSpectator);
@@ -43,17 +43,17 @@ public class UI : MonoBehaviour
     void h_heroA()
     {
         newInput = true;
-        m_heroSelected = GameData.HERO.A;
+        m_heroSelected = GameData.TYPE.A;
     }
     void h_heroB()
     {
         newInput = true;
-        m_heroSelected = GameData.HERO.B;
+        m_heroSelected = GameData.TYPE.B;
     }
     void h_heroC()
     {
         newInput = true;
-        m_heroSelected = GameData.HERO.C;
+        m_heroSelected = GameData.TYPE.C;
     }
     void h_heroD()
     {
