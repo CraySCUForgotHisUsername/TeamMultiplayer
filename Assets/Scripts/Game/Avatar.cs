@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Avatar : MonoBehaviour {
+public class Avatar : Prefab {
     public GameObject 
         m_head, m_body,
         m_weapon;

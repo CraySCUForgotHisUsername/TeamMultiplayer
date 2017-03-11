@@ -97,6 +97,7 @@
     <Compile Include="Assets\Scripts\Game\Action\Projectile.cs" />
     <Compile Include="Assets\Scripts\Game\Action\Reload.cs" />
     <Compile Include="Assets\Scripts\Game\Action\Rewind.cs" />
+    <Compile Include="Assets\Scripts\Game\Action\Rocket_LMB.cs" />
     <Compile Include="Assets\Scripts\Game\Action\Wallride.cs" />
     <Compile Include="Assets\Scripts\Game\Avatar.cs" />
     <Compile Include="Assets\Scripts\Game\PlayerMotor\Weapon.cs" />
@@ -116,9 +117,17 @@
     <Compile Include="Assets\Test\EntityMotor.cs" />
     <Compile Include="Assets\Test\EntityMotorActionBank.cs" />
     <Compile Include="Assets\Test\EntityMotorActions.cs" />
+    <Compile Include="Assets\Test\EntityScript\MoveForward.cs" />
+    <Compile Include="Assets\Test\EntityScript\Script.cs" />
+    <Compile Include="Assets\Test\EntityScriptReader.cs" />
+    <Compile Include="Assets\Test\NetworkPrefabLoader.cs" />
     <Compile Include="Assets\Test\Player.cs" />
     <Compile Include="Assets\Test\PlayerInput.cs" />
+    <Compile Include="Assets\Test\PlayerInputManager.cs" />
+    <Compile Include="Assets\Test\Prefab.cs" />
     <Compile Include="Assets\Test\PrefabBank.cs" />
+    <Compile Include="Assets\Test\Projectile.cs" />
+    <Compile Include="Assets\Test\RocketScript.cs" />
     <Compile Include="Assets\Test\UIManager.cs" />
     <Compile Include="Assets\UI_World.cs" />
   </ItemGroup>

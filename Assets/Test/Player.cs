@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class Player : NetworkBehaviour {
-    
+    public static Player LOCAL_PLAYER;
     public PrefabBank               BANK_PREFAB;
     public EntityMotorActionBank    BANK_ACTION;
     public NetworkTransformChild m_netTransformChildHead;
@@ -26,6 +26,7 @@ public class Player : NetworkBehaviour {
         base.OnStartLocalPlayer();
         m_mainCamera.SetActive(true);
         m_playerInput.enabled = true;
+        Player.LOCAL_PLAYER = this;
         Entity.LOCAL_PLAYER_ENTITY = m_entity;
     }
     [Command]
@@ -39,9 +40,15 @@ public class Player : NetworkBehaviour {
     {
         RpcChangeHero(hero);
     }
+    [Command]
+    public void CmdFireRocket(Vector3 position, Vector3 to)
+    {
+        PlayerInputManager.ME.ROCKET(this.m_entity.m_team, position, to);
+    }
     [ClientRpc]
     public void RpcChangeTeam(GameData.TEAM team)
     {
+        Debug.Log("TEAM CHANGED TIO " + team);
         if (m_entity == null) return;
         m_entity.m_team = team;
 
@@ -49,15 +56,16 @@ public class Player : NetworkBehaviour {
     [ClientRpc]
     public void RpcChangeHero(GameData.TYPE hero)
     {
-        instantiateAvatar(hero);
+        instantiateAvatar(m_entity.m_team, hero);
         if (m_entity == null) return;
         m_entity.m_type = hero;
+        PhysicsLayer.SET_PLAYER(this.m_avatar,this.m_entity.m_team);
     }
 
 
-    void instantiateAvatar(GameData.TYPE hero)
+    void instantiateAvatar(GameData.TEAM team, GameData.TYPE hero)
     {
-        Debug.Log("INSTA");
+        Debug.Log("INSTA " + team + " , "  + hero);
         Avatar avt = null;
         EntityMotorActions actions = null;
         switch (hero)
@@ -83,7 +91,6 @@ public class Player : NetworkBehaviour {
                 avt = BANK_PREFAB.AVT_MEDIC;
                 break;
         }
-
         if (avt == null) return;
 
         m_entityMotor.resetState();
@@ -98,6 +105,18 @@ public class Player : NetworkBehaviour {
         me.transform.parent = this.transform;
         me.transform.localPosition = Vector3.zero;
         me.transform.localRotation = Quaternion.identity;
+        Debug.Log(team);
+        if(team == GameData.TEAM.RED)
+        {
+            me.setMaterial(BANK_PREFAB.MAT_TEAM_RED);
+
+        }
+        else if(team == GameData.TEAM.BLUE)
+        {
+            me.setMaterial(BANK_PREFAB.MAT_TEAM_BLUE);
+
+        }
+
         if(me.m_head == null)
         {
             m_netTransformChildHead.enabled = false;
@@ -116,6 +135,7 @@ public class Player : NetworkBehaviour {
     private void FixedUpdate()
     {
         if (!isLocalPlayer) return;
+        
         m_entityMotor.kFixedUpdate(this.transform,  m_entity,m_avatar, Time.fixedDeltaTime);
     }
     void Update()

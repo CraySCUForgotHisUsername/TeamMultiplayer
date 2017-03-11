@@ -25,14 +25,16 @@
 	v2f vert(appdata v) {
 		// just make a copy of incoming vertex data but scaled according to normal direction
 		v2f o;
+		float4 pos = v.vertex;
+		pos.xyz *= 1 + _Outline;
 		float4 center = mul(UNITY_MATRIX_MVP, float4(0,0,0,1));
-		o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+		o.pos = mul(UNITY_MATRIX_MVP, pos);
 
 		float3 norm = mul((float3x3)UNITY_MATRIX_IT_MV, v.normal);
 		float2 offset = TransformViewToProjection(norm.xy);
 
 		//o.pos.xy += offset * o.pos.z * _Outline;
-		o.pos.xyz += normalize(o.pos.xyz - center.xyz) *_Outline;
+		//o.pos.xyz += normalize(o.pos.xyz - center.xyz) *_Outline;
 		//o.pos.xyz *= 1.5f;
 		o.color = _OutlineColor;
 		return o;

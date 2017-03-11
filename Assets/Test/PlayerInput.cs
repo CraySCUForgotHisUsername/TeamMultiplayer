@@ -56,6 +56,19 @@ public class PlayerInput : NetworkBehaviour
         {
             motor.actRMBEnd(entity, avatar);
         }
+
+
+        if (Input.GetMouseButton(0))
+        {
+            motor.actLMBBegin(entity, avatar);
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            motor.actLMBEnd(entity, avatar);
+        }
+
+
+        
         /*
         m_motor.move(m_entity, m_entity.Speed,Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         m_motor.rotate(m_entity.RotationSpeed, Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
@@ -82,12 +95,6 @@ public class PlayerInput : NetworkBehaviour
         }
 
         if (!m_motor.IsReadyForInput) return;
-        if (Input.GetMouseButton(0)){
-            m_motor.actLMBBegin(m_entity);
-        }
-        else if (Input.GetMouseButtonUp(0)) {
-            m_motor.actRMBEnd(m_entity);
-        }
         
         if (Input.GetKeyDown(KeyCode.R))
         {

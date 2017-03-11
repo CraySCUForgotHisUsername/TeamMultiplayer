@@ -399,6 +399,16 @@ public class EntityMotor : NetworkBehaviour
         hprEnd(entity, m_actJump, avatar);
 
     }
+    public virtual void actLMBBegin(Entity entity, Avatar avatar)
+    {
+        hprUse(m_actLMB, entity, avatar);
+
+    }
+    public virtual void actLMBEnd(Entity entity, Avatar avatar)
+    {
+
+        hprEnd(entity, m_actLMB, avatar);
+    }
     public virtual void actRMBBegin(Entity entity, Avatar avatar)
     {
         hprUse(m_actRMB,entity, avatar);

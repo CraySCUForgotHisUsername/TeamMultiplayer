@@ -44,7 +44,7 @@ public class Entity : NetworkBehaviour
 
     [SyncVar]
     [SerializeField]
-    float modGravity = 0.0f,
+    float   modGravity = 0.0f,
             modAir = 0.0f,
             modOffense = 0.0f, //Bonus damage or reduced damage and such
             modDefense = 0.0f, //Reduced damage or increased damage taken and such
@@ -97,6 +97,24 @@ public class Entity : NetworkBehaviour
         get
         {
             return m_gravityPower;
+        }
+    }
+    public float Offense {
+        get
+        {
+            return 1.0f;
+        }
+    }
+    public float Defense {
+        get
+        {
+            return 1.0f;
+        }
+    }
+     public float Time {
+        get
+        {
+            return 1.0f;
         }
     }
 
