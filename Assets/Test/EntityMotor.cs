@@ -138,7 +138,7 @@ public class EntityMotor : NetworkBehaviour
     bool updateIsGrounded(Transform body)
     {
         RaycastHit hit;
-        Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), -Vector3.up, out hit, 0.2f);
+        Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), -Vector3.up, out hit, 0.15f);
         m_upward = Vector3.up;
         if (hit.transform != null)
         {
@@ -146,7 +146,6 @@ public class EntityMotor : NetworkBehaviour
             m_upward = hit.normal;
             m_forward = (Quaternion.FromToRotation(body.up, hit.normal) * body.forward);
             m_right = (Quaternion.FromToRotation(body.up, hit.normal) * body.right);
-            //m_right = (Quaternion.LookRotation(hit.normal) * this.tran.up);
 
         }
         else
@@ -161,15 +160,14 @@ public class EntityMotor : NetworkBehaviour
     }
     public void updateGravity(Entity entity, float timeElapsed)
     {
-        m_rigidbody.AddForce(-m_upward * entity.Gravity * timeElapsed, ForceMode.Impulse);
+        m_rigidbody.AddForce(Vector3.down * entity.Gravity * timeElapsed, ForceMode.Impulse);
 
     }
     //Run during fixedupdate
     public virtual void updateMovement( Entity entity,   float timeElapsed)
     {
-        //Debug.Log("GRAVITY " + (-m_upward * entity.Gravity * timeElapsed));
-        m_rigidbody.drag = 10.0f;
-        m_rigidbody.angularDrag = 10.0f;
+        m_rigidbody.drag = 20.0f;
+        m_rigidbody.angularDrag = 20.0f;
         if (!IsGrounded)
         {
             m_rigidbody.drag = 0.0f;
@@ -177,12 +175,7 @@ public class EntityMotor : NetworkBehaviour
             //Debug.Log(isGrounded);
             if (wasGrounded && m_isJumpAvailable)
             {
-                //Vector3 velocityXZ = new Vector3(m_velocity.x, 0, m_velocity.z).normalized;
-                //Vector3 dir = m_velocity.normalized
-                //Debug.Log("OK JUMP!" + velocityXZ * 100);
-
-                //float ratio =Mathf.Max(0.1f+ Mathf.Min(1, m_timeRunning / 0.5f));
-                m_rigidbody.AddForce(VelocityDirHorizontal * entity.Speed * MINI_JUMP_PUSH_POWER, ForceMode.Impulse);
+                //m_rigidbody.AddForce(VelocityDirHorizontal * entity.Speed * MINI_JUMP_PUSH_POWER, ForceMode.Impulse);
 
             }
         }
@@ -209,13 +202,18 @@ public class EntityMotor : NetworkBehaviour
 
         if (IsGrounded)
         {
+            var velocityDiff = m_velocity - m_rigidbody.velocity;
+            //velocityDiff.y =Mathf.Min( 0, velocityDiff.y);
+            var force = velocityDiff;// * timeElapsed*15;
             // m_timeRunning += Time.fixedDeltaTime;
-            //Debug.Log("MOVING " + Time.time);
-            m_rigidbody.MovePosition(m_rigidbody.position + m_velocity * Time.fixedDeltaTime);
+            //Debug.Log("MOVING " + m_velocity + " , " + m_rigidbody.velocity +" , " + force + "TIME " + timeElapsed);
+            //Debug.Log(force);
+            m_rigidbody.AddForce(force, ForceMode.Impulse);
+            //m_rigidbody.MovePosition(m_rigidbody.position + m_velocity * timeElapsed);
 
         }
         //air control
-        if (!IsGrounded)
+        else if (!IsGrounded)
         {
             // m_timeRunning = 0;
             var bodyVelocity_XZ = m_rigidbody.velocity;
@@ -250,8 +248,9 @@ public class EntityMotor : NetworkBehaviour
             //possibleAccelerationRange = Mathf.Max(possibleAceelerationDueToSpeedDiff * AIR_SURFING_FORCE_LINEAR_MAX, possibleAccelerationRange);
             //possibleAccelerationRange = possibleAceelerationDueToSpeedDiff;// * AIR_SURFING_FORCE_LINEAR_MAX;
             Vector3 force = desiredVelocityXZ * possibleAceelerationDueToSpeedDiff;// *  Mathf.Min(1.0f, 100.0f * timeElapsed);
-                                                                                   //Debug.Log(possibleAccelerationRange + " , " +force);
-                                                                                   //Debug.Log(m_velocity + " , " + possibleAccelerationRange + " , " +  force);
+
+            //Debug.Log("AIR CONTROL " + (addThisVelocity * AIR_SURFING_FORCE_LINEAR_MAX));                                                           //Debug.Log(possibleAccelerationRange + " , " +force);
+                                                                                                 //Debug.Log(m_velocity + " , " + possibleAccelerationRange + " , " +  force);
             m_rigidbody.AddForce(addThisVelocity * AIR_SURFING_FORCE_LINEAR_MAX, ForceMode.Impulse);
             //m_rigidbody.AddForce(force * entity.AirControl, ForceMode.Impulse);
         }
@@ -382,9 +381,13 @@ public class EntityMotor : NetworkBehaviour
         if (!IsGrounded) return;
         if (m_isJumpAvailable)
         {
-            m_rigidbody.AddForce(Vector3.up * entity.Jump, ForceMode.Impulse);
+            //Debug.Log("JUMP "+Vector3.up * entity.Jump);
+            Vector3 force = (Vector3.up * entity.Jump ) - new Vector3(0, Rigidbody.velocity.y,0);
+            m_rigidbody.AddForce(force, ForceMode.Impulse);
+            m_isTouchingGround = false;
             //Vector3 direction = (m_avatar.transform.right * horizontal + m_avatar.transform.forward * vertical).normalized;//.normalized;//.normalized;
-            m_rigidbody.AddForce(VelocityDirHorizontal * entity.Speed * JUMP_POWER_HORIZONTAL, ForceMode.Impulse);
+            //m_rigidbody.AddForce(VelocityDirHorizontal * entity.Speed * JUMP_POWER_HORIZONTAL, ForceMode.Impulse);
+            
             //Debug.Log("JUMP POWER " + VelocityDirHorizontal * entity.Speed * JUMP_POWER_HORIZONTAL);
             setJumpAvailable(false);
         }

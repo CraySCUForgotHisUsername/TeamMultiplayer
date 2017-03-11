@@ -28,7 +28,7 @@ namespace NEntity.NScript
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("collider enter " +other.gameObject.name);
+            //Debug.Log("collider enter " +other.gameObject.name);
             m_rigidBody.velocity = Vector3.zero;
             m_isCollided = true;
         }
