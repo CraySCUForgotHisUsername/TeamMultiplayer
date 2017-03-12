@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>5.5.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -112,14 +114,19 @@
     <Compile Include="Assets\Scripts\UI.cs" />
     <Compile Include="Assets\Scripts\UI\Entity.cs" />
     <Compile Include="Assets\Scripts\UI\Game.cs" />
+    <Compile Include="Assets\StylizedExplosionPack\scripts\destroyMe.cs" />
+    <Compile Include="Assets\StylizedExplosionPack\scripts\instantiateEffectCaller.cs" />
+    <Compile Include="Assets\StylizedExplosionPack\scripts\particleColorChanger.cs" />
     <Compile Include="Assets\Test\AvatarBank.cs" />
     <Compile Include="Assets\Test\Entity.cs" />
     <Compile Include="Assets\Test\EntityMotor.cs" />
     <Compile Include="Assets\Test\EntityMotorActionBank.cs" />
     <Compile Include="Assets\Test\EntityMotorActions.cs" />
     <Compile Include="Assets\Test\EntityScript\MoveForward.cs" />
+    <Compile Include="Assets\Test\EntityScript\GameObjectDestroy.cs" />
     <Compile Include="Assets\Test\EntityScript\Script.cs" />
     <Compile Include="Assets\Test\EntityScriptReader.cs" />
+    <Compile Include="Assets\Test\EntityScript\LoadNetworkPrefab.cs" />
     <Compile Include="Assets\Test\NetworkPrefabLoader.cs" />
     <Compile Include="Assets\Test\Player.cs" />
     <Compile Include="Assets\Test\PlayerInput.cs" />
@@ -133,6 +140,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Silhouetted Diffuse.shader" />
+    <None Include="Assets\StylizedExplosionPack\Tips &amp; Documentations.txt" />
+    <None Include="Assets\StylizedExplosionPack\shader\alphaBlend_depthBlend_glow.shader" />
+    <None Include="Assets\StylizedExplosionPack\shader\alphaBlend_glow.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\Anton OFL.txt" />
     <None Include="Assets\TextMesh Pro\Fonts\Bangers - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />

@@ -235,7 +235,7 @@ public class Entity : NetworkBehaviour
     public int useAmmo(int amount, bool isStream)
     {
         int ammoUsed = useAmmoTest(amount, isStream);
-        Debug.Log("AMMOUS ED " + amount + ", " + ammoUsed);
+        //Debug.Log("AMMOUS ED " + amount + ", " + ammoUsed);
         m_ammo -= ammoUsed;
         raiseLazyEvent();
         return ammoUsed;

@@ -5,16 +5,26 @@ using UnityEngine;
 public class RocketScript : MonoBehaviour {
     public Prefab prefab;
     public NEntity.NScript.EntityScriptReader reader;
+    public NEntity.NScript.LoadNetworkPrefab loadRocketModel;
     public NEntity.NScript.MoveForward move;
+    public NEntity.NScript.LoadNetworkPrefab loadExplosionModel;
+    public NEntity.NScript.GameObjectDestroy destroyNetworkObject;
     public void init(
-        GameData.TEAM team, Entity entity, Rigidbody rigidBody,
+        NetworkPrefabLoader loader,
+        GameData.TEAM team,  Entity entity, Rigidbody rigidBody,
         Vector3 position, Vector3 to)
     {
         PhysicsLayer.SET_ATTACK(prefab, team);
 
         reader.enabled = true;
         reader.m_entity = entity;
+        loadRocketModel.networkloader = loader;
+        loadExplosionModel.networkloader = loader;
+        loadRocketModel.team = team;
+        loadExplosionModel.team = team;
         move.m_rigidBody = rigidBody;
+        destroyNetworkObject.obj = entity.gameObject;
+        destroyNetworkObject.isNetworkedObject = true;
 
         this.transform.parent = entity.transform;
         this.transform.localPosition = Vector3.zero;

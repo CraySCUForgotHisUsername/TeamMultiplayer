@@ -118,6 +118,16 @@ public class EntityMotor : NetworkBehaviour
         {
             return m_isTouchingGround;
         }
+        set
+        {
+            m_isTouchingGround = value;
+            if (!value)
+            {
+                m_rigidbody.drag = 0;
+                m_rigidbody.angularDrag = 0;
+
+            }
+        }
     }
 
     // Use this for initialization
@@ -155,6 +165,19 @@ public class EntityMotor : NetworkBehaviour
             m_right = transform.right;
         }
         m_isTouchingGround = (hit.transform != null);
+
+
+        m_rigidbody.drag = 20.0f;
+        m_rigidbody.angularDrag = 20.0f;
+        if (!IsGrounded)
+        {
+            m_rigidbody.drag = 0.0f;
+            m_rigidbody.angularDrag = 0.0f;
+            
+        }
+
+
+
         return m_isTouchingGround;
 
     }
@@ -166,25 +189,8 @@ public class EntityMotor : NetworkBehaviour
     //Run during fixedupdate
     public virtual void updateMovement( Entity entity,   float timeElapsed)
     {
-        m_rigidbody.drag = 20.0f;
-        m_rigidbody.angularDrag = 20.0f;
-        if (!IsGrounded)
-        {
-            m_rigidbody.drag = 0.0f;
-            m_rigidbody.angularDrag = 0.0f;
-            //Debug.Log(isGrounded);
-            if (wasGrounded && m_isJumpAvailable)
-            {
-                //m_rigidbody.AddForce(VelocityDirHorizontal * entity.Speed * MINI_JUMP_PUSH_POWER, ForceMode.Impulse);
-
-            }
-        }
-        else
-        {
-
-        }
-
-        wasGrounded = IsGrounded;
+        
+        
         if (IsGrounded)
         {
             //entity should restore the air control
@@ -323,9 +329,9 @@ public class EntityMotor : NetworkBehaviour
 
         if(isUpdateGravity)updateGravity(entity, timeElapsed);
         //Debug.Log(m_right);
+        updateIsGrounded(transform);
         if (isUpdateMovement)
         {
-            updateIsGrounded(transform);
             updateMovement(entity, timeElapsed);
         }
 

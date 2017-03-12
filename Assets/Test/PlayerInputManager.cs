@@ -29,10 +29,10 @@ public class PlayerInputManager : MonoBehaviour {
         Entity entity = networkObj.GetComponent<Entity>();
         Rigidbody body = networkObj.GetComponent<Rigidbody>();
         RocketScript script = Instantiate<RocketScript>(PREFAB_ROCKET_SCRIPT);
-        script.init(team, entity, body, position, to);
+        script.init(networkObj,team, entity, body, position, to);
 
         NetworkServer.Spawn(networkObj.gameObject);
-        networkObj.RpcLoadPrefab(PREFAB_ID.ROCKET, team);
+        //networkObj.RpcLoadPrefab_ParentMe(PREFAB_ID.ROCKET, team);
 
     }
 }

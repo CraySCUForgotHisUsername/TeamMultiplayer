@@ -61,6 +61,7 @@ namespace NAction
             //motor.Rigidbody.AddForce(-Physics.gravity);
             if (isActivated)
             {
+                motor.IsGrounded = false;
                 //Vector3 bodyVelocity = new Vector3(motor.Rigidbody.velocity.x,0, motor.Rigidbody.velocity.z);
                 //motor.Rigidbody.velocity -= motor.Rigidbody.velocity * Mathf.Min(1, m_airResistance * timeElapsed);
                 Vector3 dirFly = (motor.Velocity ).normalized;
