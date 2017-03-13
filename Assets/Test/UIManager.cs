@@ -21,6 +21,10 @@ public class UIManager : MonoBehaviour
     static public bool IS_NEW_INPUT = false;
     static public GameData.TEAM TEAM_SELECTED;
     static public GameData.TYPE HERO_SELECTED;
+
+
+
+    bool isCursurLocked = false;
     private void Awake()
     {
         
@@ -91,7 +95,14 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Entity.LOCAL_PLAYER_ENTITY != null)
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            isCursurLocked = !isCursurLocked;
+            if (isCursurLocked)
+                Cursor.lockState = CursorLockMode.Locked;
+            else Cursor.lockState = CursorLockMode.None;
+        }
+        if (Entity.LOCAL_PLAYER_ENTITY != null)
         {
             textResource.text = "" + Entity.LOCAL_PLAYER_ENTITY.m_resourceNow + " / " + Entity.LOCAL_PLAYER_ENTITY.m_resourceMax;
         }
