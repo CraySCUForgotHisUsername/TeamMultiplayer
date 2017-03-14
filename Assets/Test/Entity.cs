@@ -64,7 +64,13 @@ public class Entity : NetworkBehaviour
         }
     }
 
-    public float Health { get { return health; } }
+    public float Health {
+        get { return health; }
+        set
+        {
+            health = healthMax;
+        }
+    }
     public float Speed
     {
         get
@@ -140,7 +146,8 @@ public class Entity : NetworkBehaviour
             m_healthBefore = health;
         }
         raiseLazyEvent();
-
+        //Debug.Log("isserVEr " + isServer);
+        
     }
     public void kUpdate(float timeElapsed)
     {
@@ -160,7 +167,7 @@ public class Entity : NetworkBehaviour
         health -= amount;
 
         if (!isServer)
-            CmdClinetUpdatingHealth(amount);
+            CmdClientTakeDamage(amount);
 
         if (health < 1)
         {
@@ -186,7 +193,7 @@ public class Entity : NetworkBehaviour
         if (!isTakingDamage) return false;
         health -= amount;
         if (!isServer)
-            CmdClinetUpdatingHealth(amount);
+            CmdClientTakeDamage(amount);
         if (health < 1)
         {
             health = 0;
@@ -196,7 +203,12 @@ public class Entity : NetworkBehaviour
         return true;
     }
     [Command]
-    void CmdClinetUpdatingHealth(float amountOfDamageTaken)
+    public void CmdClientSetHealth(float health)
+    {
+        this.health = health;
+    }
+    [Command]
+    void CmdClientTakeDamage(float amountOfDamageTaken)
     {
         this.health -= amountOfDamageTaken;
     }

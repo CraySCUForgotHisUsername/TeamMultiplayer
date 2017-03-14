@@ -32,6 +32,7 @@ public class PlayerInput : NetworkBehaviour
     
     public virtual void updateMotorInput(Entity entity, EntityMotor motor, Avatar avatar)
     {
+        
         if (Input.GetKeyDown(KeyCode.Space))
         {
             motor.jumpBegin(entity, avatar, Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));

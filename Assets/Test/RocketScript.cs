@@ -8,6 +8,7 @@ public class RocketScript : MonoBehaviour {
     public NEntity.NScript.LoadNetworkPrefab loadRocketModel;
     public NEntity.NScript.MoveForward move;
     public NEntity.NScript.LoadNetworkPrefab loadExplosionModel;
+    public NEntity.NScript.LoadPrefab loadExplosionPlayer;
     public NEntity.NScript.GameObjectDestroy destroyNetworkObject;
     public void init(
         NetworkPrefabLoader loader,
@@ -25,7 +26,15 @@ public class RocketScript : MonoBehaviour {
         move.m_rigidBody = rigidBody;
         destroyNetworkObject.obj = entity.gameObject;
         destroyNetworkObject.isNetworkedObject = true;
+        if(team == GameData.TEAM.RED)
+        {
+            loadExplosionPlayer.layer = PHYSICS_LAYER.LAYER_RED_ATTACK;
+        }
+        else
+        {
+            loadExplosionPlayer.layer = PHYSICS_LAYER.LAYER_BLUE_ATTACK;
 
+        }
         this.transform.parent = entity.transform;
         this.transform.localPosition = Vector3.zero;
         this.transform.localRotation = Quaternion.identity;

@@ -36,48 +36,57 @@ using UnityEngine;
 
         }
         
-        void FixedUpdate()
+    void FixedUpdate()
+    {
+        if (m_checkTick <= 0)
         {
-            if (m_checkTick <= 0)
+            for (int i = 0; i < m_collidedColliders.Count; i++)
             {
-                for (int i = 0; i < m_collidedColliders.Count; i++)
-                {
-                    var collider = m_collidedColliders[i];
+                var collider = m_collidedColliders[i];
                 if (collider == null) continue;
-                    var body = getRigidbody(collider.transform);
-                    if (body == null) continue;
-                    //Vector3 distance = (collider.contactOffset - m_colliderExplosion.transform.position);//.normalized;
-                    //float ratio = Mathf.Max(0, 1 - distance.magnitude / m_explosionRadius);
-                    //Debug.Log(collider.contacts.Length);
-                    //Debug.Log("bomb");
-                    bool isAlreadyChecked = false;
-                    int id = body.gameObject.GetInstanceID();
-                    for (int j = 0; j < m_collidedIds.Count; j++)
-                    {
-                        if (m_collidedIds[j] == id)
-                        {
-                            isAlreadyChecked = true;
-                            break;
-                        }
-                    }
-                    if (!isAlreadyChecked)
-                    {
-                        m_collidedIds.Add(body.gameObject.GetInstanceID());
-                        onObjectEnter(body, body.GetComponent<Entity>());
-                        //float upward = Mathf.Min(1, Mathf.Max(0.1f, 1 - (body.transform.position - m_colliderExplosion.transform.position).magnitude / m_explosionRadius));
-                        //upward *= upward;
-                        //body.AddExplosionForce(m_forceApply, m_colliderExplosion.transform.position, m_explosionRadius, upward);
+             
 
+                var body = getRigidbody(collider.transform);
+                if (body == null) continue;
+                //Vector3 distance = (collider.contactOffset - m_colliderExplosion.transform.position);//.normalized;
+                //float ratio = Mathf.Max(0, 1 - distance.magnitude / m_explosionRadius);
+                //Debug.Log(collider.contacts.Length);
+                //Debug.Log("bomb");
+                bool isAlreadyChecked = false;
+                int id = body.gameObject.GetInstanceID();
+                for (int j = 0; j < m_collidedIds.Count; j++)
+                {
+                    if (m_collidedIds[j] == id)
+                    {
+                        isAlreadyChecked = true;
+                        break;
                     }
                 }
-                GameObject.Destroy(this.gameObject);
-                m_colliders.Clear();
+                if (!isAlreadyChecked)
+                {
+                    m_collidedIds.Add(body.gameObject.GetInstanceID());
+                    //int shieldLayerTest = -1;
+                    RaycastHit hit;
+                    Physics.Raycast(new Ray(this.transform.position, (collider.transform.position - this.transform.position).normalized), out hit, collider.gameObject.layer);
+                    if (hit.transform != null && body == getRigidbody(hit.transform))
+                    {
+                        onObjectEnter(body, body.GetComponent<Entity>(), hit.point);
+
+                    }
+                    //float upward = Mathf.Min(1, Mathf.Max(0.1f, 1 - (body.transform.position - m_colliderExplosion.transform.position).magnitude / m_explosionRadius));
+                    //upward *= upward;
+                    //body.AddExplosionForce(m_forceApply, m_colliderExplosion.transform.position, m_explosionRadius, upward);
+
+                }
             }
-            m_checkTick--;
+            m_colliders.Clear();
+        GameObject.Destroy(this.gameObject);
+    }
+        m_checkTick--;
 
 
-            //getModSpeed() * m_force );
-        }
+        //getModSpeed() * m_force );
+    }
         Rigidbody getRigidbody(Transform transform)
         {
             var rigidbody = transform.GetComponent<Rigidbody>();
@@ -90,10 +99,9 @@ using UnityEngine;
             return rigidbody;
         }
 
-        public virtual void onObjectEnter(Rigidbody body, Entity entity)
+        public virtual void onObjectEnter(Rigidbody body, Entity entity,Vector3 impactPoint)
         {
-
-        }
+    }
         // Update is called once per frame
         void Update()
         {

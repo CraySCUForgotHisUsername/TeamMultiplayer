@@ -30,13 +30,13 @@ public class Player : NetworkBehaviour {
         Entity.LOCAL_PLAYER_ENTITY = m_entity;
     }
     [Command]
-    void CmdChangeTeam(GameData.TEAM team)
+    public void CmdChangeTeam(GameData.TEAM team)
     {
 
         RpcChangeTeam(team);
     }
     [Command]
-    void CmdChangeHero(GameData.TYPE hero)
+    public void CmdChangeHero(GameData.TYPE hero)
     {
         RpcChangeHero(hero);
     }
@@ -50,6 +50,7 @@ public class Player : NetworkBehaviour {
     {
         Debug.Log("TEAM CHANGED TIO " + team);
         if (m_entity == null) return;
+        Game.SET_PLAYER_POSITION(m_entity.transform, team);
         m_entity.m_team = team;
 
     }
@@ -61,7 +62,37 @@ public class Player : NetworkBehaviour {
         m_entity.m_type = hero;
         PhysicsLayer.SET_PLAYER(this.m_avatar,this.m_entity.m_team);
     }
+    [ClientRpc]
+    public void RpchdrDead()
+    {
+        //play death animation
+        if (isLocalPlayer)
+        {
 
+            Game.PLAYER_DEAD(m_entity);
+            m_entity.health = m_entity.healthMax;
+            m_entity.CmdClientSetHealth(m_entity.healthMax);
+
+        }else
+        {
+            //m_entity.health = 0;
+
+        }
+    }
+    [ClientRpc]
+    public void RpcAddExplosionForce(float force, Vector3 relativePosition, float radius, float uplift, ForceMode mode)
+    {
+        m_entityMotor.IsGrounded = false;
+        m_entityMotor.Rigidbody.AddExplosionForce(force, this.transform.position + relativePosition, radius, uplift, mode);
+
+    }
+    [TargetRpc]
+    public void TargetInstantiateAvatar(NetworkConnection target, GameData.TEAM team, GameData.TYPE hero)
+    {
+        this.m_entity.m_team = team;
+        this.m_entity.m_type = hero;
+        instantiateAvatar(team, hero);
+    }
 
     void instantiateAvatar(GameData.TEAM team, GameData.TYPE hero)
     {
@@ -134,20 +165,27 @@ public class Player : NetworkBehaviour {
     }
     private void FixedUpdate()
     {
-        if (!isLocalPlayer) return;
+        if (!isLocalPlayer)
+        {
+            m_entityMotor.kFixedNonLocalUpdate(this.transform, m_entity, m_avatar, Time.fixedDeltaTime);
+            return;
+        }
         
         m_entityMotor.kFixedUpdate(this.transform,  m_entity,m_avatar, Time.fixedDeltaTime);
     }
     void Update()
     {
-
-        if (!isLocalPlayer) return;
-        if (UIManager.IS_NEW_INPUT)
+        if (isServer)
         {
-            UIManager.IS_NEW_INPUT = false;
-            CmdChangeTeam(UIManager.TEAM_SELECTED);
-            CmdChangeHero(UIManager.HERO_SELECTED);
+
+            if (m_entity.health <= 0)
+            {
+                RpchdrDead();
+                //Game.PLAYER_DEAD(m_entity);
+            }
         }
+        if (!isLocalPlayer) return;
+      
 
         if(m_avatar != null && m_avatar.m_head != null)
         {
@@ -157,7 +195,6 @@ public class Player : NetworkBehaviour {
         m_entity.kUpdate(Time.deltaTime);
         m_playerInput.KUpdate(m_entity, m_entityMotor, m_avatar, Time.deltaTime);
         m_entityMotor.kUpdate(m_entity, m_avatar, Time.deltaTime);
-
 
     }
 }

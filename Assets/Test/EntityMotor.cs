@@ -14,6 +14,10 @@ public class EntityMotor : NetworkBehaviour
     const float JUMP_DELAY = 0.25f;
     const float MINI_JUMP_PUSH_POWER = 0.45f;
     const float JUMP_POWER_HORIZONTAL = 1.0f;
+    const float ISGROUNDED_CHECK_DELAY_MIN = 0.1f;
+    const float GROUND_DRAG_LINEAR = 10;
+    const float GROUND_DRAG_ANGULAR = 10;
+
 
     public delegate float DEL_RETURN_FLOAT();
     public delegate float DEL_GET_SCHALAR(EntityMotor motor);
@@ -60,7 +64,7 @@ public class EntityMotor : NetworkBehaviour
         m_rotation = Vector3.zero,
         m_rotationFace = Vector3.zero;
 
-    public bool 
+    public bool
         isUpdateGravity = true,
         isUpdateMovement = true;
     bool m_isJumpAvailable = false;
@@ -73,8 +77,9 @@ public class EntityMotor : NetworkBehaviour
         m_upward = Vector3.up;
     bool wasGrounded = true;
     bool m_isTouchingGround = false;
-
+    bool m_isGroundedCheckDelayed = false;
     bool m_isInputDelayed = true;
+    float m_delayIsGroundedCheck = 0;
     float m_timeInputDelay = 0;
 
     public Rigidbody Rigidbody
@@ -123,6 +128,8 @@ public class EntityMotor : NetworkBehaviour
             m_isTouchingGround = value;
             if (!value)
             {
+                m_isGroundedCheckDelayed = true;
+                m_delayIsGroundedCheck = ISGROUNDED_CHECK_DELAY_MIN;
                 m_rigidbody.drag = 0;
                 m_rigidbody.angularDrag = 0;
 
@@ -167,13 +174,13 @@ public class EntityMotor : NetworkBehaviour
         m_isTouchingGround = (hit.transform != null);
 
 
-        m_rigidbody.drag = 20.0f;
-        m_rigidbody.angularDrag = 20.0f;
+        m_rigidbody.drag = GROUND_DRAG_LINEAR;
+        m_rigidbody.angularDrag = GROUND_DRAG_ANGULAR;
         if (!IsGrounded)
         {
             m_rigidbody.drag = 0.0f;
             m_rigidbody.angularDrag = 0.0f;
-            
+
         }
 
 
@@ -183,14 +190,14 @@ public class EntityMotor : NetworkBehaviour
     }
     public void updateGravity(Entity entity, float timeElapsed)
     {
-        m_rigidbody.AddForce(Vector3.down * entity.Gravity * timeElapsed, ForceMode.Impulse);
+        m_rigidbody.AddForce(new Vector3(0,-m_upward.y ,0) * entity.Gravity * timeElapsed, ForceMode.Impulse);
 
     }
     //Run during fixedupdate
-    public virtual void updateMovement( Entity entity,   float timeElapsed)
+    public virtual void updateMovement(Entity entity, float timeElapsed)
     {
-        
-        
+
+
         if (IsGrounded)
         {
             //entity should restore the air control
@@ -256,7 +263,7 @@ public class EntityMotor : NetworkBehaviour
             Vector3 force = desiredVelocityXZ * possibleAceelerationDueToSpeedDiff;// *  Mathf.Min(1.0f, 100.0f * timeElapsed);
 
             //Debug.Log("AIR CONTROL " + (addThisVelocity * AIR_SURFING_FORCE_LINEAR_MAX));                                                           //Debug.Log(possibleAccelerationRange + " , " +force);
-                                                                                                 //Debug.Log(m_velocity + " , " + possibleAccelerationRange + " , " +  force);
+            //Debug.Log(m_velocity + " , " + possibleAccelerationRange + " , " +  force);
             m_rigidbody.AddForce(addThisVelocity * AIR_SURFING_FORCE_LINEAR_MAX, ForceMode.Impulse);
             //m_rigidbody.AddForce(force * entity.AirControl, ForceMode.Impulse);
         }
@@ -269,7 +276,7 @@ public class EntityMotor : NetworkBehaviour
     {
         this.m_playerInfo.team = (GameData.TEAM)team;
     }
-    public virtual void move(Entity entity, Avatar avatar,  float speed, float horizontal, float vertical)
+    public virtual void move(Entity entity, Avatar avatar, float speed, float horizontal, float vertical)
     {
         m_moveDirection.x = horizontal;
         m_moveDirection.z = vertical;
@@ -314,7 +321,7 @@ public class EntityMotor : NetworkBehaviour
     {
     }
 
-    public virtual void kFixedUpdate(Transform transform, Entity entity, Avatar avatar, float timeElapsed)
+    public virtual void kFixedNonLocalUpdate(Transform transform, Entity entity, Avatar avatar, float timeElapsed)
     {
         if (!m_isJumpAvailable)
         {
@@ -327,14 +334,27 @@ public class EntityMotor : NetworkBehaviour
 
         }
 
-        if(isUpdateGravity)updateGravity(entity, timeElapsed);
+        if (isUpdateGravity && !IsGrounded) updateGravity(entity, timeElapsed);
         //Debug.Log(m_right);
-        updateIsGrounded(transform);
-        if (isUpdateMovement)
+        if (!m_isGroundedCheckDelayed)
         {
-            updateMovement(entity, timeElapsed);
+            updateIsGrounded(transform);
         }
+        else
+        {
+            m_delayIsGroundedCheck -= timeElapsed;
+            if (m_delayIsGroundedCheck <= 0)
+            {
+                m_isGroundedCheckDelayed = false;
+            }
 
+        }
+    }
+    public virtual void kFixedUpdate(Transform transform, Entity entity, Avatar avatar, float timeElapsed)
+    {
+        kFixedNonLocalUpdate(transform, entity, avatar, timeElapsed);
+
+        updateMovement(entity, timeElapsed);
         hprFixedUpdate(entity, avatar,m_actPassive, timeElapsed);
         hprFixedUpdate(entity, avatar,m_actLMB, timeElapsed);
         hprFixedUpdate(entity, avatar,m_actRMB, timeElapsed);
