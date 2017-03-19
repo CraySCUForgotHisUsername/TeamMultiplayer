@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 namespace GameData
 {
     public enum TEAM { WORLD, RED, BLUE };
-    public enum TYPE { A, B ,C , D , E, F,G};
+    public enum TYPE { A, B ,C , MONK , E, F,G};
    
     public class PlayerInfo {
         public TEAM team;

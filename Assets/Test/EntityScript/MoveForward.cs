@@ -8,12 +8,12 @@ namespace NEntity.NScript
     {
         public Rigidbody m_rigidBody;
         public Collider m_collider;
-        public float forceApplied;
+        public Vector3 forceApplied;
         bool m_isCollided = false;
         public override bool init(Entity entity)
         {
             base.init(entity);
-            entity.GetComponent<Rigidbody>().AddForce(entity.transform.forward * forceApplied, ForceMode.Impulse);
+            entity.GetComponent<Rigidbody>().AddForce(entity.transform.rotation * forceApplied, ForceMode.Impulse);
             m_rigidBody = entity.GetComponent<Rigidbody>();
             if (m_collider != null)
             {
