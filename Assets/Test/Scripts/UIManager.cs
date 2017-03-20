@@ -121,10 +121,10 @@ public class UIManager : MonoBehaviour
         {
             Initiate();
         }
-        if (Entity.LOCAL_PLAYER_ENTITY != null)
+        if (EntityPlayer.LOCAL_PLAYER_ENTITY != null)
         {
-            textResource.text = "Resource : " + Entity.LOCAL_PLAYER_ENTITY.m_resourceNow + " / " + Entity.LOCAL_PLAYER_ENTITY.m_resourceMax;
-            textHealth.text = "Health : " + Entity.LOCAL_PLAYER_ENTITY.health + " / " + Entity.LOCAL_PLAYER_ENTITY.healthMax;
+            textResource.text = "Resource : " + EntityPlayer.LOCAL_PLAYER_ENTITY.m_resourceNow + " / " + EntityPlayer.LOCAL_PLAYER_ENTITY.m_resourceMax;
+            textHealth.text = "Health : " + EntityPlayer.LOCAL_PLAYER_ENTITY.health + " / " + EntityPlayer.LOCAL_PLAYER_ENTITY.healthMax;
         }
         
         if (UIManager.IS_NEW_INPUT && Player.LOCAL_PLAYER != null)

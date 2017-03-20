@@ -12,7 +12,7 @@ namespace NAction
         float 
             m_forceUsed;
    
-        public override void useProcess(Entity entity, EntityMotor motor, Avatar avatar)
+        public override void useProcess(EntityPlayer entity, EntityMotor motor, Avatar avatar)
         {
             base.use(entity, motor, avatar);
             var dir = motor.VelocityRelativeDir.z * avatar.Look + motor.VelocityRelativeDir.x * avatar.Right;

@@ -23,9 +23,9 @@ public class EntityMotor : NetworkBehaviour
     public delegate float DEL_GET_SCHALAR(EntityMotor motor);
     public delegate void DEL_ME(EntityMotor motor);
     public delegate void DEL_ENTITY_ME_AVATAR(EntityMotor motor);
-    public delegate void DEL_ENTITY_ME(Entity entity, EntityMotor motor);
-    public delegate void DEL_MOVE(Entity entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical);
-    public delegate void DEL_JUMP(Entity entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical);
+    public delegate void DEL_ENTITY_ME(EntityPlayer entity, EntityMotor motor);
+    public delegate void DEL_MOVE(EntityPlayer entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical);
+    public delegate void DEL_JUMP(EntityPlayer entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical);
 
     public List<DEL_GET_SCHALAR> m_scalarsSpeed = new List<DEL_GET_SCHALAR>();
     public List<DEL_MOVE> m_evntMoves = new List<DEL_MOVE>();
@@ -188,13 +188,13 @@ public class EntityMotor : NetworkBehaviour
         return m_isTouchingGround;
 
     }
-    public void updateGravity(Entity entity, float timeElapsed)
+    public void updateGravity(EntityPlayer entity, float timeElapsed)
     {
         m_rigidbody.AddForce(new Vector3(0,-m_upward.y ,0) * entity.Gravity * timeElapsed, ForceMode.Impulse);
 
     }
     //Run during fixedupdate
-    public virtual void updateMovement(Entity entity, float timeElapsed)
+    public virtual void updateMovement(EntityPlayer entity, float timeElapsed)
     {
 
 
@@ -276,7 +276,7 @@ public class EntityMotor : NetworkBehaviour
     {
         this.m_playerInfo.team = (GameData.TEAM)team;
     }
-    public virtual void move(Entity entity, Avatar avatar, float speed, float horizontal, float vertical)
+    public virtual void move(EntityPlayer entity, Avatar avatar, float speed, float horizontal, float vertical)
     {
         m_moveDirection.x = horizontal;
         m_moveDirection.z = vertical;
@@ -297,14 +297,14 @@ public class EntityMotor : NetworkBehaviour
 
     }
 
-    public virtual void crawlBegin(Entity entity)
+    public virtual void crawlBegin(EntityPlayer entity)
     {
         for (int i = 0; i < m_evntCrawlBegin.Count; i++)
         {
             m_evntCrawlBegin[i](entity, this);
         }
     }
-    public virtual void crawlEnd(Entity entity)
+    public virtual void crawlEnd(EntityPlayer entity)
     {
         for (int i = 0; i < m_evntCrawlEnd.Count; i++)
         {
@@ -321,7 +321,7 @@ public class EntityMotor : NetworkBehaviour
     {
     }
 
-    public virtual void kFixedNonLocalUpdate(Transform transform, Entity entity, Avatar avatar, float timeElapsed)
+    public virtual void kFixedNonLocalUpdate(Transform transform, EntityPlayer entity, Avatar avatar, float timeElapsed)
     {
         if (!m_isJumpAvailable)
         {
@@ -350,7 +350,7 @@ public class EntityMotor : NetworkBehaviour
 
         }
     }
-    public virtual void kFixedUpdate(Transform transform, Entity entity, Avatar avatar, float timeElapsed)
+    public virtual void kFixedUpdate(Transform transform, EntityPlayer entity, Avatar avatar, float timeElapsed)
     {
         kFixedNonLocalUpdate(transform, entity, avatar, timeElapsed);
 
@@ -365,7 +365,7 @@ public class EntityMotor : NetworkBehaviour
         hprFixedUpdate(entity, avatar,m_actShift, timeElapsed);
     }
     // Update is called once per frame
-    public virtual void kUpdate(Entity entity, Avatar avatar, float timeElapsed)
+    public virtual void kUpdate(EntityPlayer entity, Avatar avatar, float timeElapsed)
     {
         hprUpdate(entity,avatar,m_actPassive, timeElapsed);
         hprUpdate(entity,avatar,m_actLMB, timeElapsed);
@@ -395,7 +395,7 @@ public class EntityMotor : NetworkBehaviour
         m_isInputDelayed = true;
         m_timeInputDelay = Mathf.Max(time, m_timeInputDelay);
     }
-    public virtual void jumpBegin(Entity entity, Avatar avatar, float horizontal, float vertical)
+    public virtual void jumpBegin(EntityPlayer entity, Avatar avatar, float horizontal, float vertical)
     {
    
         hprUse(m_actJump,entity, avatar);
@@ -419,7 +419,7 @@ public class EntityMotor : NetworkBehaviour
         }
 
     }
-    public virtual void jumpEnd(Entity entity, Avatar avatar)
+    public virtual void jumpEnd(EntityPlayer entity, Avatar avatar)
     {
         for (int i = 0; i < m_evntJumpStop.Count; i++)
         {
@@ -428,22 +428,22 @@ public class EntityMotor : NetworkBehaviour
         hprEnd(entity, m_actJump, avatar);
 
     }
-    public virtual void actLMBBegin(Entity entity, Avatar avatar)
+    public virtual void actLMBBegin(EntityPlayer entity, Avatar avatar)
     {
         hprUse(m_actLMB, entity, avatar);
 
     }
-    public virtual void actLMBEnd(Entity entity, Avatar avatar)
+    public virtual void actLMBEnd(EntityPlayer entity, Avatar avatar)
     {
 
         hprEnd(entity, m_actLMB, avatar);
     }
-    public virtual void actRMBBegin(Entity entity, Avatar avatar)
+    public virtual void actRMBBegin(EntityPlayer entity, Avatar avatar)
     {
         hprUse(m_actRMB,entity, avatar);
 
     }
-    public virtual void actRMBEnd(Entity entity, Avatar avatar)
+    public virtual void actRMBEnd(EntityPlayer entity, Avatar avatar)
     {
 
         hprEnd(entity, m_actRMB, avatar);
@@ -500,11 +500,11 @@ public class EntityMotor : NetworkBehaviour
 
     }
      * */
-    public virtual void actShiftBegin(Entity entity, Avatar avatar)
+    public virtual void actShiftBegin(EntityPlayer entity, Avatar avatar)
     {
         hprUse(m_actShift,entity, avatar);
     }
-    public virtual void actShiftEnd(Entity entity,Avatar avatar)
+    public virtual void actShiftEnd(EntityPlayer entity,Avatar avatar)
     {
         hprEnd(entity, m_actShift, avatar);
 
@@ -522,21 +522,21 @@ public class EntityMotor : NetworkBehaviour
 
 
 
-    void hprFixedUpdate(Entity entity, Avatar avatar, List<NAction.Action> actions, float timeElapsed)
+    void hprFixedUpdate(EntityPlayer entity, Avatar avatar, List<NAction.Action> actions, float timeElapsed)
     {
         for (int i = 0; i < actions.Count; i++)
         {
             actions[i].kFixedUpdate(entity,this, avatar, timeElapsed);
         }
     }
-    void hprUpdate(Entity entity, Avatar avatar, List<NAction.Action> actions, float timeElapsed)
+    void hprUpdate(EntityPlayer entity, Avatar avatar, List<NAction.Action> actions, float timeElapsed)
     {
         for (int i = 0; i < actions.Count; i++)
         {
             actions[i].kUpdate(entity, this, avatar, timeElapsed);
         }
     }
-    void hprUse( List<NAction.Action> actions, Entity entity, Avatar avatar)
+    void hprUse( List<NAction.Action> actions, EntityPlayer entity, Avatar avatar)
     {
         for (int i = 0; i < actions.Count; i++)
         {
@@ -544,7 +544,7 @@ public class EntityMotor : NetworkBehaviour
         }
 
     }
-    void hprEnd(Entity entity, List<NAction.Action> actions, Avatar avatar)
+    void hprEnd(EntityPlayer entity, List<NAction.Action> actions, Avatar avatar)
     {
         for (int i = 0; i < actions.Count; i++)
         {

@@ -9,7 +9,7 @@ namespace NEntity.NScript
     {
         public GameObject obj;
         public bool isNetworkedObject = false;
-        public override bool init(Entity entity)
+        public override bool init(EntityPlayer entity)
         {
             base.init(entity);
             if(isNetworkedObject)

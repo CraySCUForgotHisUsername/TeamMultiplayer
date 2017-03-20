@@ -15,7 +15,7 @@ public class RocketScript : MonoBehaviour {
 
     public void init(
         NetworkPrefabLoader loader,
-        GameData.TEAM team,  Entity entity, Rigidbody rigidBody,
+        GameData.TEAM team,  EntityPlayer entity, Rigidbody rigidBody,
         Vector3 position, Vector3 to)
     {
         PhysicsLayer.SET_ATTACK(prefab, team);

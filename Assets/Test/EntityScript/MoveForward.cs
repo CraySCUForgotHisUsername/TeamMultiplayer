@@ -10,7 +10,7 @@ namespace NEntity.NScript
         public Collider m_collider;
         public Vector3 forceApplied;
         bool m_isCollided = false;
-        public override bool init(Entity entity)
+        public override bool init(EntityPlayer entity)
         {
             base.init(entity);
             entity.GetComponent<Rigidbody>().AddForce(entity.transform.rotation * forceApplied, ForceMode.Impulse);
@@ -21,17 +21,17 @@ namespace NEntity.NScript
             }
             return true; 
         }
-        public override void kFixedUpdate(Entity entity, float timeElapsed)
+        public override void kFixedUpdate(EntityPlayer entity, float timeElapsed)
         {
             base.kFixedUpdate(entity, timeElapsed);
             //if (m_rigidBody == null) return;
             //m_rigidBody.MovePosition(m_rigidBody.transform.position + m_rigidBody.transform.forward*entity.Speed*timeElapsed);
         }
-        public override bool isCompleted(Entity entity)
+        public override bool isCompleted(EntityPlayer entity)
         {
             return m_isCollided;
         }
-        public override bool confirmComplete(Entity entity)
+        public override bool confirmComplete(EntityPlayer entity)
         {
             base.confirmComplete(entity);
             if (m_collider != null)

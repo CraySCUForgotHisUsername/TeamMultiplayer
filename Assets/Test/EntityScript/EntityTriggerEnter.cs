@@ -11,7 +11,7 @@ namespace NEntity.NScript
         bool m_isCollided = false;
         bool m_isCompleted = false;
 
-        public override bool init(Entity entity)
+        public override bool init(EntityPlayer entity)
         {
             base.init(entity);
             if (m_collider != null)
@@ -20,7 +20,7 @@ namespace NEntity.NScript
             }
             return true;
         }
-        public override void kFixedUpdate(Entity entity, float timeElapsed)
+        public override void kFixedUpdate(EntityPlayer entity, float timeElapsed)
         {
             base.kFixedUpdate(entity, timeElapsed);
             if (m_isCompleted) return;
@@ -36,7 +36,7 @@ namespace NEntity.NScript
 
             }
         }
-        public override bool isCompleted(Entity entity)
+        public override bool isCompleted(EntityPlayer entity)
         {
             return m_isCompleted;
         }

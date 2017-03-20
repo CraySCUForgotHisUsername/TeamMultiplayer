@@ -6,23 +6,23 @@ namespace NEntity.NScript
 
     public class Script : MonoBehaviour
     {
-        public virtual bool init(Entity entity)
+        public virtual bool init(EntityPlayer entity)
         {
             return true;
         }
-        public virtual void kFixedUpdate(Entity entity,float timeElapsed)
+        public virtual void kFixedUpdate(EntityPlayer entity,float timeElapsed)
         {
 
         }
-        public virtual void kUpdate(Entity entity, float timeElapsed)
+        public virtual void kUpdate(EntityPlayer entity, float timeElapsed)
         {
 
         }
-        public virtual bool isCompleted(Entity entity)
+        public virtual bool isCompleted(EntityPlayer entity)
         {
             return true;
         }
-        public virtual bool confirmComplete(Entity entity)
+        public virtual bool confirmComplete(EntityPlayer entity)
         {
             return true;
         }

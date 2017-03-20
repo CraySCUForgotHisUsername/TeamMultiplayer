@@ -23,7 +23,7 @@ public class Game : MonoBehaviour {
         }
 
     }
-    public static void PLAYER_DEAD(Entity entity)
+    public static void PLAYER_DEAD(EntityPlayer entity)
     {
         entity.Health = entity.healthMax;
         entity.m_resourceNow = entity.m_resourceMax;

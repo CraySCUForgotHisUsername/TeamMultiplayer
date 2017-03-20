@@ -5,7 +5,7 @@ namespace NEntity {
 
     public class Projectile : MonoBehaviour
     {
-        public Entity m_entity;
+        public EntityPlayer m_entity;
         public Rigidbody m_body;
         
         // Use this for initialization

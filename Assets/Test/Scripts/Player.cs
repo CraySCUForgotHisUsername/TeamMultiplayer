@@ -12,7 +12,7 @@ public partial class Player : NetworkBehaviour {
 
     public Rigidbody m_rigidbody;
     public Avatar m_avatar;
-    public Entity m_entity;
+    public EntityPlayer m_entity;
     public EntityMotor          m_entityMotor;
     public EntityMotorActions   m_entityMotorActions;
     public PlayerInput m_playerInput;
@@ -27,7 +27,7 @@ public partial class Player : NetworkBehaviour {
         m_mainCamera.SetActive(true);
         m_playerInput.enabled = true;
         Player.LOCAL_PLAYER = this;
-        Entity.LOCAL_PLAYER_ENTITY = m_entity;
+        EntityPlayer.LOCAL_PLAYER_ENTITY = m_entity;
     }
     [Command]
     public void CmdChangeTeam(GameData.TEAM team)

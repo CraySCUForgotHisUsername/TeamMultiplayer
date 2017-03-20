@@ -17,7 +17,7 @@ namespace NAction {
         Vector3 m_dirHorizontal;
         Vector3 m_dirVertical = Vector3.zero;
         
-        public override void useProcess(Entity entity, EntityMotor motor,Avatar avatar)
+        public override void useProcess(EntityPlayer entity, EntityMotor motor,Avatar avatar)
         {
             base.useProcess(entity,motor,  avatar);
             if (isUse)
@@ -30,7 +30,7 @@ namespace NAction {
 
             }
         }
-        void setActive(Entity entity, EntityMotor motor, bool value)
+        void setActive(EntityPlayer entity, EntityMotor motor, bool value)
         {
             if (!value)
             {
@@ -68,25 +68,25 @@ namespace NAction {
             }
 
         }
-        void flyHorizontally(Entity entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical)
+        void flyHorizontally(EntityPlayer entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical)
         {
             m_dirHorizontal = (avatar.Look * vertical + avatar.Right * horizontal).normalized;
         }
-        void flyUp(Entity entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical)
+        void flyUp(EntityPlayer entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical)
         {
             m_dirVertical = Vector3.up;
         }
-        void flyUpDownStop(Entity entity, EntityMotor motor)
+        void flyUpDownStop(EntityPlayer entity, EntityMotor motor)
         {
             m_dirVertical = Vector3.zero;
 
         }
-        void flyDown(Entity entity, EntityMotor motor)
+        void flyDown(EntityPlayer entity, EntityMotor motor)
         {
             m_dirVertical = Vector3.down;
 
         }
-        public override void kFixedUpdate(Entity entity, EntityMotor motor, Avatar avatar, float timeElapsed)
+        public override void kFixedUpdate(EntityPlayer entity, EntityMotor motor, Avatar avatar, float timeElapsed)
         {
             base.kFixedUpdate(entity,motor, avatar,timeElapsed);
             if (!isUse) return;

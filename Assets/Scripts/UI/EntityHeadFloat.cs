@@ -14,13 +14,13 @@ namespace NUI {
             m_healthBarMeter;
             //m_healthBarBackground;
         [SerializeField]
-        Entity m_entity;
+        EntityPlayer m_entity;
         // Use this for initialization
         void Start()
         {
 
         }
-        public void setEntity(Entity entity)
+        public void setEntity(EntityPlayer entity)
         {
             //m_entity = entity;
         }

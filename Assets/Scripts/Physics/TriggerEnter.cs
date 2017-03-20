@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class TriggerEnter : MonoBehaviour
 {
-    public delegate void DEL_ENTER(Rigidbody body, Entity entity, Vector3 impactPoint);
+    public delegate void DEL_ENTER(Rigidbody body, EntityPlayer entity, Vector3 impactPoint);
     public bool m_isRepeat = false;
     List<DEL_ENTER> m_enters = new List<DEL_ENTER>();
     List<Collider> m_collidedColliders = new List<Collider>();
@@ -92,9 +92,9 @@ public class TriggerEnter : MonoBehaviour
                     m_collidedIds.Add(body.gameObject.GetInstanceID());
                     for (int iEvent = 0; iEvent < m_enters.Count; iEvent++)
                     {
-                        m_enters[iEvent](body, body.GetComponent<Entity>(), hit.point); ;
+                        m_enters[iEvent](body, body.GetComponent<EntityPlayer>(), hit.point); ;
                     }
-                    onObjectEnter(body, body.GetComponent<Entity>(), hit.point);
+                    onObjectEnter(body, body.GetComponent<EntityPlayer>(), hit.point);
 
                 }
                 else
@@ -140,7 +140,7 @@ public class TriggerEnter : MonoBehaviour
         return rigidbody;
     }
 
-    public virtual void onObjectEnter(Rigidbody body, Entity entity,Vector3 impactPoint)
+    public virtual void onObjectEnter(Rigidbody body, EntityPlayer entity,Vector3 impactPoint)
     {
 }
     // Update is called once per frame

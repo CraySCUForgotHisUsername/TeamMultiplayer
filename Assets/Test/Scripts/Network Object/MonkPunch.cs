@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+
+
 namespace NetworkObject {
 
     public class MonkPunch : NetworkBehaviour
@@ -15,12 +17,7 @@ namespace NetworkObject {
         [ClientRpc]
         public void RpcInit(GameData.TEAM team)
         {
-
-        }
-        [Command]
-        public void CmdInit(GameData.TEAM team)
-        {
-
+            init(team);
         }
 
         public void init(GameData.TEAM team)

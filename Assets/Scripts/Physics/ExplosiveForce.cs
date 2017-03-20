@@ -8,7 +8,7 @@ public class ExplosiveForce : TriggerEnter
 {
     [SerializeField]
     float force, m_damageMin, m_damage,radius, uplift;
-    public override void onObjectEnter(Rigidbody body, Entity entity, Vector3 impactPoint)
+    public override void onObjectEnter(Rigidbody body, EntityPlayer entity, Vector3 impactPoint)
     {
         base.onObjectEnter(body, entity, impactPoint);
         float damage =  Mathf.Max(m_damageMin, m_damage*( radius - (this.transform.position - impactPoint).magnitude) / radius );

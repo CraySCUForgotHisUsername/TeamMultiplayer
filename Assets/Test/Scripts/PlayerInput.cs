@@ -20,7 +20,7 @@ public class PlayerInput : NetworkBehaviour
         if(m_avatar != null)
             m_avatar.m_head.transform.Rotate(-speed * vertical,0,0);
     }
-    public void KUpdate(Entity entity, EntityMotor motor, Avatar m_avatar ,float timeElapsed)
+    public void KUpdate(EntityPlayer entity, EntityMotor motor, Avatar m_avatar ,float timeElapsed)
     {
         if (entity == null) return;
         motor.move(entity, m_avatar, entity.Speed, Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -30,7 +30,7 @@ public class PlayerInput : NetworkBehaviour
         updateMotorInput(entity, motor, m_avatar);
     }
     
-    public virtual void updateMotorInput(Entity entity, EntityMotor motor, Avatar avatar)
+    public virtual void updateMotorInput(EntityPlayer entity, EntityMotor motor, Avatar avatar)
     {
         
         if (Input.GetKeyDown(KeyCode.Space))

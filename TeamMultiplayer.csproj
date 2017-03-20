@@ -129,6 +129,7 @@
     <Compile Include="Assets\Test\EntityScript\Script.cs" />
     <Compile Include="Assets\Test\Scripts\AvatarBank.cs" />
     <Compile Include="Assets\Test\Scripts\Entity.cs" />
+    <Compile Include="Assets\Test\Scripts\EntityPlayer.cs" />
     <Compile Include="Assets\Test\Scripts\EntityMotor.cs" />
     <Compile Include="Assets\Test\Scripts\EntityMotorActionBank.cs" />
     <Compile Include="Assets\Test\Scripts\EntityMotorActions.cs" />

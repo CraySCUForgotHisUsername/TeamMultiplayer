@@ -17,7 +17,7 @@ public class GrenadeScript : MonoBehaviour
     public float m_fuseTimeRemaining;
 
     GameData.TEAM m_team;
-    Entity m_entity;
+    EntityPlayer m_entity;
     Rigidbody m_rigidbody;
     public GRENADE_STATE m_state = GRENADE_STATE.TRAVELLING;
 
@@ -33,7 +33,7 @@ public class GrenadeScript : MonoBehaviour
 
     public void init(
         NetworkPrefabLoader loader,
-        GameData.TEAM team, Entity entity, Rigidbody krigidBody,
+        GameData.TEAM team, EntityPlayer entity, Rigidbody krigidBody,
         Vector3 position, Vector3 to)
     {
         PhysicsLayer.SET_ATTACK(m_prefab, team);
@@ -53,11 +53,11 @@ public class GrenadeScript : MonoBehaviour
         m_prefab.setLayer(PhysicsLayer.GET_LAYER(
             (team == GameData.TEAM.RED) ? PHYSICS_LAYER.LAYER_RED_ATTACK : PHYSICS_LAYER.LAYER_BLUE_ATTACK));
     }
-    void onDirectHit(Entity entity)
+    void onDirectHit(EntityPlayer entity)
     {
 
     }
-    void onCollision(Rigidbody body, Entity entity, Vector3 impactPoint)
+    void onCollision(Rigidbody body, EntityPlayer entity, Vector3 impactPoint)
     {
         if(m_state != GRENADE_STATE.TRAVELLING  && m_state != GRENADE_STATE.BURNING)
         {

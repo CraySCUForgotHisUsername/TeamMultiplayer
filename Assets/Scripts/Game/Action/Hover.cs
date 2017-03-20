@@ -19,19 +19,19 @@ namespace NAction
             m_forceAdjustmentTimeAcceleration;
         bool isUse = false, isActivated = false;
         float m_timeElapsed = 0;
-        public override void useProcess(Entity entity, EntityMotor motor, Avatar avatar)
+        public override void useProcess(EntityPlayer entity, EntityMotor motor, Avatar avatar)
         {
             base.use(entity,motor, avatar);
             if (isUse) return;
             setActive(entity,motor, true);
         }
-        public override void endProcess(Entity entity, EntityMotor motor, Avatar avatar)
+        public override void endProcess(EntityPlayer entity, EntityMotor motor, Avatar avatar)
         {
             base.endProcess(entity, motor, avatar   );
             if (!isUse) return;
             setActive(entity,motor, false);
         }
-        public void setActive(Entity entity, EntityMotor motor, bool value)
+        public void setActive(EntityPlayer entity, EntityMotor motor, bool value)
         {
             entity.m_isRegenResource = !value;
             if (value) {
@@ -53,7 +53,7 @@ namespace NAction
             isActivated = value;
             motor.isUpdateMovement = !value;
         }
-        public override void kFixedUpdate(Entity entity, EntityMotor motor, Avatar m_avatar, float timeElapsed)
+        public override void kFixedUpdate(EntityPlayer entity, EntityMotor motor, Avatar m_avatar, float timeElapsed)
         {
            // Debug.Log(isActivated);
             if (!isUse) return;
@@ -103,7 +103,7 @@ namespace NAction
         /*
        
          * */
-        public override void kUpdate(Entity entity, EntityMotor motor, Avatar avatar, float timeElapsed)
+        public override void kUpdate(EntityPlayer entity, EntityMotor motor, Avatar avatar, float timeElapsed)
         {
            // Debug.Log(motor.isUpdateMovement);
             if (!isUse) return;

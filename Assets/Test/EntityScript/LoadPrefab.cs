@@ -10,7 +10,7 @@ namespace NEntity.NScript
         public bool isParented = false;
         public bool isPhysicLayer = false;
         public PHYSICS_LAYER layer;
-        public override bool init(Entity entity)
+        public override bool init(EntityPlayer entity)
         {
             base.init(entity);
             var obj = GameObject.Instantiate<Prefab>(PREFAB);

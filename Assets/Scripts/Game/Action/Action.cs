@@ -46,7 +46,7 @@ namespace NAction {
         {
 
         }
-        public void use(Entity entity, EntityMotor motor,Avatar avatar)
+        public void use(EntityPlayer entity, EntityMotor motor,Avatar avatar)
         {
             if (!m_isReceiveInput) return;
             if (!m_isReady) return;
@@ -64,25 +64,25 @@ namespace NAction {
             useProcess(entity, motor, avatar);
         }
 
-        public void hold(Entity entity, EntityMotor motor)
+        public void hold(EntityPlayer entity, EntityMotor motor)
         {
             if (!m_isReceiveInput) return;
 
         }
-        public void end(Entity entity, EntityMotor motor, Avatar avatar)
+        public void end(EntityPlayer entity, EntityMotor motor, Avatar avatar)
         {
             if (!m_isReceiveInput) return;
             endProcess(entity, motor, avatar);
         }
-        public virtual void useProcess(Entity entity, EntityMotor motor, Avatar avatar)
+        public virtual void useProcess(EntityPlayer entity, EntityMotor motor, Avatar avatar)
         {
 
         }
-        public virtual void holdProcess(Entity entity, EntityMotor motor)
+        public virtual void holdProcess(EntityPlayer entity, EntityMotor motor)
         {
 
         }
-        public virtual void endProcess(Entity entity, EntityMotor motor, Avatar avatar)
+        public virtual void endProcess(EntityPlayer entity, EntityMotor motor, Avatar avatar)
         {
 
         }
@@ -91,7 +91,7 @@ namespace NAction {
             m_isReady = value;
             m_delayTimeElapsed = 0;
         }
-        public virtual void kUpdate(Entity entity, EntityMotor motor, Avatar avatar, float timeElapsed)
+        public virtual void kUpdate(EntityPlayer entity, EntityMotor motor, Avatar avatar, float timeElapsed)
         {
             if (m_isReady) return;
             m_delayTimeElapsed += timeElapsed;
@@ -101,7 +101,7 @@ namespace NAction {
                 m_delayTimeElapsed = 0;
             }
         }
-        public virtual void kFixedUpdate(Entity entity, EntityMotor motor, Avatar avatar, float timeElapsed)
+        public virtual void kFixedUpdate(EntityPlayer entity, EntityMotor motor, Avatar avatar, float timeElapsed)
         {
 
         }

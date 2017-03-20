@@ -21,11 +21,11 @@ namespace NAction
         Vector3 slidingDirection;
 
         
-        void hdr_jump(Entity entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical)
+        void hdr_jump(EntityPlayer entity, EntityMotor motor, Avatar avatar, float horizontal, float vertical)
         {
 
         }
-        void setState(Entity entity, EntityMotor motor, WALLRIDE_STATE state)
+        void setState(EntityPlayer entity, EntityMotor motor, WALLRIDE_STATE state)
         {
             if(state == WALLRIDE_STATE.INACTIVE )
             {
@@ -53,17 +53,17 @@ namespace NAction
             m_wallRideState = state;
 
         }
-        public override void useProcess(Entity entity, EntityMotor motor, Avatar avatar)
+        public override void useProcess(EntityPlayer entity, EntityMotor motor, Avatar avatar)
         {
             base.useProcess(entity, motor, avatar);
             setState(entity,motor, WALLRIDE_STATE.READY);
         }
-        public override void endProcess(Entity entity, EntityMotor motor, Avatar avatar)
+        public override void endProcess(EntityPlayer entity, EntityMotor motor, Avatar avatar)
         {
             base.endProcess(entity, motor, avatar);
             setState(entity, motor, WALLRIDE_STATE.INACTIVE);
         }
-        public override void kUpdate(Entity entity, EntityMotor motor, Avatar avatar,float timeElapsed)
+        public override void kUpdate(EntityPlayer entity, EntityMotor motor, Avatar avatar,float timeElapsed)
         {
             base.kUpdate(entity, motor, avatar, timeElapsed);
             if (m_wallRideState == WALLRIDE_STATE.INACTIVE) return;
@@ -124,7 +124,7 @@ namespace NAction
             m_wallNormal = hit.normal;
             return true;
         }
-        void udpateFindWall(Entity entity, EntityMotor motor, Avatar avatar, float timeElapsed)
+        void udpateFindWall(EntityPlayer entity, EntityMotor motor, Avatar avatar, float timeElapsed)
         {
             Debug.Log("Looking for a wall");
             

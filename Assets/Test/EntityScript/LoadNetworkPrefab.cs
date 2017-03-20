@@ -10,7 +10,7 @@ namespace NEntity.NScript
         public PREFAB_ID id;
         public GameData.TEAM team;
         public bool isParent;
-        public override bool init(Entity entity)
+        public override bool init(EntityPlayer entity)
         {
             base.init(entity);
             if(isParent)networkloader.RpcLoadPrefab_ParentMe(id, team);

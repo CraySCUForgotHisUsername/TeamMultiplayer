@@ -29,7 +29,7 @@ public class PlayerInputManager : MonoBehaviour {
     public void ROCKET(GameData.TEAM team, Vector3 position, Vector3 to)
     {
         NetworkPrefabLoader networkObj = Instantiate<NetworkPrefabLoader>(NETWORK_PREFAB);
-        Entity entity = networkObj.GetComponent<Entity>();
+        EntityPlayer entity = networkObj.GetComponent<EntityPlayer>();
         Rigidbody body = networkObj.GetComponent<Rigidbody>();
         RocketScript script = Instantiate<RocketScript>(PREFAB_ROCKET_SCRIPT);
         script.init(networkObj, team, entity, body, position, to);
@@ -45,7 +45,7 @@ public class PlayerInputManager : MonoBehaviour {
         networkObj.transform.LookAt(to);
         NetworkServer.Spawn(networkObj.gameObject);
 
-        Entity entity = networkObj.GetComponent<Entity>();
+        EntityPlayer entity = networkObj.GetComponent<EntityPlayer>();
         Rigidbody body = networkObj.GetComponent<Rigidbody>();
         GrenadeScript script = Instantiate<GrenadeScript>(PREFAB_GRENADE_SCRIPT);
         script.transform.parent = networkObj.transform;
@@ -63,7 +63,7 @@ public class PlayerInputManager : MonoBehaviour {
         networkObj.transform.LookAt(to);
         NetworkServer.Spawn(networkObj.gameObject);
 
-        Entity entity = networkObj.GetComponent<Entity>();
+        EntityPlayer entity = networkObj.GetComponent<EntityPlayer>();
         Rigidbody body = networkObj.GetComponent<Rigidbody>();
         var script = Instantiate<MonkPunchScript>(SCRIPT_MONKPUNCH);
         script.transform.parent = networkObj.transform;

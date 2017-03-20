@@ -6,7 +6,7 @@ namespace NEntity.NScript
 
     public class EntityScriptReader : MonoBehaviour
     {
-        public Entity m_entity;
+        public EntityPlayer m_entity;
         public List<Script> m_scripts;
 
         int m_scriptAt = 0;
